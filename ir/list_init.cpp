@@ -26,16 +26,16 @@ void ListInitializer::transform(AssignInstr *v) {
       return;   
     else{       
         std::ofstream MyFile;
-        if(std::filesystem::exists("../lst_1.txt")){
-            if(std::filesystem::exists("../lst_2.txt")){
-                MyFile.open("../lst_3.txt");
+        if(std::filesystem::exists("lst_1.txt")){
+            if(std::filesystem::exists("lst_2.txt")){
+                MyFile.open("lst_3.txt");
             }
             else{
-                MyFile.open("../lst_2.txt");
+                MyFile.open("lst_2.txt");
             }
         }
         else{
-            MyFile.open("../lst_1.txt");
+            MyFile.open("lst_1.txt");
         }        
         auto v_name = v->getLhs()->getName();  
         MyFile << v_name << "\n"; 
