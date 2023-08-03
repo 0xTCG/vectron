@@ -12,6 +12,30 @@ using namespace codon::ir;
 
 
 void zdrp::transform(ReturnInstr *v) {
+    if(std::filesystem::exists("../LoopInfo.txt")){
+        std::remove("../LoopInfo.txt");
+    }
+    if(std::filesystem::exists("../Prep_info.txt")){
+        std::remove("../Prep_info.txt");
+    }
+    if(std::filesystem::exists("../arg_1.txt")){
+        std::remove("../arg_1.txt");
+    }
+    if(std::filesystem::exists("../arg_2.txt")){
+        std::remove("../arg_2.txt");
+    }
+    if(std::filesystem::exists("../arg_3.txt")){
+        std::remove("../arg_3.txt");
+    }
+    if(std::filesystem::exists("../mx_arg1.txt")){
+        std::remove("../mx_arg1.txt");
+    }
+    if(std::filesystem::exists("../mx_arg2.txt")){
+        std::remove("../mx_arg2.txt");
+    }
+    if(std::filesystem::exists("../mx_arg3.txt")){
+        std::remove("../mx_arg3.txt");
+    }      
     auto *pf = getParentFunc();
     auto pf_name = pf->getUnmangledName();
     if(pf_name != "orig")

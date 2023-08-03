@@ -11,33 +11,7 @@ namespace vectron {
 using namespace codon::ir;
 
 
-void ListInitializer::transform(AssignInstr *v) {
-    if(std::filesystem::exists("LoopInfo.txt")){
-        std::remove("LoopInfo.txt");
-    }
-    if(std::filesystem::exists("Prep_info.txt")){
-        std::remove("Prep_info.txt");
-    }
-    if(std::filesystem::exists("arg_1.txt")){
-        std::remove("arg_1.txt");
-    }
-    if(std::filesystem::exists("arg_2.txt")){
-        std::remove("arg_2.txt");
-    }
-    if(std::filesystem::exists("arg_3.txt")){
-        std::remove("arg_3.txt");
-    }
-    if(std::filesystem::exists("mx_arg1.txt")){
-        std::remove("mx_arg1.txt");
-    }
-    if(std::filesystem::exists("mx_arg2.txt")){
-        std::remove("mx_arg2.txt");
-    }
-    if(std::filesystem::exists("mx_arg3.txt")){
-        std::remove("mx_arg3.txt");
-    }            
-
-
+void ListInitializer::transform(AssignInstr *v) {          
     auto *pf = getParentFunc();
     auto pf_name = pf->getUnmangledName();
     if(pf_name != "orig")
@@ -52,16 +26,16 @@ void ListInitializer::transform(AssignInstr *v) {
       return;   
     else{       
         std::ofstream MyFile;
-        if(std::filesystem::exists("/Users/souren/Downloads/MM-IRPass-4/lst_1.txt")){
-            if(std::filesystem::exists("/Users/souren/Downloads/MM-IRPass-4/lst_2.txt")){
-                MyFile.open("lst_3.txt");
+        if(std::filesystem::exists("../lst_1.txt")){
+            if(std::filesystem::exists("../lst_2.txt")){
+                MyFile.open("../lst_3.txt");
             }
             else{
-                MyFile.open("lst_2.txt");
+                MyFile.open("../lst_2.txt");
             }
         }
         else{
-            MyFile.open("lst_1.txt");
+            MyFile.open("../lst_1.txt");
         }        
         auto v_name = v->getLhs()->getName();  
         MyFile << v_name << "\n"; 

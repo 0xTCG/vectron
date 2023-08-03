@@ -8,10 +8,10 @@
 namespace vectron {
 
 void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {  
+  //pm->registerPass(std::make_unique<zdrp>());
   //pm->registerPass(std::make_unique<ListInitializer>());
   //pm->registerPass(std::make_unique<FuncReplacement>());
   //pm->registerPass(std::make_unique<LoopAnalyzer>());
-  //pm->registerPass(std::make_unique<zdrp>());
   //pm->registerPass(std::make_unique<ListInitializer>(), "core-parallel-openmp");
   //pm->registerPass(std::make_unique<FuncReplacement>(), "core-parallel-openmp");  
   //pm->registerPass(std::make_unique<LoopAnalyzer>(), "core-parallel-openmp");
