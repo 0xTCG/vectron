@@ -20,7 +20,8 @@ namespace vectron {
 using namespace codon::ir;
 
 void LoopAnalyzer::transform(ImperativeForFlow *v) {
-    auto *pf = getParentFunc();
+    int flag = 0;
+    auto *pf = getParentFunc();;
     auto pf_name = pf->getUnmangledName();
     if (pf_name == "prep"){   
         auto pf_arg1 = pf->arg_front()->getName();
@@ -146,7 +147,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         }        
         MyFile.close();
     }    
-    else if (pf_name == "orig"){ 
+    else if (pf_name == "orig"){         
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
         auto *check = v->getBody();
@@ -157,13 +158,509 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         auto *w_outer = v->getActual();
         std::vector<codon::ir::Var *> vars_outer = w_outer->getUsedVariables();
         auto var_str_outer = vars_outer[0]->getName(); // outer loop's iterator's name
-
         auto *w_inner = inner_loop->getActual();
         std::vector<codon::ir::Var *> vars_inner = w_inner->getUsedVariables();
-        auto var_str_inner = vars_inner[0]->getName(); // inner loop's iterator's name                
-        auto *ass = cast<CallInstr>(cast<SeriesFlow>(inner_loop->getBody())->back()); // assignment op inside the inner loop    
-        //auto *left_side = cast<CallInstr>(cast<SeriesFlow>(inner_loop->getBody())->front());
-        //std::cout << *left_side->front() << "\n";
+        auto var_str_inner = vars_inner[0]->getName(); // inner loop's iterator's name  
+        auto *chk = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back());
+        if(chk == NULL){
+            std::ofstream bw_manager("bw.txt");            
+            bw_manager << "0\n0\n0\n0\n0\n0\n0\n0\n0\n";         
+            flag = 1;
+            bw_manager.close();
+
+        }     
+        else{
+            std::ofstream bw_manager("bw.txt");                     
+            auto *main_true_branch = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back())->getCond();
+            std::__1::vector<codon::ir::Value *> main_if_ops = main_true_branch->getUsedValues();
+            std::ofstream bw_temp_write("temp_bw.txt");
+            bw_temp_write << *main_if_ops[1];
+            bw_temp_write.close();
+            std::ifstream bw_temp_read("temp_bw.txt");
+            std::basic_string or_check = "";
+            bw_temp_read >> or_check;
+            bw_temp_read.close();
+            bw_temp_write.open("temp_bw.txt");
+            bw_temp_write << *main_if_ops[2];
+            bw_temp_write.close();
+            bw_temp_read.open("temp_bw.txt");
+            std::basic_string and_check = "";
+            bw_temp_read >> and_check;
+            bw_temp_read.close();  
+            std::remove("temp_bw.txt");
+            if(or_check == "true"){
+                bw_manager << "2\n";
+            }
+            else{
+                if(and_check == "false"){
+                    bw_manager << "1\n";
+                }
+                else{
+                    bw_manager << "0\n";
+                }
+            }
+            if (and_check == "false" || or_check == "true"){
+                auto *left_cond = cast<CallInstr>(main_if_ops[0]);
+                std::__1::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
+
+                auto *left_operator = util::getFunc(left_cond_vars[2]);
+                auto left_op_name = left_operator->getUnmangledName();
+                if (left_op_name == "__eq__"){
+                    bw_manager << "0\n";
+                }
+                else{
+                    if (left_op_name == "__gt__"){
+                        bw_manager << "1\n";
+                    }
+                    else{
+                        if(left_op_name == "__ge__"){
+                            bw_manager << "2\n";
+                        }
+                        else{
+                            if(left_op_name == "__lt__"){
+                                bw_manager << "-1\n";
+                            }
+                            else{
+                                bw_manager << "-2\n";
+                            }
+                        }
+                    }
+                }            
+                auto *left_lhs = cast<CallInstr>(left_cond_vars[0]); // the last op of the lhs of first condition
+                if(left_lhs == NULL){
+                    std::__1::vector<codon::ir::Var *> var_lhs = left_cond_vars[0]->getUsedVariables();
+                    auto lhs_name = var_lhs[0]->getName();
+                    if (lhs_name == var_str_outer){
+                        bw_manager << "1\n";
+                    }
+                    else{
+                        if(lhs_name == var_str_inner){
+                            bw_manager << "2\n";
+                        }
+                        else{
+                            bw_manager << "0\n";
+                        }
+                    }
+                    bw_manager << "0\n";
+
+                }
+                else{
+                    auto last_lhs_op = util::getFunc(left_lhs->getCallee())->getUnmangledName(); 
+                    auto *left_lhs_lhs = left_lhs->front();
+                    auto *left_lhs_lhs_func = cast<CallInstr>(left_lhs_lhs); // the second to last op of the lhs of first condition
+                    if(left_lhs_lhs_func == NULL){
+                        std::__1::vector<codon::ir::Var *> var_lhs_lhs = left_lhs_lhs->getUsedVariables();
+                        auto lhs_lhs_name = var_lhs_lhs[0]->getName();
+                        if (lhs_lhs_name == var_str_outer){
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(lhs_lhs_name == var_str_inner){
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }
+                        }
+                        auto *left_lhs_rhs = left_lhs->back();
+                        std::__1::vector<codon::ir::Var *> var_lhs_rhs = left_lhs_rhs->getUsedVariables();
+                        auto lhs_rhs_name = var_lhs_rhs[0]->getName();
+                        if (lhs_rhs_name == var_str_outer){
+                            if (last_lhs_op == "__sub__"){
+                                bw_manager << "-";
+                            }
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(lhs_lhs_name == var_str_inner){
+                                if (last_lhs_op == "__sub__"){
+                                    bw_manager << "-";
+                                }                            
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }
+                        }                           
+
+                    }
+                    else{         
+                        auto neg_test_name = util::getFunc(left_lhs_lhs_func->getCallee())->getUnmangledName();
+                        auto *first_lhs_operand = left_lhs_lhs_func->back();
+                        std::__1::vector<codon::ir::Var *> first_var = first_lhs_operand->getUsedVariables();
+                        auto first_var_name = first_var[0]->getName();
+                        if (first_var_name == var_str_outer){
+                            if(neg_test_name == "__neg__"){
+                                bw_manager << "-";
+                            }                            
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(first_var_name == var_str_inner){       
+                                if(neg_test_name == "__neg__"){
+                                    bw_manager << "-";
+                                }                                             
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }                        
+                        }
+                                    
+                                    
+                        auto *left_lhs_rhs = left_lhs->back();                  
+                        std::__1::vector<codon::ir::Var *> second_var = left_lhs_rhs->getUsedVariables();                
+                        auto second_var_name = second_var[0]->getName();    
+                        if (second_var_name == var_str_outer){
+                            if(last_lhs_op == "__sub__"){
+                                bw_manager << "-";
+                            }                        
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(second_var_name == var_str_inner){    
+                                if(last_lhs_op == "__sub__"){
+                                    bw_manager << "-";
+                                }                                            
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }                        
+                        }  
+                    }                                       
+
+                }
+                bw_manager << *left_cond_vars[1] << "\n";
+                
+                auto *right_cond = cast<CallInstr>(main_if_ops[2]);
+                if (and_check == "false"){
+                    right_cond = cast<CallInstr>(main_if_ops[1]); 
+                }
+
+                std::__1::vector<codon::ir::Value *> right_cond_vars = right_cond->getUsedValues();    
+                int build_flag = 0;   
+                auto *right_operator = util::getFunc(cast<CallInstr>(right_cond_vars[0])->getCallee());
+                auto right_op_name = right_operator->getUnmangledName();
+                if (right_op_name == "__eq__"){
+                    bw_manager << "0\n";
+                }
+                else{
+                    if (right_op_name == "__gt__"){
+                        bw_manager << "1\n";
+                    }
+                    else{
+                        if(right_op_name == "__ge__"){
+                            bw_manager << "2\n";
+                        }
+                        else{
+                            if(right_op_name == "__lt__"){
+                                bw_manager << "-1\n";
+                            }
+                            else{
+                                if(right_op_name == "__le__"){
+                                    bw_manager << "-2\n";
+                                }  
+                                else{
+                                    build_flag = 1;
+                                    right_operator =  util::getFunc(cast<CallInstr>(right_cond)->getCallee());
+                                    right_op_name = right_operator->getUnmangledName();
+                                    if (right_op_name == "__eq__"){
+                                            bw_manager << "0\n";
+                                        }
+                                    else{
+                                        if (right_op_name == "__gt__"){
+                                            bw_manager << "1\n";
+                                        }
+                                        else{
+                                            if(right_op_name == "__ge__"){
+                                                bw_manager << "2\n";
+                                            }
+                                            else{
+                                                if(right_op_name == "__lt__"){
+                                                    bw_manager << "-1\n";
+                                                }
+                                                else{
+                                                    if(right_op_name == "__le__"){
+                                                        bw_manager << "-2\n";
+                                                    }      
+                                                }
+                                            }
+                                        }
+                                    }                               
+
+                                }                                
+
+                            }
+                        }
+                    }
+                }    
+
+
+
+
+                auto *right = cast<CallInstr>(right_cond_vars[0])->front(); // the left hand side of the right condition
+                auto *right_lhs = cast<CallInstr>(right);
+                if(build_flag == 1){
+                    right_lhs = cast<CallInstr>(right_cond->front());
+                }
+                if(right_lhs == NULL){
+                    std::__1::vector<codon::ir::Var *> r_var_lhs = right->getUsedVariables();
+                    auto r_lhs_name = r_var_lhs[0]->getName();
+                    if (r_lhs_name == var_str_outer){
+                        bw_manager << "1\n";
+                    }
+                    else{
+                        if(r_lhs_name == var_str_inner){
+                            bw_manager << "2\n";
+                        }
+                        else{
+                            bw_manager << "0\n";
+                        }
+                    }
+                    bw_manager << "0\n";
+
+                }
+                else{
+                    auto r_last_lhs_op = util::getFunc(right_lhs->getCallee())->getUnmangledName(); 
+                    auto *right_lhs_lhs = right_lhs->front();
+                    auto *right_lhs_lhs_func = cast<CallInstr>(right_lhs_lhs); // the second to last op of the lhs of first condition
+                    if(right_lhs_lhs_func == NULL){
+                        std::__1::vector<codon::ir::Var *> r_var_lhs_lhs = right_lhs_lhs->getUsedVariables();
+                        auto r_lhs_lhs_name = r_var_lhs_lhs[0]->getName();
+                        if (r_lhs_lhs_name == var_str_outer){
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(r_lhs_lhs_name == var_str_inner){
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }
+                        }
+                        auto *right_lhs_rhs = right_lhs->back();
+                        std::__1::vector<codon::ir::Var *> r_var_lhs_rhs = right_lhs_rhs->getUsedVariables();
+                        auto r_lhs_rhs_name = r_var_lhs_rhs[0]->getName();
+                        if (r_lhs_rhs_name == var_str_outer){
+                            if (r_last_lhs_op == "__sub__"){
+                                bw_manager << "-";
+                            }
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(r_lhs_lhs_name == var_str_inner){
+                                if (r_last_lhs_op == "__sub__"){
+                                    bw_manager << "-";
+                                }                            
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }
+                        }                           
+
+                    }
+                    else{         
+                        auto neg_test_name = util::getFunc(right_lhs_lhs_func->getCallee())->getUnmangledName();
+                        auto *r_first_lhs_operand = right_lhs_lhs_func->back();
+                        std::__1::vector<codon::ir::Var *> r_first_var = r_first_lhs_operand->getUsedVariables();
+                        auto r_first_var_name = r_first_var[0]->getName();
+                        if (r_first_var_name == var_str_outer){
+                            if(neg_test_name == "__neg__"){
+                                bw_manager << "-";
+                            }                            
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(r_first_var_name == var_str_inner){       
+                                if(neg_test_name == "__neg__"){
+                                    bw_manager << "-";
+                                }                                             
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }                        
+                        }      
+                                    
+                        auto *right_lhs_rhs = right_lhs->back();                  
+                        std::__1::vector<codon::ir::Var *> r_second_var = right_lhs_rhs->getUsedVariables();                
+                        auto r_second_var_name = r_second_var[0]->getName();    
+                        if (r_second_var_name == var_str_outer){
+                            if(r_last_lhs_op == "__sub__"){
+                                bw_manager << "-";
+                            }                        
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(r_second_var_name == var_str_inner){    
+                                if(r_last_lhs_op == "__sub__"){
+                                    bw_manager << "-";
+                                }                                            
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }                        
+                        }  
+                    }                                       
+
+                }
+                auto *right_rhs = cast<CallInstr>(right_cond_vars[0])->back();
+                if(build_flag == 1){
+                    right_rhs = right_cond->back();
+                }
+                bw_manager << *right_rhs << "\n";      
+            }              
+            else{             
+                auto *single_left_cond = cast<CallInstr>(main_true_branch);
+                //std::__1::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
+                auto *left_operator = util::getFunc(single_left_cond->getCallee());
+                auto left_op_name = left_operator->getUnmangledName();
+                if (left_op_name == "__eq__"){
+                    bw_manager << "0\n";
+                }
+                else{
+                    if (left_op_name == "__gt__"){
+                        bw_manager << "1\n";
+                    }
+                    else{
+                        if(left_op_name == "__ge__"){
+                            bw_manager << "2\n";
+                        }
+                        else{
+                            if(left_op_name == "__lt__"){
+                                bw_manager << "-1\n";
+                            }
+                            else{
+                                bw_manager << "-2\n";
+                            }
+                        }
+                    }
+                }            
+
+                auto *left_lhs = cast<CallInstr>(main_true_branch); // the last op of the lhs of first condition
+                auto *op_check = cast<CallInstr>(left_lhs->front());
+                std::__1::vector<codon::ir::Value *> left_cond_vars = left_lhs->getUsedValues();             
+                if(op_check == NULL){
+                    std::__1::vector<codon::ir::Var *> var_lhs = left_cond_vars[0]->getUsedVariables();
+                    auto lhs_name = var_lhs[0]->getName();
+                    if (lhs_name == var_str_outer){
+                        bw_manager << "1\n";
+                    }
+                    else{
+                        if(lhs_name == var_str_inner){
+                            bw_manager << "2\n";
+                        }
+                        else{
+                            bw_manager << "0\n";
+                        }
+                    }
+                    bw_manager << "0\n";
+
+                }
+                else{
+                    auto last_lhs_op = util::getFunc(op_check->getCallee())->getUnmangledName(); 
+                    auto *left_lhs_lhs = op_check->front();
+                    auto *left_lhs_lhs_func = cast<CallInstr>(left_lhs_lhs); // the second to last op of the lhs of first condition
+                    if(left_lhs_lhs_func == NULL){
+                        std::__1::vector<codon::ir::Var *> var_lhs_lhs = left_lhs_lhs->getUsedVariables();
+                        auto lhs_lhs_name = var_lhs_lhs[0]->getName();
+                        if (lhs_lhs_name == var_str_outer){
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(lhs_lhs_name == var_str_inner){
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }
+                        }
+                        auto *left_lhs_rhs = op_check->back();
+                        std::__1::vector<codon::ir::Var *> var_lhs_rhs = left_lhs_rhs->getUsedVariables();
+                        auto lhs_rhs_name = var_lhs_rhs[0]->getName();
+                        if (lhs_rhs_name == var_str_outer){
+                            if (last_lhs_op == "__sub__"){
+                                bw_manager << "-";
+                            }
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(lhs_lhs_name == var_str_inner){
+                                if (last_lhs_op == "__sub__"){
+                                    bw_manager << "-";
+                                }                            
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }
+                        }                           
+
+                    }
+                    else{         
+                        auto neg_test_name = util::getFunc(left_lhs_lhs_func->getCallee())->getUnmangledName();
+                        auto *first_lhs_operand = left_lhs_lhs_func->back();
+                        std::__1::vector<codon::ir::Var *> first_var = first_lhs_operand->getUsedVariables();
+                        auto first_var_name = first_var[0]->getName();
+                        if (first_var_name == var_str_outer){
+                            if(neg_test_name == "__neg__"){
+                                bw_manager << "-";
+                            }                            
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(first_var_name == var_str_inner){       
+                                if(neg_test_name == "__neg__"){
+                                    bw_manager << "-";
+                                }                                             
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }                        
+                        }
+                                    
+                                    
+                        auto *left_lhs_rhs = left_lhs->back();                  
+                        std::__1::vector<codon::ir::Var *> second_var = left_lhs_rhs->getUsedVariables();                
+                        auto second_var_name = second_var[0]->getName();    
+                        if (second_var_name == var_str_outer){
+                            if(last_lhs_op == "__sub__"){
+                                bw_manager << "-";
+                            }                        
+                            bw_manager << "1\n";
+                        }
+                        else{
+                            if(second_var_name == var_str_inner){    
+                                if(last_lhs_op == "__sub__"){
+                                    bw_manager << "-";
+                                }                                            
+                                bw_manager << "2\n";
+                            }
+                            else{
+                                bw_manager << "0\n";
+                            }                        
+                        }  
+                    }                                       
+
+                }
+                bw_manager << *main_if_ops[1] << "\n";                
+                bw_manager << "0\n0\n0\n0\n";
+            }
+            
+            bw_manager.close();
+        }
+        
+
+
+        auto *ass = cast<CallInstr>(cast<SeriesFlow>(inner_loop->getBody())->back()); // assignment op inside the inner loop   
+        if (flag == 0){
+            auto *main_else_branch = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back())->getFalseBranch();                        
+            ass = cast<CallInstr>(cast<SeriesFlow>(main_else_branch)->back()); // assignment op inside the inner loop                
+        }
         auto *right_side = cast<CallInstr>(ass->back()); // the right side of the assignment operation
         std::__1::vector<codon::ir::Var *> left_side = cast<CallInstr>(ass->front())->front()->getUsedVariables();
         auto left_side_name = left_side[0]->getName();
@@ -1189,7 +1686,6 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     auto *a_arg = all_args_2[1];                                
                                     auto *b_arg = all_args_2[2];
                                     auto *am_arg = all_args_2[3];                                                                    
-                                    //std::cout << "FUNC ARG2: " << elif_arg_back << "\n";
                                     if(elif_cond_func_name == "__eq__" && (elif_arg_1_name == match_arg_1 || elif_arg_1_name == match_arg_2) && ((elif_arg_2_name == match_arg_1 || elif_arg_2_name == match_arg_2))){
                                         auto *return_val_2_1 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_2)->back())->getValue();
                                         auto *return_val_2_2 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_2)->back())->getValue();
@@ -1996,7 +2492,6 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
     else{
         return;
     }
-
 }
 
 
