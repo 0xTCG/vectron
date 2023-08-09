@@ -39,13 +39,14 @@ def orig(h, m):
      s = listCR(len(h) + 1, len(m) + 1, -10000, -10000, 0, -4, -2, -10000)
      for i in range(1, len(m) + 1):
           for j in range(1, len(h) + 1):       
-               if j - i <= -105 and j - i >= 105:
-                    if j - i == -105 or j - 1 == 105:
+               if j - i <= -105 or j - i >= 105:
+                    if j - i == -105 or j - i == 105:
                          q[i][j] = -10000
                          l[i][j] = -10000
                          s[i][j] = -10000
                else:
                     q[i][j] = max(q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6))                              
+                    #q[i][j] = max(q[i - 1][j - 1] + match_func(m[i - 1], 5, 4, -3, h[j - 1]), l[i - 1][j - 1] + match_func(m[i - 1], 6, 4, -2, h[j - 1]), s[i - 1][j - 1] + match_func(m[i - 1], 7, 5, -3, h[j - 1]))
      print(zdrop(q[-1][-1], max_val(q), 800))
      return zdrop(q[-1][-1], max_val(q), 800)
 
@@ -937,7 +938,7 @@ def calculate_bw_or(starget, squery, x, seqs_t, matrices, H, V, check, params, s
           mx2_arg2_c0 = m_c0_x
           mx2_arg2_c1 = m_c1_x
           mx2_arg3_c0 = m_c0_x
-          mx2_arg3_c1 = m_c1_x   
+          mx2_arg3_c1 = m_c1_x          
      if mx3_checker != 0:
           mx3_arg2_vec = Vec(i16(inds_mx3[4]), i16, 16)
           mx3_arg3_vec = Vec(i16(inds_mx3[7]), i16, 16)                    
@@ -1011,7 +1012,7 @@ def calculate_bw_or(starget, squery, x, seqs_t, matrices, H, V, check, params, s
           mx3_arg2_c0 = m_c0_x
           mx3_arg2_c1 = m_c1_x
           mx3_arg3_c0 = m_c0_x
-          mx3_arg3_c1 = m_c1_x                                                                                                    
+          mx3_arg3_c1 = m_c1_x                                                                                               
      if params[16] == -1:          
           if first_list == "M":               
                arg_1_c0 = m_c0_x
@@ -1076,6 +1077,7 @@ def calculate_bw_or(starget, squery, x, seqs_t, matrices, H, V, check, params, s
      x_vec = x.arr.ptr
      n = Vec(u8(ord("N")), u8, 16)
      infinitizer = Vec(i16(-10000), i16, 16)
+     zeronizer = Vec(i16(0), i16, 16)
      t1_l = 0
      t2_l = 0
      t3_l = 0
@@ -1141,6 +1143,7 @@ def calculate_bw_or(starget, squery, x, seqs_t, matrices, H, V, check, params, s
               
      L = bw_params[4]
      U = bw_params[8]     
+
      match decision:
           case "000":
                for current_x in range(outer_start, outer_stop, outer_step):
@@ -1154,7 +1157,7 @@ def calculate_bw_or(starget, squery, x, seqs_t, matrices, H, V, check, params, s
                          else:                       
                               s_1 = seqs_t[1][current_y + y_ind_1] 
                               s_2 = seqs_t[1][current_y + y_ind_2] 
-                              s_3 = seqs_t[1][current_y + y_ind_3]               
+                              s_3 = seqs_t[1][current_y + y_ind_3]   
                               for ind_y in range(check):
                                    if params[8] == 0:
                                         if params[11] != -1:
@@ -2812,14 +2815,14 @@ def sumOne(s_x, s_y):
           inner_stop += len(s_y[0])
      inner_stop += params[7]  
      inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names = [""]
      mx1_checker = 0
      inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx2_names = [""]
      mx2_checker = 0
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx2_names = [""]
+     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
      mx2_checker = 0     
+     mx1_names = ["", "", ""]
+     mx2_names = ["", "", ""]
+     mx3_names = ["", "", ""]
      try:
           temp_mx1 = [""]
           with open("mx_arg1.txt") as f:
@@ -2875,10 +2878,13 @@ def sumOne(s_x, s_y):
           inds_3 = [0 for _ in range(10)]
           lst_3_name = ""
      lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0]
-     inds_H = [0]
-     inds_V = [0]
-     if left_param == lst_1_name:
+     inds = [0, 0, 0, 0, 0, 0, 0, 0]
+     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
+     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
+     first_list = ""
+     second_list = ""
+     third_list = ""
+     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
           inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
           inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
           inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
@@ -2969,6 +2975,7 @@ def sumOne(s_x, s_y):
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
      SEQ_NO_Q = len(major_params_2)
+
      if bw != -1:
           if bw_params[0] == 1:
                for x in major_params_1:
