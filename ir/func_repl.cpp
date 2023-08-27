@@ -17,7 +17,7 @@ void FuncReplacement::transform(CallInstr *v) {
       auto *args_1 = v->front();
       auto *args_2 = v->back();    
       auto *sumOne = M->getOrRealizeFunc("sumOne", {args_1->getType(), args_2->getType()});    
-      auto *sumOneCall = util::call(sumOne, {args_1, args_2}); 
+      auto *sumOneCall = util::call(sumOne, {args_1, args_2});       
       v->replaceAll(sumOneCall);
     }
     

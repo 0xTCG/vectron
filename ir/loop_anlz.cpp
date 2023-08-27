@@ -20,9 +20,12 @@ namespace vectron {
 using namespace codon::ir;
 
 void LoopAnalyzer::transform(ImperativeForFlow *v) {
+    int arg1_flag = 0;
+    int arg2_flag = 0;
+    int arg3_flag = 0;
     int flag = 0;
     auto *pf = getParentFunc();;
-    auto pf_name = pf->getUnmangledName();
+    auto pf_name = pf->getUnmangledName();    
     if (pf_name == "prep"){   
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
@@ -652,10 +655,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             
             bw_manager.close();
-        }
-        
-
-
+        }    
         auto *ass = cast<CallInstr>(cast<SeriesFlow>(inner_loop->getBody())->back()); // assignment op inside the inner loop   
         if (flag == 0){
             auto *main_else_branch = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back())->getFalseBranch();                        
@@ -848,7 +848,8 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 }
             }
             if (arg1_inst == NULL){
-                MyFile << "0\n0\n0\n0\n0\n" << *arg1->front() << "\n"; // writing down the constant value + reserved elements for further instructions
+                MyFile << "0\n0\n0\n0\n0\n" << *arg1->front() << "\n"; // writing down the constant value + reserved elements for further instructions                
+                arg1_flag = 1;
             }
             else{
                 auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();
@@ -1375,6 +1376,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             if (arg2_inst == NULL){
                 MyFile << "0\n0\n0\n0\n0\n"<< *r_mid[1] << "\n"; // writing down the constant value + reserved elements for further instructions
+                arg2_flag = 1;
             }
             else{
                 auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();
@@ -1907,6 +1909,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 auto *arg3_inst = cast<CallInstr>(arg3->back());
                 if (arg3_inst == NULL){
                     MyFile << "0\n0\n0\n0\n0\n" << *r_end << "\n"; // writing down the constant value + reserved elements for further instructions
+                    arg3_flag = 1;
                 }
                 else{
                     auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();
@@ -2438,33 +2441,51 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         }
         else
             return;
-         
-        
-
         auto *arg1 = cast<CallInstr>(right_side->front()); // the left side operand
         auto *arg1_inst = cast<CallInstr>(arg1->front());
-        auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();   
+        std::string arg1_func_name = "";
+        if(arg1_inst != NULL){
+            arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();   
+        }
         if (arg1_inst != NULL && arg1_func_name != "max_store"){      
-            auto *arg1_op = cast<CallInstr>(arg1_inst->front()); // the left side operand
+            auto *arg1_op = cast<CallInstr>(arg1_inst->front()); // the left side operand        
             auto *arg1_fr = cast<CallInstr>(arg1_op->front()); // the left side variable + its row index                         
-            auto *arg1_var = arg1_fr->front(); // the left side variable              
-            std::vector<codon::ir::Var *> arg1_vars = arg1_var->getUsedVariables();            
-            auto arg1_var_name = arg1_vars[0]->getName(); 
-            MyFile << arg1_var_name << "\n";        
+            if(arg1_fr != NULL){
+                auto *arg1_var = arg1_fr->front(); // the left side variable              
+                std::vector<codon::ir::Var *> arg1_vars = arg1_var->getUsedVariables();
+                auto arg1_var_name = arg1_vars[0]->getName(); 
+                MyFile << arg1_var_name << "\n";  
+            }
+            else{
+                std::vector<codon::ir::Var *> arg1_vars = arg1_op->front()->getUsedVariables();
+                auto arg1_var_name = arg1_vars[0]->getName(); 
+                MyFile << arg1_var_name << "\n";                  
+            }
         }
         else{
             MyFile << "0" << "\n";        
         }
-        std::__wrap_iter<codon::ir::Value **> r_mid = cast<CallInstr>(right_side->front())->begin();
-        auto *arg2_inst = cast<CallInstr>(r_mid[1]);    
-        auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();             
+        auto *r_mid_0 = cast<CallInstr>(right_side->front());
+        std::__wrap_iter<codon::ir::Value **> r_mid = r_mid_0->begin();        
+        auto *arg2_inst = cast<CallInstr>(r_mid[1]);     
+        std::string arg2_func_name = "";
+        if (arg2_inst != NULL){
+            arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();             
+        }          
         if (arg2_inst != NULL && arg2_func_name != "max_store"){
             auto *arg2_op = cast<CallInstr>(arg2_inst->front()); // the left side operand
-            auto *arg2_fr = cast<CallInstr>(arg2_op->front()); // the left side variable + its row index                 
-            auto *arg2_var = arg2_fr->front(); // the left side variable              
-            std::vector<codon::ir::Var *> arg2_vars = arg2_var->getUsedVariables();            
-            auto arg2_var_name = arg2_vars[0]->getName();
-            MyFile << arg2_var_name << "\n";
+            auto *arg2_fr = cast<CallInstr>(arg2_op->front()); // the left side variable + its row index   
+            if(arg2_fr != NULL){              
+                auto *arg2_var = arg2_fr->front(); // the left side variable              
+                std::vector<codon::ir::Var *> arg2_vars = arg2_var->getUsedVariables();            
+                auto arg2_var_name = arg2_vars[0]->getName();
+                MyFile << arg2_var_name << "\n";
+            }
+            else{
+                std::vector<codon::ir::Var *> arg2_vars = arg2_op->front()->getUsedVariables();            
+                auto arg2_var_name = arg2_vars[0]->getName();
+                MyFile << arg2_var_name << "\n";                
+            }
         }
         else{
             MyFile << "0" << "\n";
@@ -2473,20 +2494,31 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         if (r_end != r_mid[1]){        
             auto *arg3 = cast<CallInstr>(right_side->back()); // the right side operand                         
             auto *arg3_inst = cast<CallInstr>(arg3->back()); 
-            auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();   
+            std::string arg3_func_name = "";
+            if(arg3_inst != NULL){
+                arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();   
+            }       
             if (arg3_inst != NULL && arg3_func_name != "max_store"){
                 auto *arg3_op = cast<CallInstr>(arg3_inst->front()); // the left side operand
-                auto *arg3_fr = cast<CallInstr>(arg3_op->front()); // the left side variable + its row index     
-                auto *arg3_var = arg3_fr->front(); // the left side variable                                                                                
-                std::vector<codon::ir::Var *> arg3_vars = arg3_var->getUsedVariables();            
-                auto arg3_var_name = arg3_vars[0]->getName();                  
-                MyFile << arg3_var_name << "\n";                
+                auto *arg3_fr = cast<CallInstr>(arg3_op->front()); // the left side variable + its row index                       
+                if(arg3_fr != NULL){
+                    auto *arg3_var = arg3_fr->front(); // the left side variable                                                                                
+                    std::vector<codon::ir::Var *> arg3_vars = arg3_var->getUsedVariables();            
+                    auto arg3_var_name = arg3_vars[0]->getName();                  
+                    MyFile << arg3_var_name << "\n";                
+                }
+                else{
+                    std::vector<codon::ir::Var *> arg3_vars = arg3_op->front()->getUsedVariables();            
+                    auto arg3_var_name = arg3_vars[0]->getName();                  
+                    MyFile << arg3_var_name << "\n";                                
+                }
             }
             else{
                 MyFile << "0" << "\n";
             }
-        }                              
-        MyFile << left_side_name << "\n";
+        }                           
+        MyFile << left_side_name << "\n";            
+         
         MyFile.close();         
     }
     else{
