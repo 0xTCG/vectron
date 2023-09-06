@@ -14,7 +14,7 @@ def orig(T, params):
 
 SEQ_NO_T = 4096
 SEQ_NO_Q = 4096
-params = {"a": 2, "b": 4, "ambig": 3, "gapo": 4, "gape": 2, "zdrop": 800, "bandwidth": 105, "end_bonus": 0}
+params = {"a": 2, "b": 4, "ambig": 3, "gapo": 4, "gape": 3, "zdrop": 800, "bandwidth": 105, "end_bonus": 0}
 seqs_x = [s"" for _ in range(SEQ_NO_T)]
 f = open("seqx_seq.txt", "r")
 count = 0

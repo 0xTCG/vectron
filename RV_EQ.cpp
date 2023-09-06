@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+//# pragma clang loop vectorize(assume_safety) vectorize_width(16)
 
 int zdrop(int a, int b, int c){
     if(b - a <= c)
