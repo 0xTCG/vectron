@@ -1584,7 +1584,26 @@ class Vec[T, N: Static[int]]:
     @staticmethod    
     @inline
     def cmp_vec(other2: Vec[u8, 16], other3: Vec[u8, 16], other4: Vec[i16, 16], other5: Vec[i16, 16], other6: Vec[i16, 16], other7: Vec[u8, 16]) -> Vec[i16, 16]:
-        return Vec._mm256_cmpgt_vec(other2, other3, other4, other5, other6, other7)        
+        return Vec._mm256_cmpgt_vec(other2, other3, other4, other5, other6, other7)   
+
+    @pure
+    @derives
+    @staticmethod
+    @inline
+    @llvm
+    def _mm256_cmpgt_vec_2(x: Vec[u8, 16], y: Vec[u8, 16], a: Vec[i16, 16], b: Vec[i16, 16]) -> Vec[i16, 16]:
+        %0= icmp eq <16 x i8> %x, %y
+        %1= zext <16 x i1> %0 to <16 x i16>
+        %2= mul <16 x i16> %1, %a
+        %3= xor <16 x i16> %1, <i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1>
+        %4= mul <16 x i16> %3, %b
+        %5= add <16 x i16> %2, %4
+        ret <16 x i16> %5
+
+    @staticmethod    
+    @inline
+    def cmp_vec_2(other2: Vec[u8, 16], other3: Vec[u8, 16], other4: Vec[i16, 16], other5: Vec[i16, 16]) -> Vec[i16, 16]:
+        return Vec._mm256_cmpgt_vec_2(other2, other3, other4, other5)                
 
 
     @pure
@@ -1822,6 +1841,77 @@ class Vec[T, N: Static[int]]:
 
     @inline
     @llvm
+    def __mm256_max_i16_2(x: Vec[i16, 16], y: Vec[i16, 16], z: Vec[i16, 16], ms: ptr, index: int, m: ptr, x2: Vec[i16, 16], y2: Vec[i16, 16], z2: Vec[i16, 16], index2: int) -> None:
+        declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
+        %0 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x, <16 x i16> %y)
+        %1 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %0, <16 x i16> %z)
+        %2 = getelementptr <16 x i16>, ptr %ms, i64 %index
+        %3 = load <16 x i16>, ptr %2
+        %4 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %1, <16 x i16> %3)
+        store <16 x i16> %4, ptr %2
+        %5 = getelementptr <16 x i16>, ptr %m, i64 %index
+        store <16 x i16> %1, ptr %5
+        %6 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x2, <16 x i16> %y2)
+        %7 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %6, <16 x i16> %z2)
+        %8 = getelementptr <16 x i16>, ptr %ms, i64 %index2
+        %9 = load <16 x i16>, ptr %8
+        %10 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %7, <16 x i16> %9)
+        store <16 x i16> %10, ptr %8
+        %11 = getelementptr <16 x i16>, ptr %m, i64 %index2
+        store <16 x i16> %7, ptr %11
+        ret {} {}
+
+      
+    @inline
+    def max_2(self: Vec[i16, 16], other: Vec[i16, 16], other2: Vec[i16, 16], other3: List[Vec[i16, 16]], other4: int, other5: List[Vec[i16, 16]], other6: Vec[i16, 16], other7: Vec[i16, 16], other8: Vec[i16, 16]):        
+        Vec.__mm256_max_i16_2(self, other, other2, other3.arr.ptr, other4, other5.arr.ptr, other6, other7, other8, other4 + 1)        
+
+
+    @inline
+    @llvm
+    def __mm256_max_i16_4(x: Vec[i16, 16], y: Vec[i16, 16], z: Vec[i16, 16], ms: ptr, index: int, m: ptr, x2: Vec[i16, 16], y2: Vec[i16, 16], z2: Vec[i16, 16], index2: int, x3: Vec[i16, 16], y3: Vec[i16, 16], z3: Vec[i16, 16], index3: int, x4: Vec[i16, 16], y4: Vec[i16, 16], z4: Vec[i16, 16], index4: int) -> None:
+        declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
+        %0 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x, <16 x i16> %y)
+        %1 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %0, <16 x i16> %z)
+        %2 = getelementptr <16 x i16>, ptr %ms, i64 %index
+        %3 = load <16 x i16>, ptr %2
+        %4 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %1, <16 x i16> %3)
+        store <16 x i16> %4, ptr %2
+        %5 = getelementptr <16 x i16>, ptr %m, i64 %index
+        store <16 x i16> %1, ptr %5
+        %6 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x2, <16 x i16> %y2)
+        %7 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %6, <16 x i16> %z2)
+        %8 = getelementptr <16 x i16>, ptr %ms, i64 %index2
+        %9 = load <16 x i16>, ptr %8
+        %10 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %7, <16 x i16> %9)
+        store <16 x i16> %10, ptr %8
+        %11 = getelementptr <16 x i16>, ptr %m, i64 %index2
+        store <16 x i16> %7, ptr %11
+        %12= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x3, <16 x i16> %y3)
+        %13= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %12, <16 x i16> %z3)
+        %14= getelementptr <16 x i16>, ptr %ms, i64 %index3
+        %15= load <16 x i16>, ptr %14
+        %16= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %13, <16 x i16> %15)
+        store <16 x i16> %16, ptr %14
+        %17= getelementptr <16 x i16>, ptr %m, i64 %index3
+        store <16 x i16> %13, ptr %17
+        %18= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x4, <16 x i16> %y4)
+        %19= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %18, <16 x i16> %z4)
+        %20= getelementptr <16 x i16>, ptr %ms, i64 %index4
+        %21= load <16 x i16>, ptr %20
+        %22= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %19, <16 x i16> %21)
+        store <16 x i16> %22, ptr %20
+        %23= getelementptr <16 x i16>, ptr %m, i64 %index4
+        store <16 x i16> %19, ptr %23
+        ret {} {}
+
+      
+    @inline
+    def max_4(self: Vec[i16, 16], other: Vec[i16, 16], other2: Vec[i16, 16], other3: List[Vec[i16, 16]], other4: int, other5: List[Vec[i16, 16]], other6: Vec[i16, 16], other7: Vec[i16, 16], other8: Vec[i16, 16], other9: Vec[i16, 16], other10: Vec[i16, 16], other11: Vec[i16, 16], other12: Vec[i16, 16], other13: Vec[i16, 16], other14: Vec[i16, 16]):        
+        Vec.__mm256_max_i16_4(self, other, other2, other3.arr.ptr, other4, other5.arr.ptr, other6, other7, other8, other4 + 1, other9, other10, other11, other4 + 2, other12, other13, other14, other4 + 3)        
+
+    @inline
+    @llvm
     def __mm256_min_i16(x: Vec[i16, 16], y: Vec[i16, 16], z: Vec[i16, 16], ms: ptr, index: int, m: ptr) -> None:
         declare <16 x i16> @llvm.smin.v16i16(<16 x i16>, <16 x i16>)  
         declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
@@ -1839,7 +1929,79 @@ class Vec[T, N: Static[int]]:
     def min(self: Vec[i16, 16], other: Vec[i16, 16], other2: Vec[i16, 16], other3: List[Vec[i16, 16]], other4: int, other5: List[Vec[i16, 16]]):
         Vec.__mm256_min_i16(self, other, other2, other3.arr.ptr, other4, other5.arr.ptr)      
 
-  
+    @inline
+    @llvm
+    def __mm256_min_i16_2(x: Vec[i16, 16], y: Vec[i16, 16], z: Vec[i16, 16], ms: ptr, index: int, m: ptr, x2: Vec[i16, 16], y2: Vec[i16, 16], z2: Vec[i16, 16], index2: int) -> None:
+        declare <16 x i16> @llvm.smin.v16i16(<16 x i16>, <16 x i16>)
+        declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
+        %0 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x, <16 x i16> %y)
+        %1 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %0, <16 x i16> %z)
+        %2 = getelementptr <16 x i16>, ptr %ms, i64 %index
+        %3 = load <16 x i16>, ptr %2
+        %4 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %1, <16 x i16> %3)
+        store <16 x i16> %4, ptr %2
+        %5 = getelementptr <16 x i16>, ptr %m, i64 %index
+        store <16 x i16> %1, ptr %5
+        %6 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x2, <16 x i16> %y2)
+        %7 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %6, <16 x i16> %z2)
+        %8 = getelementptr <16 x i16>, ptr %ms, i64 %index2
+        %9 = load <16 x i16>, ptr %8
+        %10 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %7, <16 x i16> %9)
+        store <16 x i16> %10, ptr %8
+        %11 = getelementptr <16 x i16>, ptr %m, i64 %index2
+        store <16 x i16> %7, ptr %11
+        ret {} {}
+
+      
+    @inline
+    def min_2(self: Vec[i16, 16], other: Vec[i16, 16], other2: Vec[i16, 16], other3: List[Vec[i16, 16]], other4: int, other5: List[Vec[i16, 16]], other6: Vec[i16, 16], other7: Vec[i16, 16], other8: Vec[i16, 16]):        
+        Vec.__mm256_min_i16_2(self, other, other2, other3.arr.ptr, other4, other5.arr.ptr, other6, other7, other8, other4 + 1)
+
+    @inline
+    @llvm
+    def __mm256_min_i16_4(x: Vec[i16, 16], y: Vec[i16, 16], z: Vec[i16, 16], ms: ptr, index: int, m: ptr, x2: Vec[i16, 16], y2: Vec[i16, 16], z2: Vec[i16, 16], index2: int, x3: Vec[i16, 16], y3: Vec[i16, 16], z3: Vec[i16, 16], index3: int, x4: Vec[i16, 16], y4: Vec[i16, 16], z4: Vec[i16, 16], index4: int) -> None:
+        declare <16 x i16> @llvm.smin.v16i16(<16 x i16>, <16 x i16>)
+        declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
+        %0 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x, <16 x i16> %y)
+        %1 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %0, <16 x i16> %z)
+        %2 = getelementptr <16 x i16>, ptr %ms, i64 %index
+        %3 = load <16 x i16>, ptr %2
+        %4 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %1, <16 x i16> %3)
+        store <16 x i16> %4, ptr %2
+        %5 = getelementptr <16 x i16>, ptr %m, i64 %index
+        store <16 x i16> %1, ptr %5
+        %6 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x2, <16 x i16> %y2)
+        %7 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %6, <16 x i16> %z2)
+        %8 = getelementptr <16 x i16>, ptr %ms, i64 %index2
+        %9 = load <16 x i16>, ptr %8
+        %10 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %7, <16 x i16> %9)
+        store <16 x i16> %10, ptr %8
+        %11 = getelementptr <16 x i16>, ptr %m, i64 %index2
+        store <16 x i16> %7, ptr %11
+        %12= call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x3, <16 x i16> %y3)
+        %13= call <16 x i16> @llvm.smin.v16i16(<16 x i16> %12, <16 x i16> %z3)
+        %14= getelementptr <16 x i16>, ptr %ms, i64 %index3
+        %15= load <16 x i16>, ptr %14
+        %16= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %13, <16 x i16> %15)
+        store <16 x i16> %16, ptr %14
+        %17= getelementptr <16 x i16>, ptr %m, i64 %index3
+        store <16 x i16> %13, ptr %17
+        %18= call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x4, <16 x i16> %y4)
+        %19= call <16 x i16> @llvm.smin.v16i16(<16 x i16> %18, <16 x i16> %z4)
+        %20= getelementptr <16 x i16>, ptr %ms, i64 %index4
+        %21= load <16 x i16>, ptr %20
+        %22= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %19, <16 x i16> %21)
+        store <16 x i16> %22, ptr %20
+        %23= getelementptr <16 x i16>, ptr %m, i64 %index4
+        store <16 x i16> %19, ptr %23
+        ret {} {}
+
+      
+    @inline
+    def min_4(self: Vec[i16, 16], other: Vec[i16, 16], other2: Vec[i16, 16], other3: List[Vec[i16, 16]], other4: int, other5: List[Vec[i16, 16]], other6: Vec[i16, 16], other7: Vec[i16, 16], other8: Vec[i16, 16], other9: Vec[i16, 16], other10: Vec[i16, 16], other11: Vec[i16, 16], other12: Vec[i16, 16], other13: Vec[i16, 16], other14: Vec[i16, 16]):        
+        Vec.__mm256_min_i16_4(self, other, other2, other3.arr.ptr, other4, other5.arr.ptr, other6, other7, other8, other4 + 1, other9, other10, other11, other4 + 2, other12, other13, other14, other4 + 3)        
+
+
     @inline
     @llvm
     def __mm256_max_i162(x: Vec[i16, 16], y: Vec[i16, 16], ms: ptr, index: int, m: ptr) -> None:
@@ -1860,6 +2022,33 @@ class Vec[T, N: Static[int]]:
 
     @inline
     @llvm
+    def __mm256_max_i162_2(x: Vec[i16, 16], y: Vec[i16, 16], ms: ptr, index: int, m: ptr, x2: Vec[i16, 16], y2: Vec[i16, 16], index2: int) -> None:
+        declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)  
+        %0 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x, <16 x i16> %y)
+        %1 = getelementptr <16 x i16>, ptr %ms, i64 %index
+        %2 = load <16 x i16>, ptr %1
+        %3 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %2, <16 x i16> %0) 
+        store <16 x i16> %3, ptr %1   
+        %4 = getelementptr <16 x i16>, ptr %m, i64 %index
+        store <16 x i16> %0, ptr %4   
+        %5= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %x2, <16 x i16> %y2)
+        %6= getelementptr <16 x i16>, ptr %ms, i64 %index2
+        %7= load <16 x i16>, ptr %6
+        %8= call <16 x i16> @llvm.smax.v16i16(<16 x i16> %7, <16 x i16> %5) 
+        store <16 x i16> %8, ptr %6
+        %9= getelementptr <16 x i16>, ptr %m, i64 %index2
+        store <16 x i16> %5, ptr %9
+        ret {} {}
+
+    
+    @inline
+    def max_2(self: Vec[i16, 16], other: Vec[i16, 16], other2: List[Vec[i16, 16]], other3: int, other4: List[Vec[i16, 16]], other5: Vec[i16, 16], other6: Vec[i16, 16]):
+        Vec.__mm256_max_i162_2(self, other, other2.arr.ptr, other3, other4.arr.ptr, other5, other6, other3 + 1)        
+
+        
+
+    @inline
+    @llvm
     def __mm256_min_i162(x: Vec[i16, 16], y: Vec[i16, 16], ms: ptr, index: int, m: ptr) -> None:
         declare <16 x i16> @llvm.smin.v16i16(<16 x i16>, <16 x i16>)  
         declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
@@ -1875,6 +2064,31 @@ class Vec[T, N: Static[int]]:
     @inline
     def min(self: Vec[i16, 16], other: Vec[i16, 16], other2: List[Vec[i16, 16]], other3: int, other4: List[Vec[i16, 16]]):
         Vec.__mm256_min_i162(self, other, other2.arr.ptr, other3, other4.arr.ptr)
+
+    @inline
+    @llvm
+    def __mm256_min_i162_2(x: Vec[i16, 16], y: Vec[i16, 16], ms: ptr, index: int, m: ptr, x2: Vec[i16, 16], y2: Vec[i16, 16], index2: int) -> None:
+        declare <16 x i16> @llvm.smin.v16i16(<16 x i16>, <16 x i16>)  
+        declare <16 x i16> @llvm.smax.v16i16(<16 x i16>, <16 x i16>)
+        %0 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x, <16 x i16> %y)
+        %1 = getelementptr <16 x i16>, ptr %ms, i64 %index
+        %2 = load <16 x i16>, ptr %1
+        %3 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %2, <16 x i16> %0)
+        store <16 x i16> %3, ptr %1
+        %4 = getelementptr <16 x i16>, ptr %m, i64 %index
+        store <16 x i16> %0, ptr %4   
+        %5 = call <16 x i16> @llvm.smin.v16i16(<16 x i16> %x2, <16 x i16> %y2)
+        %6 = getelementptr <16 x i16>, ptr %ms, i64 %index2
+        %7 = load <16 x i16>, ptr %6
+        %8 = call <16 x i16> @llvm.smax.v16i16(<16 x i16> %7, <16 x i16> %5)
+        store <16 x i16> %3, ptr %6
+        %9 = getelementptr <16 x i16>, ptr %m, i64 %index2
+        store <16 x i16> %5, ptr %9
+        ret {} {}
+      
+    @inline
+    def min_2(self: Vec[i16, 16], other: Vec[i16, 16], other2: List[Vec[i16, 16]], other3: int, other4: List[Vec[i16, 16]], other5: Vec[i16, 16], other6: Vec[i16, 16]):
+        Vec.__mm256_min_i162_2(self, other, other2.arr.ptr, other3, other4.arr.ptr, other5, other6, other3 + 1)        
 
     @pure
     @derives    
@@ -1964,6 +2178,54 @@ class Vec[T, N: Static[int]]:
     @inline    
     def assign(self: List[Vec[i16, 16]], other: int, other2: int, other3: List[i16], other4: int):
         return Vec._mm256_assignepi16(self.arr.ptr, other, other2, other3.arr.ptr, other4)
+
+
+    @staticmethod
+    @inline
+    @llvm
+    def _mm256_vec_assignepi16_am(lst, score, index3: int, ms: ptr, z: Vec[i16, 16]) -> None:
+        declare void @llvm.prefetch(ptr, i32, i32, i32)
+        %0 = getelementptr <16 x i16>, ptr %lst, i64 %index3
+        %1 = getelementptr <16 x i16>, ptr %ms, i64 %index3
+        %2 = getelementptr <16 x i16>, ptr %score, i64 %index3
+        call void @llvm.prefetch(ptr %0, i32 0, i32 3, i32 1)
+        call void @llvm.prefetch(ptr %1, i32 1, i32 3, i32 1)
+        call void @llvm.prefetch(ptr %2, i32 1, i32 3, i32 1)
+        %3 = load <16 x i16>, ptr %0
+        %4 = load <16 x i16>, ptr %1
+        %5 = sub <16 x i16> %4, %3
+        %6 = icmp sle <16 x i16> %5, %z
+        %7 = zext <16 x i1> %6 to <16 x i16>
+        %8 = xor <16 x i16> %7, <i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1>
+        %9 = mul <16 x i16> %7, %3
+        %10 = mul <16 x i16> %8, <i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768, i16 -32768>
+        %11 = add <16 x i16> %9, %10
+        store <16 x i16> %11, ptr %2        
+        ret {} {}  
+
+
+    @staticmethod
+    @inline    
+    def vec_assign_am(self: List[Vec[i16, 16]], other3: List[Vec[i16,16]], other4: int, other5: List[Vec[i16, 16]], other6: Vec[i16, 16]):
+        return Vec._mm256_vec_assignepi16_am(self.arr.ptr, other3.arr.ptr, other4, other5.arr.ptr, other6)    
+
+    @staticmethod
+    @inline
+    @llvm
+    def _mm256_vec_assignepi16(lst, score, index3: int) -> None:
+        declare void @llvm.prefetch(ptr, i32, i32, i32)
+        %0 = getelementptr <16 x i16>, ptr %lst, i64 %index3
+        %1 = getelementptr <16 x i16>, ptr %score, i64 %index3
+        call void @llvm.prefetch(ptr %0, i32 0, i32 3, i32 1)
+        call void @llvm.prefetch(ptr %1, i32 1, i32 3, i32 1)
+        %2 = load <16 x i16>, ptr %0
+        store <16 x i16> %2, ptr %1
+        ret {} {}  
+
+    @staticmethod
+    @inline    
+    def vec_assign(self: List[Vec[i16, 16]], other3: List[Vec[i16, 16]], other4: int):
+        return Vec._mm256_vec_assignepi16(self.arr.ptr, other3.arr.ptr, other4)
 
 
     @staticmethod
