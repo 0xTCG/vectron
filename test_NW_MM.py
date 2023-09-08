@@ -39,7 +39,7 @@ def orig(h, m):
      for i in range(1, len(m) + 1):
           for j in range(1, len(h) + 1):       
                if j - i <= -105 or j - i >= 105:
-                    if j - i == -105 or j - 1 == 105:
+                    if j - i == -105 or j - i == 105:
                          q[i][j] = -10000
                          l[i][j] = -10000
                          s[i][j] = -10000
@@ -47,15 +47,15 @@ def orig(h, m):
                     #q[i][j] = max(q[i - 1][j - 1] + match_func(m[i - 1], 6, -2, -1, h[j - 1]), l[i - 1][j - 1] + match_func(m[i - 1], 5, -3, -2, h[j - 1]), s[i - 1][j - 1] + match_func(m[i - 1], 7, -1, -2, h[j - 1])) #000 
                     #q[i][j] = max(q[i - 1][j - 1] + match_func(m[i - 1], 5, -4, -3, h[j - 1]), l[i - 1][j - 1] + match_func(m[i - 1], 6, -3, -3, h[j - 1]), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6)) #001   
                     #q[i][j] = max(q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), l[i - 1][j - 1] + match_func(m[i - 1], 7, -1, -2, h[j - 1]))   #010 
-                    q[i][j] = min(q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6))     #011 
+                    q[i][j] = max(q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6))     #011 
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), s[i - 1][j - 1] + match_func(m[i - 1], 7, -1, -2, h[j - 1])) #100                    
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), q[i - 1][j - 1] + match_func(m[i - 1], 5, -4, -3, h[j - 1]), s[i - 1][j - 1] + match_func(m[i - 1], 7, -3, -4, h[j - 1])) #100 
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6)) #101            
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6), q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1])) #110 
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6), max_store(s, i, j, l[i - 1][j - 1] - 2, q[i - 1][j - 1] - 6)) #111
-     #print(zdrop(q[-1][-1], max_val(q), 800))
-     print(q[-1][-1])
-     return q[-1][-1]#zdrop(q[-1][-1], max_val(q), 800)
+     print(zdrop(q[-1][-1], max_val(q), 800))
+     #print(q[-1][-1])
+     return zdrop(q[-1][-1], max_val(q), 800)
 
 def prep(x, y):
      score = [[0 for _ in range(len(y))] for __ in range(len(x))]
@@ -2646,57 +2646,10 @@ def calculate_bw_or_0(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE OR 000########################
-def sumOne_or_0(s_x, s_y):
-     z_value = i16(-1)
+
+def sumOne_or_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -2712,115 +2665,20 @@ def sumOne_or_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -2839,8 +2697,7 @@ def sumOne_or_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -2853,36 +2710,7 @@ def sumOne_or_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -2896,7 +2724,7 @@ def sumOne_or_0(s_x, s_y):
                t = [[u8(ord(str(row[_][__]))) if _ < SEQ_NO_Q else u8(0) for _ in range(SEQ_NO_Q + REG_SIZE)] for __ in range(MAX_LENGTH_Q)]
                seqs_t = tuple(list([[Vec(t[__][(_ * REG_SIZE): (_ + 1) * REG_SIZE], u8, 16) for _ in range(check)] for __ in range(MAX_LENGTH_Q)]))         
                score = calculate_bw_or_0(x, row, x_vec, seqs_t, matrices, H, V, check, params, score, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_col, H_col_mul, mat_col, mat_col_mul, V_col, V_col_mul, first_list, second_list, third_list, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3)                                 
-     return score  
+     return score 
 
 
 ########################CALCULATE BW OR 001########################
@@ -3016,57 +2844,9 @@ def calculate_bw_or_1(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE OR 001########################
-def sumOne_or_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_or_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -3082,115 +2862,20 @@ def sumOne_or_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -3209,8 +2894,7 @@ def sumOne_or_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -3223,36 +2907,7 @@ def sumOne_or_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -3387,57 +3042,9 @@ def calculate_bw_or_10(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE OR 010########################
-def sumOne_or_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_or_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -3453,115 +3060,20 @@ def sumOne_or_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -3580,8 +3092,7 @@ def sumOne_or_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -3594,36 +3105,7 @@ def sumOne_or_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -3755,52 +3237,9 @@ def calculate_bw_or_11(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE OR 011########################
-def sumOne_or_11(s_x, s_y, zdrop):
+def sumOne_or_11(s_x, s_y, zdrop, params, args1, inds_1, inds_2, inds_3, bw_params, inds_mx2, inds_mx3, checker_1, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -3816,115 +3255,20 @@ def sumOne_or_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -3943,8 +3287,7 @@ def sumOne_or_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -3957,36 +3300,7 @@ def sumOne_or_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                        
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -4000,7 +3314,8 @@ def sumOne_or_11(s_x, s_y, zdrop):
                t = [[u8(ord(str(row[_][__]))) if _ < SEQ_NO_Q else u8(0) for _ in range(SEQ_NO_Q + REG_SIZE)] for __ in range(MAX_LENGTH_Q)]
                seqs_t = tuple(list([[Vec(t[__][(_ * REG_SIZE): (_ + 1) * REG_SIZE], u8, 16) for _ in range(check)] for __ in range(MAX_LENGTH_Q)]))         
                score = calculate_bw_or_11(x, row, x_vec, seqs_t, matrices, H, V, check, params, score, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, H_col, H_col_mul, mat_col, mat_col_mul, V_col, V_col_mul, first_list, second_list, third_list, mx2_names_final, inds_mx2, mx3_names_final, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1)               
-     return score
+     return score 
+
 
 ########################CALCULATE BW OR 100########################
 
@@ -4121,57 +3436,9 @@ def calculate_bw_or_100(starget, squery, x, seqs_t, matrices, H, V, check, param
      return scores  
 
 ########################SUMONE OR 100########################
-def sumOne_or_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_or_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -4187,115 +3454,20 @@ def sumOne_or_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -4314,8 +3486,7 @@ def sumOne_or_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -4328,36 +3499,7 @@ def sumOne_or_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -4489,57 +3631,9 @@ def calculate_bw_or_101(starget, squery, x, seqs_t, matrices, H, V, check, param
      return scores  
 
 ########################SUMONE OR 101########################
-def sumOne_or_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_or_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -4555,115 +3649,20 @@ def sumOne_or_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -4682,8 +3681,7 @@ def sumOne_or_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -4696,36 +3694,7 @@ def sumOne_or_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -4860,57 +3829,9 @@ def calculate_bw_or_110(starget, squery, x, seqs_t, matrices, H, V, check, param
      return scores  
 
 ########################SUMONE OR 110########################
-def sumOne_or_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_or_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -4926,115 +3847,20 @@ def sumOne_or_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -5053,8 +3879,7 @@ def sumOne_or_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -5067,36 +3892,7 @@ def sumOne_or_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -5228,57 +4024,9 @@ def calculate_bw_or_111(starget, squery, x, seqs_t, matrices, H, V, check, param
      return scores  
 
 ########################SUMONE OR 111########################
-def sumOne_or_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_or_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -5294,115 +4042,20 @@ def sumOne_or_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -5421,8 +4074,7 @@ def sumOne_or_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -5435,36 +4087,7 @@ def sumOne_or_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -5598,57 +4221,9 @@ def calculate_bw_and_0(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE BW AND 000########################
-def sumOne_and_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -5664,115 +4239,20 @@ def sumOne_and_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -5791,8 +4271,7 @@ def sumOne_and_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -5805,36 +4284,7 @@ def sumOne_and_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -5968,57 +4418,9 @@ def calculate_bw_and_1(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE BW AND 001########################
-def sumOne_and_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -6034,115 +4436,20 @@ def sumOne_and_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -6161,8 +4468,7 @@ def sumOne_and_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -6175,36 +4481,7 @@ def sumOne_and_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -6339,57 +4616,9 @@ def calculate_bw_and_10(starget, squery, x, seqs_t, matrices, H, V, check, param
      return scores  
 
 ########################SUMONE BW AND 010########################
-def sumOne_and_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -6405,115 +4634,20 @@ def sumOne_and_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -6532,8 +4666,7 @@ def sumOne_and_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -6546,36 +4679,7 @@ def sumOne_and_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -6707,52 +4811,9 @@ def calculate_bw_and_11(starget, squery, x, seqs_t, matrices, H, V, check, param
      return scores  
 
 ########################SUMONE BW AND 011########################
-def sumOne_and_11(s_x, s_y, zdrop):
+def sumOne_and_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -6768,115 +4829,20 @@ def sumOne_and_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -6895,8 +4861,7 @@ def sumOne_and_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -6909,36 +4874,7 @@ def sumOne_and_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                             
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -7073,57 +5009,9 @@ def calculate_bw_and_100(starget, squery, x, seqs_t, matrices, H, V, check, para
      return scores  
 
 ########################SUMONE BW AND 100########################
-def sumOne_and_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -7139,115 +5027,20 @@ def sumOne_and_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -7266,8 +5059,7 @@ def sumOne_and_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -7280,36 +5072,7 @@ def sumOne_and_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -7441,57 +5204,9 @@ def calculate_bw_and_101(starget, squery, x, seqs_t, matrices, H, V, check, para
      return scores  
 
 ########################SUMONE BW AND 101########################
-def sumOne_and_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -7507,115 +5222,20 @@ def sumOne_and_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -7634,8 +5254,7 @@ def sumOne_and_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -7648,36 +5267,7 @@ def sumOne_and_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -7812,57 +5402,9 @@ def calculate_bw_and_110(starget, squery, x, seqs_t, matrices, H, V, check, para
      return scores  
 
 ########################SUMONE BW AND 110########################
-def sumOne_and_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -7878,115 +5420,20 @@ def sumOne_and_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -8005,8 +5452,7 @@ def sumOne_and_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -8019,36 +5465,7 @@ def sumOne_and_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -8180,57 +5597,9 @@ def calculate_bw_and_111(starget, squery, x, seqs_t, matrices, H, V, check, para
      return scores  
 
 ########################SUMONE BW AND 111########################
-def sumOne_and_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_and_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -8246,115 +5615,20 @@ def sumOne_and_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -8373,8 +5647,7 @@ def sumOne_and_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -8387,36 +5660,7 @@ def sumOne_and_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -8550,57 +5794,9 @@ def calculate_bw_1_0(starget, squery, x, seqs_t, matrices, H, V, check, params, 
      return scores  
 
 ########################SUMONE BW 1 000########################
-def sumOne_1_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -8616,115 +5812,20 @@ def sumOne_1_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -8743,8 +5844,7 @@ def sumOne_1_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -8757,36 +5857,7 @@ def sumOne_1_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -8920,57 +5991,9 @@ def calculate_bw_1_1(starget, squery, x, seqs_t, matrices, H, V, check, params, 
      return scores  
 
 ########################SUMONE BW 1 001########################
-def sumOne_1_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -8986,115 +6009,20 @@ def sumOne_1_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -9113,8 +6041,7 @@ def sumOne_1_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -9127,36 +6054,7 @@ def sumOne_1_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -9291,57 +6189,9 @@ def calculate_bw_1_10(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE BW 1 010########################
-def sumOne_1_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -9357,115 +6207,20 @@ def sumOne_1_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -9484,8 +6239,7 @@ def sumOne_1_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -9498,36 +6252,7 @@ def sumOne_1_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -9659,52 +6384,9 @@ def calculate_bw_1_11(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE BW 1 011########################
-def sumOne_1_11(s_x, s_y, zdrop):
+def sumOne_1_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -9720,115 +6402,20 @@ def sumOne_1_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -9847,8 +6434,7 @@ def sumOne_1_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -9861,36 +6447,7 @@ def sumOne_1_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -10025,57 +6582,9 @@ def calculate_bw_1_100(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE BW 1 100########################
-def sumOne_1_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -10091,115 +6600,20 @@ def sumOne_1_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -10218,8 +6632,7 @@ def sumOne_1_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -10232,36 +6645,7 @@ def sumOne_1_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -10393,57 +6777,9 @@ def calculate_bw_1_101(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE BW 1 101########################
-def sumOne_1_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -10459,115 +6795,20 @@ def sumOne_1_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -10586,8 +6827,7 @@ def sumOne_1_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -10600,36 +6840,7 @@ def sumOne_1_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -10764,57 +6975,10 @@ def calculate_bw_1_110(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE BW 1 110########################
-def sumOne_1_110(s_x, s_y):
-     z_value = i16(-1)
+
+def sumOne_1_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -10830,115 +6994,20 @@ def sumOne_1_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -10957,8 +7026,7 @@ def sumOne_1_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -10971,36 +7039,7 @@ def sumOne_1_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -11132,57 +7171,9 @@ def calculate_bw_1_111(starget, squery, x, seqs_t, matrices, H, V, check, params
      return scores  
 
 ########################SUMONE BW 1 111########################
-def sumOne_1_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -11198,115 +7189,20 @@ def sumOne_1_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -11325,8 +7221,7 @@ def sumOne_1_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -11339,36 +7234,7 @@ def sumOne_1_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -11490,51 +7356,9 @@ def calculate_0(starget, squery, x, seqs_t, matrices, H, V, check, params, score
      return scores  
 
 ########################SUMONE NORMAL 000########################
-def sumOne_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -11550,115 +7374,20 @@ def sumOne_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -11677,8 +7406,7 @@ def sumOne_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -11691,7 +7419,7 @@ def sumOne_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                        
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -11812,51 +7540,9 @@ def calculate_1(starget, squery, x, seqs_t, matrices, H, V, check, params, score
      return scores  
 
 ########################SUMONE NORMAL 001########################
-def sumOne_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -11872,115 +7558,20 @@ def sumOne_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -11999,8 +7590,7 @@ def sumOne_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -12013,7 +7603,7 @@ def sumOne_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                      
+     SEQ_NO_Q = len(major_params_2)                                    
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -12135,51 +7725,9 @@ def calculate_10(starget, squery, x, seqs_t, matrices, H, V, check, params, scor
      return scores  
 
 ########################SUMONE NORMAL 010########################
-def sumOne_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1] 
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -12195,115 +7743,20 @@ def sumOne_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -12322,8 +7775,7 @@ def sumOne_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -12336,7 +7788,7 @@ def sumOne_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                       
+     SEQ_NO_Q = len(major_params_2)                                    
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -12455,46 +7907,9 @@ def calculate_11(starget, squery, x, seqs_t, matrices, H, V, check, params, scor
      return scores  
 
 ########################SUMONE NORMAL 011########################
-def sumOne_11(s_x, s_y, zdrop):
+def sumOne_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -12510,115 +7925,20 @@ def sumOne_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -12637,8 +7957,7 @@ def sumOne_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -12651,7 +7970,7 @@ def sumOne_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                     
+     SEQ_NO_Q = len(major_params_2)                                  
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -12773,51 +8092,9 @@ def calculate_100(starget, squery, x, seqs_t, matrices, H, V, check, params, sco
      return scores  
 
 ########################SUMONE NORMAL 100########################
-def sumOne_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -12833,115 +8110,20 @@ def sumOne_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -12960,8 +8142,7 @@ def sumOne_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -12974,7 +8155,7 @@ def sumOne_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                      
+     SEQ_NO_Q = len(major_params_2)                                    
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -13093,51 +8274,9 @@ def calculate_101(starget, squery, x, seqs_t, matrices, H, V, check, params, sco
      return scores  
 
 ########################SUMONE NORMAL 101########################
-def sumOne_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -13153,115 +8292,20 @@ def sumOne_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -13280,8 +8324,7 @@ def sumOne_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -13294,7 +8337,7 @@ def sumOne_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                         
+     SEQ_NO_Q = len(major_params_2)                                       
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -13416,51 +8459,9 @@ def calculate_110(starget, squery, x, seqs_t, matrices, H, V, check, params, sco
      return scores  
 
 ########################SUMONE NORMAL 110########################
-def sumOne_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -13476,115 +8477,20 @@ def sumOne_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -13603,8 +8509,7 @@ def sumOne_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -13617,7 +8522,7 @@ def sumOne_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                       
+     SEQ_NO_Q = len(major_params_2)                                      
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -13736,51 +8641,9 @@ def calculate_111(starget, squery, x, seqs_t, matrices, H, V, check, params, sco
      return scores  
 
 ########################SUMONE NORMAL 111########################
-def sumOne_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]     
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -13796,115 +8659,20 @@ def sumOne_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -13923,8 +8691,7 @@ def sumOne_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -13937,7 +8704,7 @@ def sumOne_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                        
+     SEQ_NO_Q = len(major_params_2)                                     
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -14071,57 +8838,9 @@ def calculate_min_bw_or_0(starget, squery, x, seqs_t, matrices, H, V, check, par
      return scores  
 
 ########################SUMONE OR 000MIN ########################
-def sumOne_min_or_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -14137,115 +8856,20 @@ def sumOne_min_or_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -14264,8 +8888,7 @@ def sumOne_min_or_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -14278,36 +8901,7 @@ def sumOne_min_or_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -14441,57 +9035,9 @@ def calculate_min_bw_or_1(starget, squery, x, seqs_t, matrices, H, V, check, par
      return scores  
 
 ########################SUMONE OR 001MIN ########################
-def sumOne_min_or_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -14507,115 +9053,20 @@ def sumOne_min_or_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -14634,8 +9085,7 @@ def sumOne_min_or_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -14648,36 +9098,7 @@ def sumOne_min_or_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -14812,57 +9233,9 @@ def calculate_min_bw_or_10(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE OR 010MIN ########################
-def sumOne_min_or_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -14878,115 +9251,20 @@ def sumOne_min_or_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -15005,8 +9283,7 @@ def sumOne_min_or_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -15019,36 +9296,7 @@ def sumOne_min_or_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -15179,52 +9427,9 @@ def calculate_min_bw_or_11(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE OR 011 MIN########################
-def sumOne_min_or_11(s_x, s_y, zdrop):
+def sumOne_min_or_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -15240,115 +9445,20 @@ def sumOne_min_or_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -15367,8 +9477,7 @@ def sumOne_min_or_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -15381,36 +9490,7 @@ def sumOne_min_or_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -15545,57 +9625,9 @@ def calculate_min_bw_or_100(starget, squery, x, seqs_t, matrices, H, V, check, p
      return scores  
 
 ########################SUMONE OR 100 MIN########################
-def sumOne_min_or_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -15611,115 +9643,20 @@ def sumOne_min_or_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -15738,8 +9675,7 @@ def sumOne_min_or_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -15752,36 +9688,7 @@ def sumOne_min_or_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -15913,57 +9820,9 @@ def calculate_min_bw_or_101(starget, squery, x, seqs_t, matrices, H, V, check, p
      return scores  
 
 ########################SUMONE OR 101 MIN########################
-def sumOne_min_or_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -15979,115 +9838,20 @@ def sumOne_min_or_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -16106,8 +9870,7 @@ def sumOne_min_or_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -16120,36 +9883,7 @@ def sumOne_min_or_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -16284,57 +10018,9 @@ def calculate_min_bw_or_110(starget, squery, x, seqs_t, matrices, H, V, check, p
      return scores  
 
 ########################SUMONE OR 110 MIN########################
-def sumOne_min_or_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -16350,115 +10036,20 @@ def sumOne_min_or_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -16477,8 +10068,7 @@ def sumOne_min_or_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -16491,36 +10081,7 @@ def sumOne_min_or_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                            
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -16652,57 +10213,9 @@ def calculate_min_bw_or_111(starget, squery, x, seqs_t, matrices, H, V, check, p
      return scores  
 
 ########################SUMONE OR 111 MIN########################
-def sumOne_min_or_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_or_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -16718,115 +10231,20 @@ def sumOne_min_or_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -16845,8 +10263,7 @@ def sumOne_min_or_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -16859,36 +10276,7 @@ def sumOne_min_or_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                  
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -17022,57 +10410,9 @@ def calculate_min_bw_and_0(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE BW AND 000 MIN########################
-def sumOne_min_and_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -17088,115 +10428,20 @@ def sumOne_min_and_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -17215,8 +10460,7 @@ def sumOne_min_and_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -17229,36 +10473,7 @@ def sumOne_min_and_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -17392,57 +10607,9 @@ def calculate_min_bw_and_1(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE BW AND 001 MIN########################
-def sumOne_min_and_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -17458,115 +10625,20 @@ def sumOne_min_and_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -17585,8 +10657,7 @@ def sumOne_min_and_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -17599,36 +10670,7 @@ def sumOne_min_and_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -17763,57 +10805,9 @@ def calculate_min_bw_and_10(starget, squery, x, seqs_t, matrices, H, V, check, p
      return scores  
 
 ########################SUMONE BW AND 010 MIN########################
-def sumOne_min_and_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -17829,115 +10823,20 @@ def sumOne_min_and_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -17956,8 +10855,7 @@ def sumOne_min_and_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -17970,36 +10868,7 @@ def sumOne_min_and_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -18131,52 +11000,9 @@ def calculate_min_bw_and_11(starget, squery, x, seqs_t, matrices, H, V, check, p
      return scores  
 
 ########################SUMONE BW AND 011 MIN########################
-def sumOne_min_and_11(s_x, s_y, zdrop):
+def sumOne_min_and_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -18192,115 +11018,20 @@ def sumOne_min_and_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -18319,8 +11050,7 @@ def sumOne_min_and_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -18333,36 +11063,7 @@ def sumOne_min_and_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -18497,57 +11198,9 @@ def calculate_min_bw_and_100(starget, squery, x, seqs_t, matrices, H, V, check, 
      return scores  
 
 ########################SUMONE BW AND 100 MIN########################
-def sumOne_min_and_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -18563,115 +11216,20 @@ def sumOne_min_and_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -18690,8 +11248,7 @@ def sumOne_min_and_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -18704,36 +11261,7 @@ def sumOne_min_and_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -18865,57 +11393,9 @@ def calculate_min_bw_and_101(starget, squery, x, seqs_t, matrices, H, V, check, 
      return scores  
 
 ########################SUMONE BW AND 101 MIN########################
-def sumOne_min_and_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -18931,115 +11411,20 @@ def sumOne_min_and_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -19058,8 +11443,7 @@ def sumOne_min_and_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -19072,36 +11456,7 @@ def sumOne_min_and_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -19236,57 +11591,9 @@ def calculate_min_bw_and_110(starget, squery, x, seqs_t, matrices, H, V, check, 
      return scores  
 
 ########################SUMONE BW AND 110 MIN########################
-def sumOne_min_and_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -19302,115 +11609,20 @@ def sumOne_min_and_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -19429,8 +11641,7 @@ def sumOne_min_and_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -19443,36 +11654,7 @@ def sumOne_min_and_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -19604,57 +11786,9 @@ def calculate_min_bw_and_111(starget, squery, x, seqs_t, matrices, H, V, check, 
      return scores  
 
 ########################SUMONE BW AND 111 MIN########################
-def sumOne_min_and_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_and_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -19670,115 +11804,20 @@ def sumOne_min_and_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -19797,8 +11836,7 @@ def sumOne_min_and_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -19811,36 +11849,7 @@ def sumOne_min_and_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -19974,57 +11983,9 @@ def calculate_min_bw_1_0(starget, squery, x, seqs_t, matrices, H, V, check, para
      return scores  
 
 ########################SUMONE BW 1 000 MIN########################
-def sumOne_min_1_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -20040,115 +12001,20 @@ def sumOne_min_1_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -20167,8 +12033,7 @@ def sumOne_min_1_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -20181,36 +12046,7 @@ def sumOne_min_1_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                             
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -20344,57 +12180,9 @@ def calculate_min_bw_1_1(starget, squery, x, seqs_t, matrices, H, V, check, para
      return scores  
 
 ########################SUMONE BW 1 001 MIN########################
-def sumOne_min_1_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -20410,115 +12198,20 @@ def sumOne_min_1_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -20537,8 +12230,7 @@ def sumOne_min_1_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -20551,36 +12243,7 @@ def sumOne_min_1_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -20715,57 +12378,9 @@ def calculate_min_bw_1_10(starget, squery, x, seqs_t, matrices, H, V, check, par
      return scores  
 
 ########################SUMONE BW 1 010 MIN########################
-def sumOne_min_1_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -20781,115 +12396,20 @@ def sumOne_min_1_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -20908,8 +12428,7 @@ def sumOne_min_1_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -20922,36 +12441,7 @@ def sumOne_min_1_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -21083,52 +12573,9 @@ def calculate_min_bw_1_11(starget, squery, x, seqs_t, matrices, H, V, check, par
      return scores  
 
 ########################SUMONE BW 1 011 MIN########################
-def sumOne_min_1_11(s_x, s_y, zdrop):
+def sumOne_min_1_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -21144,115 +12591,20 @@ def sumOne_min_1_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -21271,8 +12623,7 @@ def sumOne_min_1_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -21285,36 +12636,7 @@ def sumOne_min_1_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                              
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -21449,57 +12771,9 @@ def calculate_min_bw_1_100(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE BW 1 100 MIN########################
-def sumOne_min_1_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -21515,115 +12789,20 @@ def sumOne_min_1_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -21642,8 +12821,7 @@ def sumOne_min_1_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -21656,36 +12834,7 @@ def sumOne_min_1_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                 
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -21817,57 +12966,9 @@ def calculate_min_bw_1_101(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE BW 1 101 MIN########################
-def sumOne_min_1_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -21883,115 +12984,20 @@ def sumOne_min_1_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -22010,8 +13016,7 @@ def sumOne_min_1_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -22024,36 +13029,7 @@ def sumOne_min_1_101(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -22188,57 +13164,9 @@ def calculate_min_bw_1_110(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE BW 1 110 MIN########################
-def sumOne_min_1_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -22254,115 +13182,20 @@ def sumOne_min_1_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -22381,8 +13214,7 @@ def sumOne_min_1_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -22395,36 +13227,7 @@ def sumOne_min_1_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                               
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -22556,57 +13359,9 @@ def calculate_min_bw_1_111(starget, squery, x, seqs_t, matrices, H, V, check, pa
      return scores  
 
 ########################SUMONE BW 1 111 MIN########################
-def sumOne_min_1_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     bw_params = [0, 0, 0, 0, 0, 0, 0, 0, 0]     
-     bw = 0
-     with open("bw.txt") as d:               
-          bw_params = [int(_) for _ in d]          
-     #if sum(bw_params) == 0:
-     #     bw = -1   
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -22622,115 +13377,20 @@ def sumOne_min_1_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -22749,8 +13409,7 @@ def sumOne_min_1_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -22763,36 +13422,7 @@ def sumOne_min_1_111(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)        
-     if bw_params[2] == -2 or bw_params[2] == 2:
-          t1_l = bw_params[2]
-          t2_l = bw_params[2] / 2
-     else:
-          t1_l = 0
-          t2_l = bw_params[2]
-     if bw_params[3] == -2 or bw_params[3] == 2:
-          t3_l = bw_params[3]
-          t4_l = bw_params[3] / 2
-     else:
-          t3_l = 0
-          t4_l = bw_params[3]       
-     if bw_params[6] == -2 or bw_params[6] == 2:
-          t1_r = bw_params[6]
-          t2_r = bw_params[6] / 2
-     else:
-          t1_r = 0
-          t2_r = bw_params[6]
-     if bw_params[7] == -2 or bw_params[7] == 2:
-          t3_r = bw_params[7]
-          t4_r = bw_params[7] / 2
-     else:
-          t3_r = 0
-          t4_r = bw_params[7]                   
-
-     y_params_1 = (bw_params[2] - t2_l) + (bw_params[3] - t4_l)
-     y_params_2 = (bw_params[6] - t2_r) + (bw_params[7] - t4_r)
-     x_params_1 = (bw_params[2] - t1_l) + (bw_params[3] - t3_l)
-     x_params_2 = (bw_params[6] - t1_r) + (bw_params[7] - t3_r)                                  
+     SEQ_NO_Q = len(major_params_2)                                
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -22914,51 +13544,9 @@ def calculate_min_0(starget, squery, x, seqs_t, matrices, H, V, check, params, s
      return scores  
 
 ########################SUMONE NORMAL 000 MIN########################
-def sumOne_min_0(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_0(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -22974,115 +13562,20 @@ def sumOne_min_0(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -23101,8 +13594,7 @@ def sumOne_min_0(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -23115,7 +13607,7 @@ def sumOne_min_0(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                        
+     SEQ_NO_Q = len(major_params_2)                                     
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -23236,51 +13728,9 @@ def calculate_min_1(starget, squery, x, seqs_t, matrices, H, V, check, params, s
      return scores  
 
 ########################SUMONE NORMAL 001 MIN########################
-def sumOne_min_1(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_1(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 1
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -23296,115 +13746,20 @@ def sumOne_min_1(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -23423,8 +13778,7 @@ def sumOne_min_1(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -23437,7 +13791,7 @@ def sumOne_min_1(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                      
+     SEQ_NO_Q = len(major_params_2)                                     
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -23559,51 +13913,9 @@ def calculate_min_10(starget, squery, x, seqs_t, matrices, H, V, check, params, 
      return scores  
 
 ########################SUMONE NORMAL 010 MIN########################
-def sumOne_min_10(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_10(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 1
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1] 
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -23619,115 +13931,20 @@ def sumOne_min_10(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -23746,8 +13963,7 @@ def sumOne_min_10(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -23760,7 +13976,7 @@ def sumOne_min_10(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                       
+     SEQ_NO_Q = len(major_params_2)                                      
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -23879,46 +14095,9 @@ def calculate_min_11(starget, squery, x, seqs_t, matrices, H, V, check, params, 
      return scores  
 
 ########################SUMONE NORMAL 011 MIN########################
-def sumOne_min_11(s_x, s_y, zdrop):
+def sumOne_min_11(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
      z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 1
-     checker_2 = 0
-     checker_3 = 0
-     args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     try:
-          with open("arg_1.txt") as f:
-               args1 = [int(_) for _ in f] 
-     except:
-          checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -23934,115 +14113,20 @@ def sumOne_min_11(s_x, s_y, zdrop):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     #inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     #mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     #temp_mx1 = [""]
-     #with open("mx_arg1.txt") as f:
-     #     temp_mx1 = [str(_) for _ in f]        
-     #inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     #mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     #mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          #mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          #mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          #mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -24061,8 +14145,7 @@ def sumOne_min_11(s_x, s_y, zdrop):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -24075,7 +14158,7 @@ def sumOne_min_11(s_x, s_y, zdrop):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                     
+     SEQ_NO_Q = len(major_params_2)                                   
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -24197,51 +14280,9 @@ def calculate_min_100(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE NORMAL 100 MIN########################
-def sumOne_min_100(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_100(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -24257,115 +14298,20 @@ def sumOne_min_100(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -24384,8 +14330,7 @@ def sumOne_min_100(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -24398,7 +14343,7 @@ def sumOne_min_100(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                      
+     SEQ_NO_Q = len(major_params_2)                                   
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -24517,51 +14462,9 @@ def calculate_min_101(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE NORMAL 101 MIN########################
-def sumOne_min_101(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_101(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 1
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     try:
-          with open("arg_2.txt") as f:
-               args2 = [int(_) for _ in f]      
-     except:
-          checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -24577,115 +14480,20 @@ def sumOne_min_101(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     #mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     #mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     #temp_mx2 = [""]
-     #with open("mx_arg2.txt") as f:
-     #     temp_mx2 = [str(_) for _ in f]                  
-     #inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     #mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          #mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          #mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          #mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -24704,8 +14512,7 @@ def sumOne_min_101(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -24840,51 +14647,9 @@ def calculate_min_110(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE NORMAL 110 MIN########################
-def sumOne_min_110(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_110(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 1
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     args3 = [0, 0, 0, 0, -1, -1]
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     try:
-          with open("arg_3.txt") as f:               
-               args3 = [int(_) for _ in f]                     
-     except:
-          checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -24900,115 +14665,20 @@ def sumOne_min_110(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     #inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     #mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     #mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     #temp_mx3 = [""]
-     #with open("mx_arg3.txt") as f:
-     #     temp_mx3 = [str(_) for _ in f]                     
-     #inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     #mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          #mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          #mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          #mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -25027,8 +14697,7 @@ def sumOne_min_110(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
@@ -25041,7 +14710,7 @@ def sumOne_min_110(s_x, s_y):
           major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
      if hyper_params[6] == -1:
           major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
-     SEQ_NO_Q = len(major_params_2)                                       
+     SEQ_NO_Q = len(major_params_2)                                    
      for x in major_params_1:
           score = [i16(0) for _ in range(len(major_params_2))]                
           x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
@@ -25160,51 +14829,9 @@ def calculate_min_111(starget, squery, x, seqs_t, matrices, H, V, check, params,
      return scores  
 
 ########################SUMONE NORMAL 111 MIN########################
-def sumOne_min_111(s_x, s_y):
-     z_value = i16(-1)
+def sumOne_min_111(s_x, s_y, zdrop, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):     
+     z_value = i16(zdrop)
      REG_SIZE = 16
-     checker_1 = 0
-     checker_2 = 0
-     checker_3 = 0
-     #args1 = [0, 0, 0, 0, -1, -1]
-     #args2 = [0, 0, 0, 0, -1, -1]
-     #args3 = [0, 0, 0, 0, -1, -1]     
-     #try:
-     #     with open("arg_1.txt") as f:
-     #          args1 = [int(_) for _ in f] 
-     #except:
-     #     checker_1 = 0
-     #try:
-     #     with open("arg_2.txt") as f:
-     #          args2 = [int(_) for _ in f]      
-     #except:
-     #     checker_2 = 0
-     #try:
-     #     with open("arg_3.txt") as f:               
-     #          args3 = [int(_) for _ in f]                     
-     #except:
-     #     checker_3 = 0 
-     try:
-          with open("zdrop.txt") as f:               
-               temp_int = [int(_) for _ in f]
-          z_value = i16(temp_int[0])
-     except:
-          z_value = i16(-1)
-     temp_loop = [""]
-     with open("LoopInfo.txt") as f:
-          temp_loop = [str(_) for _ in f]
-     count_3 = int(temp_loop[11])
-     if count_3 != -1:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-4]))]
-          third_param = temp_loop[-2][:-1]  
-          second_param = temp_loop[-3][:-1]
-          first_param = temp_loop[-4][:-1]               
-     else:
-          params = [int(temp_loop[_]) for _ in range(len(temp_loop[:-3]))]
-          third_param = "0"          
-          second_param = temp_loop[-2][:-1]
-          first_param = temp_loop[-3][:-1]                         
-     left_param = temp_loop[-1][:-1]
      outer_start = params[0]
      outer_step = params[1]
      outer_stop = 0
@@ -25220,115 +14847,20 @@ def sumOne_min_111(s_x, s_y):
           inner_stop += len(s_x[0])
      elif params[6] == -2:
           inner_stop += len(s_y[0])
-     inner_stop += params[7]  
-     inds_mx1 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx2 = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_mx3 = [0, 0, 0, 0, 0, 0, 0, 0]
-     mx1_names_final = [-1, -1, -1]
-     mx2_names_final = [-1, -1, -1]
-     mx3_names_final = [-1, -1, -1]
-     mx1_names = ["", "", ""]
-     mx2_names = ["", "", ""]
-     mx3_names = ["", "", ""]
-     temp_mx1 = [""]
-     with open("mx_arg1.txt") as f:
-          temp_mx1 = [str(_) for _ in f]        
-     inds_mx1 = [int(temp_mx1[1]), int(temp_mx1[2]), int(temp_mx1[4]), int(temp_mx1[5]), int(temp_mx1[6]), int(temp_mx1[8]), int(temp_mx1[9]), int(temp_mx1[10])]
-     mx1_names = [temp_mx1[0][:-1], temp_mx1[3][:-1], temp_mx1[7][:-1]]
-     mx1_checker = 1
-     temp_mx2 = [""]
-     with open("mx_arg2.txt") as f:
-          temp_mx2 = [str(_) for _ in f]                  
-     inds_mx2 = [int(temp_mx2[1]), int(temp_mx2[2]), int(temp_mx2[4]), int(temp_mx2[5]), int(temp_mx2[6]), int(temp_mx2[8]), int(temp_mx2[9]), int(temp_mx2[10])]
-     mx2_names = [temp_mx2[0][:-1], temp_mx2[3][:-1], temp_mx2[7][:-1]]
-     temp_mx3 = [""]
-     with open("mx_arg3.txt") as f:
-          temp_mx3 = [str(_) for _ in f]                     
-     inds_mx3 = [int(temp_mx3[1]), int(temp_mx3[2]), int(temp_mx3[4]), int(temp_mx3[5]), int(temp_mx3[6]), int(temp_mx3[8]), int(temp_mx3[9]), int(temp_mx3[10])]
-     mx3_names = [temp_mx3[0][:-1], temp_mx3[3][:-1], temp_mx3[7][:-1]]
-     try:
-          temp_lst1 = [""]
-          with open("lst_1.txt") as f:
-               temp_lst1 = [str(_) for _ in f]             
-          inds_1 = [int(temp_lst1[_ + 1]) for _ in range(len(temp_lst1) - 1)]
-          lst_1_name = temp_lst1[0][:-1]
-     except:
-          inds_1 = [0 for _ in range(10)]
-          lst_1_name = ""
-     try:
-          temp_lst2 = [""]
-          with open("lst_2.txt") as f:
-               temp_lst2 = [str(_) for _ in f]                   
-          inds_2 = [int(temp_lst2[_ + 1]) for _ in range(len(temp_lst2) - 1)]
-          lst_2_name = temp_lst2[0][:-1]
-     except:
-          inds_2 = [0 for _ in range(10)]
-          lst_2_name = ""
-     try:
-          temp_lst3 = [""]
-          with open("lst_3.txt") as f:
-               temp_lst3 = [str(_) for _ in f]        
-          inds_3 = [int(temp_lst3[_ + 1]) for _ in range(len(temp_lst3) - 1)]
-          lst_3_name = temp_lst3[0][:-1]
-     except:
-          inds_3 = [0 for _ in range(10)]
-          lst_3_name = ""
-     lens = [len(s_x[0]), len(s_y[0])]
-     inds = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_H = [0, 0, 0, 0, 0, 0, 0, 0]
-     inds_V = [0, 0, 0, 0, 0, 0, 0, 0]
-     first_list = -1
-     second_list = -1
-     third_list = -1   
-     if left_param == lst_1_name or (params[8] + params[9] + params[10] == 0):          
-          inds = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]         
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]                
-          first_list = 0 if first_param == lst_1_name else 1 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 0 if second_param == lst_1_name else 1 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 0 if third_param == lst_1_name else 1 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 0 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 0 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 0 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 0 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 0 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 0 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 0 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 0 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 0 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1               
-     elif left_param == lst_2_name:     
-          inds = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_H = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          inds_V = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          first_list = 1 if first_param == lst_1_name else 0 if first_param == lst_2_name else 2 if first_param == lst_3_name else -1
-          second_list = 1 if second_param == lst_1_name else 0 if second_param == lst_2_name else 2 if second_param == lst_3_name else -1
-          third_list = 1 if third_param == lst_1_name else 0 if third_param == lst_2_name else 2 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 1 if mx1_names[0] == lst_1_name else 0 if mx1_names[0] == lst_2_name else 2 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 1 if mx1_names[1] == lst_1_name else 0 if mx1_names[1] == lst_2_name else 2 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 1 if mx1_names[2] == lst_1_name else 0 if mx1_names[2] == lst_2_name else 2 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 1 if mx2_names[0] == lst_1_name else 0 if mx2_names[0] == lst_2_name else 2 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 1 if mx2_names[1] == lst_1_name else 0 if mx2_names[1] == lst_2_name else 2 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 1 if mx2_names[2] == lst_1_name else 0 if mx2_names[2] == lst_2_name else 2 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 1 if mx3_names[0] == lst_1_name else 0 if mx3_names[0] == lst_2_name else 2 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 1 if mx3_names[1] == lst_1_name else 0 if mx3_names[1] == lst_2_name else 2 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 1 if mx3_names[2] == lst_1_name else 0 if mx3_names[2] == lst_2_name else 2 if mx3_names[2] == lst_3_name else -1 
+     inner_stop += params[7]              
+            
+     lens = [len(s_x[0]), len(s_y[0])] 
+     inds_1_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_1_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_H_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_H_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_H_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_H_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_H_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_H_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])
+     inds_V_0 = (lens[inds_1[0] -1] + inds_1[1]) if inds_V_ptr[0] == 1 else (lens[inds_2[0] -1] + inds_2[1]) if inds_V_ptr[0] == 2 else (lens[inds_3[0] -1] + inds_3[1])
+     inds_V_1 = (lens[inds_1[2] -1] + inds_1[3]) if inds_V_ptr[1] == 1 else (lens[inds_2[2] -1] + inds_2[3]) if inds_V_ptr[1] == 2 else (lens[inds_3[2] -1] + inds_3[3])          
 
-     elif left_param == lst_3_name:      
-          inds = [lens[inds_3[0] -1] + inds_3[1], lens[inds_3[2] -1] + inds_3[3], inds_3[4], inds_3[5], inds_3[6], inds_3[7], inds_3[8], inds_3[9]]
-          inds_H = [lens[inds_2[0] -1] + inds_2[1], lens[inds_2[2] -1] + inds_2[3], inds_2[4], inds_2[5], inds_2[6], inds_2[7], inds_2[8], inds_2[9]]
-          inds_V = [lens[inds_1[0] -1] + inds_1[1], lens[inds_1[2] -1] + inds_1[3], inds_1[4], inds_1[5], inds_1[6], inds_1[7], inds_1[8], inds_1[9]]
-          first_list = 2 if first_param == lst_1_name else 1 if first_param == lst_2_name else 0 if first_param == lst_3_name else -1
-          second_list = 2 if second_param == lst_1_name else 1 if second_param == lst_2_name else 0 if second_param == lst_3_name else -1
-          third_list = 2 if third_param == lst_1_name else 1 if third_param == lst_2_name else 0 if third_param == lst_3_name else -1
-          mx1_names_final[0] = 2 if mx1_names[0] == lst_1_name else 1 if mx1_names[0] == lst_2_name else 0 if mx1_names[0] == lst_3_name else -1
-          mx1_names_final[1] = 2 if mx1_names[1] == lst_1_name else 1 if mx1_names[1] == lst_2_name else 0 if mx1_names[1] == lst_3_name else -1
-          mx1_names_final[2] = 2 if mx1_names[2] == lst_1_name else 1 if mx1_names[2] == lst_2_name else 0 if mx1_names[2] == lst_3_name else -1
-          mx2_names_final[0] = 2 if mx2_names[0] == lst_1_name else 1 if mx2_names[0] == lst_2_name else 0 if mx2_names[0] == lst_3_name else -1
-          mx2_names_final[1] = 2 if mx2_names[1] == lst_1_name else 1 if mx2_names[1] == lst_2_name else 0 if mx2_names[1] == lst_3_name else -1
-          mx2_names_final[2] = 2 if mx2_names[2] == lst_1_name else 1 if mx2_names[2] == lst_2_name else 0 if mx2_names[2] == lst_3_name else -1               
-          mx3_names_final[0] = 2 if mx3_names[0] == lst_1_name else 1 if mx3_names[0] == lst_2_name else 0 if mx3_names[0] == lst_3_name else -1
-          mx3_names_final[1] = 2 if mx3_names[1] == lst_1_name else 1 if mx3_names[1] == lst_2_name else 0 if mx3_names[1] == lst_3_name else -1
-          mx3_names_final[2] = 2 if mx3_names[2] == lst_1_name else 1 if mx3_names[2] == lst_2_name else 0 if mx3_names[2] == lst_3_name else -1           
+     inds = (inds_1_0, inds_1_1, inds_ptr[2], inds_ptr[3], inds_ptr[4], inds_ptr[5], inds_ptr[6], inds_ptr[7])
+     inds_H = (inds_H_0, inds_H_1, inds_H_ptr[2], inds_H_ptr[3], inds_H_ptr[4], inds_H_ptr[5], inds_H_ptr[6], inds_H_ptr[7])
+     inds_V = (inds_V_0, inds_V_1, inds_V_ptr[2], inds_V_ptr[3], inds_V_ptr[4], inds_V_ptr[5], inds_V_ptr[6], inds_V_ptr[7])
+
      mat_00 = Vec(i16(inds[2]), i16, 16)
      mat_row = Vec(i16(inds[3]), i16, 16)
      mat_row_mul = Vec(i16(inds[4]), i16, 16)
@@ -25347,8 +14879,7 @@ def sumOne_min_111(s_x, s_y):
      V_col = Vec(i16(inds_V[5]), i16, 16)
      V_col_mul = Vec(i16(inds_V[6]), i16, 16)
      V_rest = Vec(i16(inds_V[7]), i16, 16)      
-     with open("Prep_info.txt") as f:
-          hyper_params = [int(_) for _ in f]
+
      major_outer_start = hyper_params[0]
      major_outer_step = hyper_params[1]
      major_outer_inst = hyper_params[3]
