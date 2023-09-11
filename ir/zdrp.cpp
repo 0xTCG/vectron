@@ -49,7 +49,7 @@ void zdrp::transform(ReturnInstr *v) {
     auto pf_name = pf->getUnmangledName();
     if(pf_name != "orig")
         return;
-    std::__1::vector<codon::ir::Value *> func = v->getUsedValues();
+    std::vector<codon::ir::Value *> func = v->getUsedValues();
     auto *func_log = cast<CallInstr>(func[0]);
     auto func_name = util::getFunc(func_log->getCallee())->getUnmangledName();    
     if(func_name != "zdrop")

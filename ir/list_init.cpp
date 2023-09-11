@@ -39,13 +39,13 @@ void ListInitializer::transform(AssignInstr *v) {
         }        
         auto v_name = v->getLhs()->getName();  
         MyFile << v_name << "\n"; 
-        std::__1::vector<codon::ir::Value *> vls = c->getUsedValues();  // the real values passed by the function call (numbers)    
+        std::vector<codon::ir::Value *> vls = c->getUsedValues();  // the real values passed by the function call (numbers)    
         auto *first_arg = cast<CallInstr>(vls[0]);
         if(first_arg != NULL){
             auto *first_arg_func = util::getFunc(first_arg->getCallee());
             auto first_arg_func_name = first_arg_func->getUnmangledName();
             if(first_arg_func_name == "len"){
-                std::__1::vector<codon::ir::Var *> len_arg_1 = first_arg->front()->getUsedVariables();
+                std::vector<codon::ir::Var *> len_arg_1 = first_arg->front()->getUsedVariables();
                 auto len_arg_1_name = len_arg_1[0]->getName();
                 if (len_arg_1_name == pf_arg1){
                     MyFile << "1\n";
@@ -59,7 +59,7 @@ void ListInitializer::transform(AssignInstr *v) {
                 if(first_arg_func_name == "__add__" || first_arg_func_name == "__sub__"){
                     auto *first_arg_add = first_arg->back(); // add/sub value of first_arg
                     auto *first_arg_var = cast<CallInstr>(first_arg->front())->front();
-                    std::__1::vector<codon::ir::Var *> len_arg_1 = first_arg_var->getUsedVariables();                    
+                    std::vector<codon::ir::Var *> len_arg_1 = first_arg_var->getUsedVariables();                    
                     auto len_arg_1_name = len_arg_1[0]->getName();
                     
                     if (len_arg_1_name == pf_arg1){
@@ -84,7 +84,7 @@ void ListInitializer::transform(AssignInstr *v) {
             auto *second_arg_func = util::getFunc(second_arg->getCallee());
             auto second_arg_func_name = second_arg_func->getUnmangledName();
             if(second_arg_func_name == "len"){
-                std::__1::vector<codon::ir::Var *> len_arg_2 = second_arg->front()->getUsedVariables();
+                std::vector<codon::ir::Var *> len_arg_2 = second_arg->front()->getUsedVariables();
                 auto len_arg_2_name = len_arg_2[0]->getName();
                 if (len_arg_2_name == pf_arg1){
                     MyFile << "1\n";
@@ -98,7 +98,7 @@ void ListInitializer::transform(AssignInstr *v) {
                 if(second_arg_func_name == "__add__" || second_arg_func_name == "__sub__"){
                     auto *second_arg_add = second_arg->back(); // add/sub value of first_arg
                     auto *second_arg_var = cast<CallInstr>(second_arg->front())->front();
-                    std::__1::vector<codon::ir::Var *> len_arg_2 = second_arg_var->getUsedVariables();                    
+                    std::vector<codon::ir::Var *> len_arg_2 = second_arg_var->getUsedVariables();                    
                     auto len_arg_2_name = len_arg_2[0]->getName();                    
                     if (len_arg_2_name == pf_arg1){
                         MyFile << "1\n";

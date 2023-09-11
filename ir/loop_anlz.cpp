@@ -69,7 +69,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             auto *end_func = util::getFunc(call_end_outer->getCallee());
             auto final_end = end_func->getUnmangledName();            
             if (final_end == "len"){
-                std::__1::vector<codon::ir::Var *> len_arg = call_end_outer->back()->getUsedVariables();
+                std::vector<codon::ir::Var *> len_arg = call_end_outer->back()->getUsedVariables();
                 auto len_arg_name = len_arg[0]->getName();
                 if (len_arg_name == pf_arg1){
                     MyFile << "-1\n";
@@ -82,7 +82,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto *right_end = call_end_outer->back();                
-                std::__1::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_outer->front())->back()->getUsedVariables();                               
+                std::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_outer->front())->back()->getUsedVariables();                               
                 auto len_arg_name = len_arg[0]->getName();
                 if (len_arg_name == pf_arg1){
                     MyFile << "-1\n";
@@ -117,7 +117,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 //std::vector<codon::ir::Var *> end_inner_var = len_arg_fr->getUsedVariables();
                 //auto len_arg = end_inner_var[0]->getName();
                 //auto len_arg = end_func_inner->arg_front()->getName();
-                std::__1::vector<codon::ir::Var *> len_arg_inner = call_end_inner->back()->getUsedVariables();
+                std::vector<codon::ir::Var *> len_arg_inner = call_end_inner->back()->getUsedVariables();
                 auto len_arg_name_inner = len_arg_inner[0]->getName();        
                 if (len_arg_name_inner == pf_arg1){
                     MyFile << "-1\n";
@@ -130,7 +130,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto *right_end_inner = call_end_inner->back();  
-                std::__1::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_inner->front())->back()->getUsedVariables();                               
+                std::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_inner->front())->back()->getUsedVariables();                               
                 auto len_arg_name = len_arg[0]->getName();
                 if (len_arg_name == pf_arg1){
                     MyFile << "-1\n";
@@ -175,7 +175,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         else{
             std::ofstream bw_manager("bw.txt");                     
             auto *main_true_branch = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back())->getCond();
-            std::__1::vector<codon::ir::Value *> main_if_ops = main_true_branch->getUsedValues();
+            std::vector<codon::ir::Value *> main_if_ops = main_true_branch->getUsedValues();
             std::ofstream bw_temp_write("temp_bw.txt");
             bw_temp_write << *main_if_ops[1];
             bw_temp_write.close();
@@ -204,7 +204,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             if (and_check == "false" || or_check == "true"){
                 auto *left_cond = cast<CallInstr>(main_if_ops[0]);
-                std::__1::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
+                std::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
 
                 auto *left_operator = util::getFunc(left_cond_vars[2]);
                 auto left_op_name = left_operator->getUnmangledName();
@@ -231,7 +231,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 }            
                 auto *left_lhs = cast<CallInstr>(left_cond_vars[0]); // the last op of the lhs of first condition
                 if(left_lhs == NULL){
-                    std::__1::vector<codon::ir::Var *> var_lhs = left_cond_vars[0]->getUsedVariables();
+                    std::vector<codon::ir::Var *> var_lhs = left_cond_vars[0]->getUsedVariables();
                     auto lhs_name = var_lhs[0]->getName();
                     if (lhs_name == var_str_outer){
                         bw_manager << "1\n";
@@ -252,7 +252,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     auto *left_lhs_lhs = left_lhs->front();
                     auto *left_lhs_lhs_func = cast<CallInstr>(left_lhs_lhs); // the second to last op of the lhs of first condition
                     if(left_lhs_lhs_func == NULL){
-                        std::__1::vector<codon::ir::Var *> var_lhs_lhs = left_lhs_lhs->getUsedVariables();
+                        std::vector<codon::ir::Var *> var_lhs_lhs = left_lhs_lhs->getUsedVariables();
                         auto lhs_lhs_name = var_lhs_lhs[0]->getName();
                         if (lhs_lhs_name == var_str_outer){
                             bw_manager << "1\n";
@@ -266,7 +266,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                         }
                         auto *left_lhs_rhs = left_lhs->back();
-                        std::__1::vector<codon::ir::Var *> var_lhs_rhs = left_lhs_rhs->getUsedVariables();
+                        std::vector<codon::ir::Var *> var_lhs_rhs = left_lhs_rhs->getUsedVariables();
                         auto lhs_rhs_name = var_lhs_rhs[0]->getName();
                         if (lhs_rhs_name == var_str_outer){
                             if (last_lhs_op == "__sub__"){
@@ -290,7 +290,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     else{         
                         auto neg_test_name = util::getFunc(left_lhs_lhs_func->getCallee())->getUnmangledName();
                         auto *first_lhs_operand = left_lhs_lhs_func->back();
-                        std::__1::vector<codon::ir::Var *> first_var = first_lhs_operand->getUsedVariables();
+                        std::vector<codon::ir::Var *> first_var = first_lhs_operand->getUsedVariables();
                         auto first_var_name = first_var[0]->getName();
                         if (first_var_name == var_str_outer){
                             if(neg_test_name == "__neg__"){
@@ -312,7 +312,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     
                                     
                         auto *left_lhs_rhs = left_lhs->back();                  
-                        std::__1::vector<codon::ir::Var *> second_var = left_lhs_rhs->getUsedVariables();                
+                        std::vector<codon::ir::Var *> second_var = left_lhs_rhs->getUsedVariables();                
                         auto second_var_name = second_var[0]->getName();    
                         if (second_var_name == var_str_outer){
                             if(last_lhs_op == "__sub__"){
@@ -341,7 +341,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     right_cond = cast<CallInstr>(main_if_ops[1]); 
                 }
 
-                std::__1::vector<codon::ir::Value *> right_cond_vars = right_cond->getUsedValues();    
+                std::vector<codon::ir::Value *> right_cond_vars = right_cond->getUsedValues();    
                 int build_flag = 0;   
                 auto *right_operator = util::getFunc(cast<CallInstr>(right_cond_vars[0])->getCallee());
                 auto right_op_name = right_operator->getUnmangledName();
@@ -408,7 +408,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     right_lhs = cast<CallInstr>(right_cond->front());
                 }
                 if(right_lhs == NULL){
-                    std::__1::vector<codon::ir::Var *> r_var_lhs = right->getUsedVariables();
+                    std::vector<codon::ir::Var *> r_var_lhs = right->getUsedVariables();
                     auto r_lhs_name = r_var_lhs[0]->getName();
                     if (r_lhs_name == var_str_outer){
                         bw_manager << "1\n";
@@ -429,7 +429,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     auto *right_lhs_lhs = right_lhs->front();
                     auto *right_lhs_lhs_func = cast<CallInstr>(right_lhs_lhs); // the second to last op of the lhs of first condition
                     if(right_lhs_lhs_func == NULL){
-                        std::__1::vector<codon::ir::Var *> r_var_lhs_lhs = right_lhs_lhs->getUsedVariables();
+                        std::vector<codon::ir::Var *> r_var_lhs_lhs = right_lhs_lhs->getUsedVariables();
                         auto r_lhs_lhs_name = r_var_lhs_lhs[0]->getName();
                         if (r_lhs_lhs_name == var_str_outer){
                             bw_manager << "1\n";
@@ -443,7 +443,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                         }
                         auto *right_lhs_rhs = right_lhs->back();
-                        std::__1::vector<codon::ir::Var *> r_var_lhs_rhs = right_lhs_rhs->getUsedVariables();
+                        std::vector<codon::ir::Var *> r_var_lhs_rhs = right_lhs_rhs->getUsedVariables();
                         auto r_lhs_rhs_name = r_var_lhs_rhs[0]->getName();
                         if (r_lhs_rhs_name == var_str_outer){
                             if (r_last_lhs_op == "__sub__"){
@@ -467,7 +467,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     else{         
                         auto neg_test_name = util::getFunc(right_lhs_lhs_func->getCallee())->getUnmangledName();
                         auto *r_first_lhs_operand = right_lhs_lhs_func->back();
-                        std::__1::vector<codon::ir::Var *> r_first_var = r_first_lhs_operand->getUsedVariables();
+                        std::vector<codon::ir::Var *> r_first_var = r_first_lhs_operand->getUsedVariables();
                         auto r_first_var_name = r_first_var[0]->getName();
                         if (r_first_var_name == var_str_outer){
                             if(neg_test_name == "__neg__"){
@@ -488,7 +488,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }      
                                     
                         auto *right_lhs_rhs = right_lhs->back();                  
-                        std::__1::vector<codon::ir::Var *> r_second_var = right_lhs_rhs->getUsedVariables();                
+                        std::vector<codon::ir::Var *> r_second_var = right_lhs_rhs->getUsedVariables();                
                         auto r_second_var_name = r_second_var[0]->getName();    
                         if (r_second_var_name == var_str_outer){
                             if(r_last_lhs_op == "__sub__"){
@@ -518,7 +518,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }              
             else{             
                 auto *single_left_cond = cast<CallInstr>(main_true_branch);
-                //std::__1::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
+                //std::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
                 auto *left_operator = util::getFunc(single_left_cond->getCallee());
                 auto left_op_name = left_operator->getUnmangledName();
                 if (left_op_name == "__eq__"){
@@ -545,9 +545,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
 
                 auto *left_lhs = cast<CallInstr>(main_true_branch); // the last op of the lhs of first condition
                 auto *op_check = cast<CallInstr>(left_lhs->front());
-                std::__1::vector<codon::ir::Value *> left_cond_vars = left_lhs->getUsedValues();             
+                std::vector<codon::ir::Value *> left_cond_vars = left_lhs->getUsedValues();             
                 if(op_check == NULL){
-                    std::__1::vector<codon::ir::Var *> var_lhs = left_cond_vars[0]->getUsedVariables();
+                    std::vector<codon::ir::Var *> var_lhs = left_cond_vars[0]->getUsedVariables();
                     auto lhs_name = var_lhs[0]->getName();
                     if (lhs_name == var_str_outer){
                         bw_manager << "1\n";
@@ -568,7 +568,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     auto *left_lhs_lhs = op_check->front();
                     auto *left_lhs_lhs_func = cast<CallInstr>(left_lhs_lhs); // the second to last op of the lhs of first condition
                     if(left_lhs_lhs_func == NULL){
-                        std::__1::vector<codon::ir::Var *> var_lhs_lhs = left_lhs_lhs->getUsedVariables();
+                        std::vector<codon::ir::Var *> var_lhs_lhs = left_lhs_lhs->getUsedVariables();
                         auto lhs_lhs_name = var_lhs_lhs[0]->getName();
                         if (lhs_lhs_name == var_str_outer){
                             bw_manager << "1\n";
@@ -582,7 +582,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                         }
                         auto *left_lhs_rhs = op_check->back();
-                        std::__1::vector<codon::ir::Var *> var_lhs_rhs = left_lhs_rhs->getUsedVariables();
+                        std::vector<codon::ir::Var *> var_lhs_rhs = left_lhs_rhs->getUsedVariables();
                         auto lhs_rhs_name = var_lhs_rhs[0]->getName();
                         if (lhs_rhs_name == var_str_outer){
                             if (last_lhs_op == "__sub__"){
@@ -606,7 +606,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     else{         
                         auto neg_test_name = util::getFunc(left_lhs_lhs_func->getCallee())->getUnmangledName();
                         auto *first_lhs_operand = left_lhs_lhs_func->back();
-                        std::__1::vector<codon::ir::Var *> first_var = first_lhs_operand->getUsedVariables();
+                        std::vector<codon::ir::Var *> first_var = first_lhs_operand->getUsedVariables();
                         auto first_var_name = first_var[0]->getName();
                         if (first_var_name == var_str_outer){
                             if(neg_test_name == "__neg__"){
@@ -628,7 +628,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     
                                     
                         auto *left_lhs_rhs = left_lhs->back();                  
-                        std::__1::vector<codon::ir::Var *> second_var = left_lhs_rhs->getUsedVariables();                
+                        std::vector<codon::ir::Var *> second_var = left_lhs_rhs->getUsedVariables();                
                         auto second_var_name = second_var[0]->getName();    
                         if (second_var_name == var_str_outer){
                             if(last_lhs_op == "__sub__"){
@@ -662,7 +662,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             ass = cast<CallInstr>(cast<SeriesFlow>(main_else_branch)->back()); // assignment op inside the inner loop                
         }
         auto *right_side = cast<CallInstr>(ass->back()); // the right side of the assignment operation
-        std::__1::vector<codon::ir::Var *> left_side = cast<CallInstr>(ass->front())->front()->getUsedVariables();
+        std::vector<codon::ir::Var *> left_side = cast<CallInstr>(ass->front())->front()->getUsedVariables();
         auto left_side_name = left_side[0]->getName();
 
         auto *oper = util::getFunc(right_side->getCallee());
@@ -691,7 +691,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             auto *end_func = util::getFunc(call_end_outer->getCallee());
             auto final_end = end_func->getUnmangledName();            
             if (final_end == "len"){
-                std::__1::vector<codon::ir::Var *> len_arg = call_end_outer->back()->getUsedVariables();
+                std::vector<codon::ir::Var *> len_arg = call_end_outer->back()->getUsedVariables();
                 auto len_arg_name = len_arg[0]->getName();
                 if (len_arg_name == pf_arg1){
                     MyFile << "-1\n";
@@ -704,7 +704,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto *right_end = call_end_outer->back(); 
-                std::__1::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_outer->front())->back()->getUsedVariables();                               
+                std::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_outer->front())->back()->getUsedVariables();                               
                 auto len_arg_name = len_arg[0]->getName();
                 if (len_arg_name == pf_arg1){
                     MyFile << "-1\n";
@@ -739,7 +739,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 //std::vector<codon::ir::Var *> end_inner_var = len_arg_fr->getUsedVariables();
                 //auto len_arg = end_inner_var[0]->getName();
                 //auto len_arg = end_func_inner->arg_front()->getName();
-                std::__1::vector<codon::ir::Var *> len_arg_inner = call_end_inner->back()->getUsedVariables();
+                std::vector<codon::ir::Var *> len_arg_inner = call_end_inner->back()->getUsedVariables();
                 auto len_arg_name_inner = len_arg_inner[0]->getName();        
                 if (len_arg_name_inner == pf_arg1){
                     MyFile << "-1\n";
@@ -752,7 +752,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto *right_end_inner = call_end_inner->back();                
-                std::__1::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_inner->front())->back()->getUsedVariables();                               
+                std::vector<codon::ir::Var *> len_arg = cast<CallInstr>(call_end_inner->front())->back()->getUsedVariables();                               
                 auto len_arg_name = len_arg[0]->getName();
                 if (len_arg_name == pf_arg1){
                     MyFile << "-1\n";
@@ -780,7 +780,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             auto *arg1 = cast<CallInstr>(right_side->front()); // the left side operand
             auto *arg1_inst = cast<CallInstr>(arg1->front()); 
                             
-            std::__wrap_iter<codon::ir::Value **> r_mid = cast<CallInstr>(right_side->front())->begin();
+            auto r_mid = cast<CallInstr>(right_side->front())->begin();
             auto *arg2_inst = cast<CallInstr>(r_mid[1]);        
                 
             auto *r_end = cast<CallInstr>(right_side->front())->back(); // the last argument of the main function (min or max)
@@ -1133,7 +1133,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 auto *m_call_1_func = util::getFunc(m_call_1->getCallee());
                                 auto m_call_1_name = m_call_1_func->getUnmangledName();                        
                                 if (m_call_1_name == "match_func"){
-                                    std::__1::vector<codon::ir::Value *> body_1 = m_call_1_func->getUsedValues();
+                                    std::vector<codon::ir::Value *> body_1 = m_call_1_func->getUsedValues();
                                     auto match_arg_1 = m_call_1_func->arg_front()->getName();
                                     auto match_arg_2 = m_call_1_func->arg_back()->getName();                                
 
@@ -1148,13 +1148,13 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     auto *elif_cond_1_call = cast<CallInstr>(elif_branch_1);
                                     auto *elif_cond_1 = util::getFunc(elif_cond_1_call->getCallee());
                                     auto elif_cond_func_name = elif_cond_1->getUnmangledName();
-                                    std::__1::vector<codon::ir::Var *> elif_arg_1 = elif_cond_1_call->front()->getUsedVariables();
-                                    std::__1::vector<codon::ir::Var *> elif_arg_2 = elif_cond_1_call->back()->getUsedVariables();
+                                    std::vector<codon::ir::Var *> elif_arg_1 = elif_cond_1_call->front()->getUsedVariables();
+                                    std::vector<codon::ir::Var *> elif_arg_2 = elif_cond_1_call->back()->getUsedVariables();
                                     auto elif_arg_1_name = elif_arg_1[0]->getName();
                                     auto elif_arg_2_name = elif_arg_2[0]->getName();
                                     std::ofstream arg_1_file("arg_1.txt");
                                     arg_1_file << "0\n";                                    
-                                    std::__1::vector<codon::ir::Value *> all_args_1 = m_call_1->getUsedValues();
+                                    std::vector<codon::ir::Value *> all_args_1 = m_call_1->getUsedValues();
                                     auto *a_arg = all_args_1[1];                                
                                     auto *b_arg = all_args_1[2];
                                     auto *am_arg = all_args_1[3];        
@@ -1162,11 +1162,11 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                         auto *return_val_1_1 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_1)->back())->getValue();
                                         auto *return_val_1_2 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_1)->back())->getValue();
                                         auto *return_val_1_3 = cast<ReturnInstr>(cast<SeriesFlow>(else_branch_1)->back())->getValue(); 
-                                        std::__1::vector<codon::ir::Var *> ret_val_1 = return_val_1_1->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_1 = return_val_1_1->getUsedVariables();
                                         auto ret_val_1_name = ret_val_1[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_2 = return_val_1_2->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_2 = return_val_1_2->getUsedVariables();
                                         auto ret_val_2_name = ret_val_2[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_3 = return_val_1_3->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_3 = return_val_1_3->getUsedVariables();
                                         auto ret_val_3_name = ret_val_3[0]->getName();                                    
 
                                         if(ret_val_1_name == "a"){
@@ -1214,11 +1214,11 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                         auto *return_val_1_2 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_1)->back())->getValue();
                                         auto *return_val_1_1 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_1)->back())->getValue();
                                         auto *return_val_1_3 = cast<ReturnInstr>(cast<SeriesFlow>(else_branch_1)->back())->getValue();  
-                                        std::__1::vector<codon::ir::Var *> ret_val_1 = return_val_1_1->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_1 = return_val_1_1->getUsedVariables();
                                         auto ret_val_1_name = ret_val_1[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_2 = return_val_1_2->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_2 = return_val_1_2->getUsedVariables();
                                         auto ret_val_2_name = ret_val_2[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_3 = return_val_1_3->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_3 = return_val_1_3->getUsedVariables();
                                         auto ret_val_3_name = ret_val_3[0]->getName();                                    
 
                                         if(ret_val_1_name == "a"){
@@ -1662,7 +1662,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 auto *m_call_2_func = util::getFunc(m_call_2->getCallee());
                                 auto m_call_2_name = m_call_2_func->getUnmangledName();                            
                                 if (m_call_2_name == "match_func"){
-                                    std::__1::vector<codon::ir::Value *> body_2 = m_call_2_func->getUsedValues();
+                                    std::vector<codon::ir::Value *> body_2 = m_call_2_func->getUsedValues();
                                     auto match_arg_1 = m_call_2_func->arg_front()->getName();
                                     auto match_arg_2 = m_call_2_func->arg_back()->getName();
                                     
@@ -1678,13 +1678,13 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     auto *elif_cond_2_call = cast<CallInstr>(elif_branch_2);
                                     auto *elif_cond_2 = util::getFunc(elif_cond_2_call->getCallee());
                                     auto elif_cond_func_name = elif_cond_2->getUnmangledName();
-                                    std::__1::vector<codon::ir::Var *> elif_arg_1 = elif_cond_2_call->front()->getUsedVariables();
-                                    std::__1::vector<codon::ir::Var *> elif_arg_2 = elif_cond_2_call->back()->getUsedVariables();
+                                    std::vector<codon::ir::Var *> elif_arg_1 = elif_cond_2_call->front()->getUsedVariables();
+                                    std::vector<codon::ir::Var *> elif_arg_2 = elif_cond_2_call->back()->getUsedVariables();
                                     auto elif_arg_1_name = elif_arg_1[0]->getName();
                                     auto elif_arg_2_name = elif_arg_2[0]->getName();
                                     std::ofstream arg_2_file("arg_2.txt");
                                     arg_2_file << "0\n";   
-                                    std::__1::vector<codon::ir::Value *> all_args_2 = m_call_2->getUsedValues();
+                                    std::vector<codon::ir::Value *> all_args_2 = m_call_2->getUsedValues();
                                     auto *a_arg = all_args_2[1];                                
                                     auto *b_arg = all_args_2[2];
                                     auto *am_arg = all_args_2[3];                                                                    
@@ -1692,11 +1692,11 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                         auto *return_val_2_1 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_2)->back())->getValue();
                                         auto *return_val_2_2 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_2)->back())->getValue();
                                         auto *return_val_2_3 = cast<ReturnInstr>(cast<SeriesFlow>(else_branch_2)->back())->getValue();
-                                        std::__1::vector<codon::ir::Var *> ret_val_1 = return_val_2_1->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_1 = return_val_2_1->getUsedVariables();
                                         auto ret_val_1_name = ret_val_1[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_2 = return_val_2_2->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_2 = return_val_2_2->getUsedVariables();
                                         auto ret_val_2_name = ret_val_2[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_3 = return_val_2_3->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_3 = return_val_2_3->getUsedVariables();
                                         auto ret_val_3_name = ret_val_3[0]->getName();                                    
 
                                         if(ret_val_1_name == "a"){
@@ -1743,11 +1743,11 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                         auto *return_val_2_2 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_2)->back())->getValue();
                                         auto *return_val_2_1 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_2)->back())->getValue();
                                         auto *return_val_2_3 = cast<ReturnInstr>(cast<SeriesFlow>(else_branch_2)->back())->getValue();                                    
-                                        std::__1::vector<codon::ir::Var *> ret_val_1 = return_val_2_1->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_1 = return_val_2_1->getUsedVariables();
                                         auto ret_val_1_name = ret_val_1[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_2 = return_val_2_2->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_2 = return_val_2_2->getUsedVariables();
                                         auto ret_val_2_name = ret_val_2[0]->getName();
-                                        std::__1::vector<codon::ir::Var *> ret_val_3 = return_val_2_3->getUsedVariables();
+                                        std::vector<codon::ir::Var *> ret_val_3 = return_val_2_3->getUsedVariables();
                                         auto ret_val_3_name = ret_val_3[0]->getName();                                    
 
                                         if(ret_val_1_name == "a"){
@@ -2193,7 +2193,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     auto *m_call_3_func = util::getFunc(m_call_3->getCallee());
                                     auto m_call_3_name = m_call_3_func->getUnmangledName();                            
                                     if (m_call_3_name == "match_func"){
-                                        std::__1::vector<codon::ir::Value *> body_3 = m_call_3_func->getUsedValues();
+                                        std::vector<codon::ir::Value *> body_3 = m_call_3_func->getUsedValues();
                                         auto match_arg_1 = m_call_3_func->arg_front()->getName();
                                         auto match_arg_2 = m_call_3_func->arg_back()->getName();
                                         
@@ -2209,13 +2209,13 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                         auto *elif_cond_3_call = cast<CallInstr>(elif_branch_3);
                                         auto *elif_cond_3 = util::getFunc(elif_cond_3_call->getCallee());
                                         auto elif_cond_func_name = elif_cond_3->getUnmangledName();
-                                        std::__1::vector<codon::ir::Var *> elif_arg_1 = elif_cond_3_call->front()->getUsedVariables();
-                                        std::__1::vector<codon::ir::Var *> elif_arg_2 = elif_cond_3_call->back()->getUsedVariables();
+                                        std::vector<codon::ir::Var *> elif_arg_1 = elif_cond_3_call->front()->getUsedVariables();
+                                        std::vector<codon::ir::Var *> elif_arg_2 = elif_cond_3_call->back()->getUsedVariables();
                                         auto elif_arg_1_name = elif_arg_1[0]->getName();
                                         auto elif_arg_2_name = elif_arg_2[0]->getName();
                                         std::ofstream arg_3_file("arg_3.txt");
                                         arg_3_file << "0\n";                                    
-                                        std::__1::vector<codon::ir::Value *> all_args_3 = m_call_3->getUsedValues();
+                                        std::vector<codon::ir::Value *> all_args_3 = m_call_3->getUsedValues();
                                         auto *a_arg = all_args_3[1];                                
                                         auto *b_arg = all_args_3[2];
                                         auto *am_arg = all_args_3[3];     
@@ -2223,11 +2223,11 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                             auto *return_val_3_1 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_3)->back())->getValue();
                                             auto *return_val_3_2 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_3)->back())->getValue();
                                             auto *return_val_3_3 = cast<ReturnInstr>(cast<SeriesFlow>(else_branch_3)->back())->getValue();
-                                            std::__1::vector<codon::ir::Var *> ret_val_1 = return_val_3_1->getUsedVariables();
+                                            std::vector<codon::ir::Var *> ret_val_1 = return_val_3_1->getUsedVariables();
                                             auto ret_val_1_name = ret_val_1[0]->getName();
-                                            std::__1::vector<codon::ir::Var *> ret_val_2 = return_val_3_2->getUsedVariables();
+                                            std::vector<codon::ir::Var *> ret_val_2 = return_val_3_2->getUsedVariables();
                                             auto ret_val_2_name = ret_val_2[0]->getName();
-                                            std::__1::vector<codon::ir::Var *> ret_val_3 = return_val_3_3->getUsedVariables();
+                                            std::vector<codon::ir::Var *> ret_val_3 = return_val_3_3->getUsedVariables();
                                             auto ret_val_3_name = ret_val_3[0]->getName();                                    
 
                                             if(ret_val_1_name == "a"){
@@ -2274,11 +2274,11 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                             auto *return_val_3_2 = cast<ReturnInstr>(cast<SeriesFlow>(elif_return_3)->back())->getValue();
                                             auto *return_val_3_1 = cast<ReturnInstr>(cast<SeriesFlow>(true_return_3)->back())->getValue();
                                             auto *return_val_3_3 = cast<ReturnInstr>(cast<SeriesFlow>(else_branch_3)->back())->getValue();                                    
-                                            std::__1::vector<codon::ir::Var *> ret_val_1 = return_val_3_1->getUsedVariables();
+                                            std::vector<codon::ir::Var *> ret_val_1 = return_val_3_1->getUsedVariables();
                                             auto ret_val_1_name = ret_val_1[0]->getName();
-                                            std::__1::vector<codon::ir::Var *> ret_val_2 = return_val_3_2->getUsedVariables();
+                                            std::vector<codon::ir::Var *> ret_val_2 = return_val_3_2->getUsedVariables();
                                             auto ret_val_2_name = ret_val_2[0]->getName();
-                                            std::__1::vector<codon::ir::Var *> ret_val_3 = return_val_3_3->getUsedVariables();
+                                            std::vector<codon::ir::Var *> ret_val_3 = return_val_3_3->getUsedVariables();
                                             auto ret_val_3_name = ret_val_3[0]->getName();                                    
 
                                             if(ret_val_1_name == "a"){
@@ -2466,7 +2466,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             MyFile << "0" << "\n";        
         }
         auto *r_mid_0 = cast<CallInstr>(right_side->front());
-        std::__wrap_iter<codon::ir::Value **> r_mid = r_mid_0->begin();        
+        auto r_mid = r_mid_0->begin();        
         auto *arg2_inst = cast<CallInstr>(r_mid[1]);     
         std::string arg2_func_name = "";
         if (arg2_inst != NULL){
