@@ -10,12 +10,12 @@ namespace vectron {
 using namespace codon::ir;
 
 
-void FuncReplacement::transform(CallInstr *v) {    
+void FuncReplacement::transform(CallInstr *v) {  
     auto *M = v->getModule(); 
     auto *orig = util::getFunc(v->getCallee());
     if (!orig || orig->getUnmangledName() != "prep")
       return;   
-    else{
+    else{     
       std::ifstream loop_file("LoopInfo.txt");
       std::basic_string min_check = "";
       //std::string params = "";
@@ -27,15 +27,34 @@ void FuncReplacement::transform(CallInstr *v) {
           break;
         }        
         std::getline(loop_file, temp_reader);
-        if(i < 30){
-          params[i] = std::stoi(temp_reader);
-        }
-        //params += temp_reader;
         params_test[i] = temp_reader;
         if(i == 8){
           min_check = temp_reader;
         }        
-      } 
+      }
+      std::string first_param = "";
+      std::string second_param = "";
+      std::string third_param = "";
+      std::string left_param = "";      
+      if(params_test[11] == "-1"){
+        third_param = "0";
+        first_param = params_test[24];
+        second_param = params_test[25];
+        left_param = params_test[26];        
+        for(int i = 0; i < 24; i++){
+          params[i] = std::stoi(params_test[i]);
+        }
+      }
+      else{
+        first_param = params_test[30]; 
+        second_param = params_test[31];
+        third_param = params_test[32];
+        left_param = params_test[33];        
+        for(int i = 0; i < 30; i++){
+          params[i] = std::stoi(params_test[i]);
+        }        
+
+      }
       std::ifstream prep_file("Prep_info.txt");      
       int hyper_p[8] = {0, 0, 0, 0, 0, 0, 0, 0};
       for(int i = 0; i < 8; i++){
@@ -48,22 +67,7 @@ void FuncReplacement::transform(CallInstr *v) {
         hyper_params_arr.push_back(M->getInt(hyper_p[i]));
       }
       Value *hyper_params_ptr = util::makeTuple(hyper_params_arr, M);       
-      std::string first_param = "";
-      std::string second_param = "";
-      std::string third_param = "";
-      std::string left_param = "";
-      if(params_test[11] == "-1"){
-        third_param = "0";
-        first_param = params_test[30];
-        second_param = params_test[31];
-        left_param = params_test[32];
-      }
-      else{
-        first_param = params_test[30]; 
-        second_param = params_test[31];
-        third_param = params_test[32];
-        left_param = params_test[33];
-      }
+
       std::vector<types::Type*> types_arr;    
       for(int i = 0; i < 30; i++){
         types_arr.push_back(M->getIntType());
@@ -113,7 +117,6 @@ void FuncReplacement::transform(CallInstr *v) {
       }
       types::Type *typ_ptr3 = M->getTupleType(types_arr3);
 
-
       std::vector<Value*> params_arr;    
       for(int i = 0; i < 30; i++){
         params_arr.push_back(M->getInt(params[i]));
@@ -123,11 +126,11 @@ void FuncReplacement::transform(CallInstr *v) {
       int checker_1 = 1;
       int checker_2 = 1;
       int checker_3 = 1;
-      int args1_test[6] = {0, 0, 0, 0, 0, 0};
+      int args1_test[6] = {0, 0, 0, 0, 0, -1};
       std::vector<Value*> arg1_arr;    
-      int args2_test[6] = {0, 0, 0, 0, 0, 0};
+      int args2_test[6] = {0, 0, 0, 0, 0, -1};
       std::vector<Value*> arg2_arr;    
-      int args3_test[6] = {0, 0, 0, 0, 0, 0};
+      int args3_test[6] = {0, 0, 0, 0, 0, -1};
       std::vector<Value*> arg3_arr;        
 
       std::ifstream arg_1_file("arg_1.txt");
@@ -197,7 +200,6 @@ void FuncReplacement::transform(CallInstr *v) {
           }
         }
       }
-      
       lst_1_file.close();
       std::ifstream lst_2_file("lst_2.txt");
       if(lst_2_file){
@@ -232,7 +234,6 @@ void FuncReplacement::transform(CallInstr *v) {
         lst2_arr.push_back(M->getInt(lst2[i]));
         lst3_arr.push_back(M->getInt(lst3[i]));
       }
-
       Value *lst1_ptr = util::makeTuple(lst1_arr, M);    
       Value *lst2_ptr = util::makeTuple(lst2_arr, M);    
       Value *lst3_ptr = util::makeTuple(lst3_arr, M);     
@@ -317,7 +318,7 @@ void FuncReplacement::transform(CallInstr *v) {
       auto *y_params_2_ptr = M->getInt(y_params_2);
       auto *x_params_1_ptr = M->getInt(x_params_1);
       auto *x_params_2_ptr = M->getInt(x_params_2);
-
+ 
       for(int i = 0; i < 9; i++){
         bw_arr.push_back(M->getInt(bw_temp[i]));
       }
@@ -498,7 +499,7 @@ void FuncReplacement::transform(CallInstr *v) {
       int first_list = -1;
       int second_list = -1;
       int third_list = -1;
-
+     
       if(left_param == lst1_name || (params[8] + params[9] + params[10] == 0)){
           inds[0] = 1;
           inds[1] = 1;
