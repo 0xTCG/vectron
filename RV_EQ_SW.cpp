@@ -82,7 +82,7 @@ int orig(std::string h, std::string m){
     }
     std::string st1;
     std::string st2;
-    # pragma clang loop vectorize(assume_safety) vectorize_width(16)    
+    //# pragma clang loop vectorize(assume_safety) vectorize_width(16)    
     for(int i = 1; i < (m.size() + 1); i++){        
         for(int j = 1; j < (h.size() + 1); j++){
             if(j - i <= -105 or j - i >= 105){
@@ -108,14 +108,14 @@ int orig(std::string h, std::string m){
 
 int** prep(std::string *x, std::string *y){
     int** score = 0;
-    score = new int*[512];
-    for (int h = 0; h < 512; h++){
-        score[h] = new int[512];
+    score = new int*[64];
+    for (int h = 0; h < 64; h++){
+        score[h] = new int[64];
     }
     std::string a;
     std::string b;
-    for(int i = 0; i < 512; i++){
-        for(int j = 0; j < 512; j++){
+    for(int i = 0; i < 64; i++){
+        for(int j = 0; j < 64; j++){
             a = x[i];
             b = y[j];
             score[i][j] = orig(a, b);
