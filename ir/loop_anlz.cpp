@@ -1092,6 +1092,8 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }
                         std::string arg1_col_var_name = ""; // taking care of the column index of the first (left side) operand
                         if (arg1_col_instr != NULL){
+                            auto *arg1_num_col = arg1_col_instr->back();
+                            auto *arg1_num_col_inst = cast<CallInstr>(arg1_num_col);                            
                             auto *arg1_col_func = util::getFunc(arg1_col_instr->getCallee());
                             auto arg1_col_func_name = arg1_col_func->getUnmangledName();
                             std::vector<codon::ir::Var *> arg1_col_var = arg1_col_instr->front()->getUsedVariables();
@@ -1101,12 +1103,54 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                             else{
                                 MyFile << "1\n";
-                            }
+                            }                            
                             if (arg1_col_func_name == "__sub__"){
                                 MyFile << "-";
-                            }            
-                            auto *arg1_num_col = arg1_col_instr->back();
-                            MyFile << *arg1_num_col << "\n";            
+                            }                            
+                            if(arg1_num_col_inst == NULL){   
+                                MyFile << *arg1_num_col << "\n";                                                     
+                            }
+                            else{
+                                auto *arg_1_num_col_left = arg1_num_col_inst->front();
+                                auto *arg_1_num_col_right = arg1_num_col_inst->back();
+                                std::vector<codon::ir::Var *> arg_1_num_col_left_vars = arg_1_num_col_left->getUsedVariables();
+                                auto arg_1_num_col_left_name = arg_1_num_col_left_vars[0]->getName();
+                                if(arg_1_num_col_left_name == pf_arg1){
+                                    MyFile << "0 ";
+                                }
+                                else{
+                                    MyFile << "1 ";
+                                }
+                                auto *arg_1_num_col_right_inst = cast<CallInstr>(arg_1_num_col_right);
+                                if(arg_1_num_col_right_inst == NULL){
+                                    std::vector<codon::ir::Var *> arg_1_num_col_right_vars = arg_1_num_col_right->getUsedVariables();
+                                    auto arg_1_num_col_right_name = arg_1_num_col_right_vars[0]->getName();
+                                    if(arg_1_num_col_right_name == var_str_inner){
+                                        MyFile << "0 0\n";
+                                    }
+                                    else{
+                                        MyFile << "1 0\n";
+                                    }
+                                }
+                                else{
+                                    auto *arg1_num_col_right_left = arg_1_num_col_right_inst->front();
+                                    std::vector<codon::ir::Var *> arg1_num_col_right_left_vars =  arg1_num_col_right_left->getUsedVariables();
+                                    auto arg1_num_col_right_left_name = arg1_num_col_right_left_vars[0]->getName();
+                                    if(arg1_num_col_right_left_name == var_str_inner){
+                                        MyFile << "0 ";
+                                    }
+                                    else{
+                                        MyFile << "1 ";
+                                    }
+                                    auto *arg1_num_col_right_right = arg_1_num_col_right_inst->back();
+                                    auto *arg1_num_col_right_func = util::getFunc(arg_1_num_col_right_inst->getCallee());
+                                    auto arg1_num_col_right_func_name = arg1_num_col_right_func->getUnmangledName();
+                                    if(arg1_num_col_right_func_name == "__sub__"){
+                                        MyFile << "-";
+                                    }
+                                    MyFile << *arg1_num_col_right_right << "\n";
+                                }
+                            }
                         }
                         else{
                             std::vector<codon::ir::Var *> arg1_col_var = arg1_col->getUsedVariables();            
@@ -1606,7 +1650,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 MyFile << "-";
                             }            
                             auto *arg2_num_row = arg2_row_instr->back();
-                            MyFile << *arg2_num_row << "\n";            
+                            MyFile << *arg2_num_row << "\n";                                        
                         }
                         else{
                             std::vector<codon::ir::Var *> arg2_row_var = arg2_row->getUsedVariables();            
@@ -1621,6 +1665,8 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }
                         std::string arg2_col_var_name = ""; // taking care of the column index of the first (left side) operand
                         if (arg2_col_instr != NULL){
+                            auto *arg2_num_col = arg2_col_instr->back();
+                            auto *arg2_num_col_inst = cast<CallInstr>(arg2_num_col);                            
                             auto *arg2_col_func = util::getFunc(arg2_col_instr->getCallee());
                             auto arg2_col_func_name = arg2_col_func->getUnmangledName();
                             std::vector<codon::ir::Var *> arg2_col_var = arg2_col_instr->front()->getUsedVariables();
@@ -1630,12 +1676,54 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                             else{
                                 MyFile << "1\n";
-                            }
+                            }                            
                             if (arg2_col_func_name == "__sub__"){
                                 MyFile << "-";
-                            }            
-                            auto *arg2_num_col = arg2_col_instr->back();
-                            MyFile << *arg2_num_col << "\n";            
+                            }                             
+                            if(arg2_num_col_inst == NULL){  
+                                MyFile << *arg2_num_col << "\n";                                                     
+                            }
+                            else{
+                                auto *arg_2_num_col_left = arg2_num_col_inst->front();
+                                auto *arg_2_num_col_right = arg2_num_col_inst->back();
+                                std::vector<codon::ir::Var *> arg_2_num_col_left_vars = arg_2_num_col_left->getUsedVariables();
+                                auto arg_2_num_col_left_name = arg_2_num_col_left_vars[0]->getName();
+                                if(arg_2_num_col_left_name == pf_arg1){
+                                    MyFile << "0 ";
+                                }
+                                else{
+                                    MyFile << "1 ";
+                                }
+                                auto *arg_2_num_col_right_inst = cast<CallInstr>(arg_2_num_col_right);
+                                if(arg_2_num_col_right_inst == NULL){
+                                    std::vector<codon::ir::Var *> arg_2_num_col_right_vars = arg_2_num_col_right->getUsedVariables();
+                                    auto arg_2_num_col_right_name = arg_2_num_col_right_vars[0]->getName();
+                                    if(arg_2_num_col_right_name == var_str_inner){
+                                        MyFile << "0 0\n";
+                                    }
+                                    else{
+                                        MyFile << "1 0\n";
+                                    }
+                                }
+                                else{
+                                    auto *arg2_num_col_right_left = arg_2_num_col_right_inst->front();
+                                    std::vector<codon::ir::Var *> arg2_num_col_right_left_vars =  arg2_num_col_right_left->getUsedVariables();
+                                    auto arg2_num_col_right_left_name = arg2_num_col_right_left_vars[0]->getName();
+                                    if(arg2_num_col_right_left_name == var_str_inner){
+                                        MyFile << "0 ";
+                                    }
+                                    else{
+                                        MyFile << "1 ";
+                                    }
+                                    auto *arg2_num_col_right_right = arg_2_num_col_right_inst->back();
+                                    auto *arg2_num_col_right_func = util::getFunc(arg_2_num_col_right_inst->getCallee());
+                                    auto arg2_num_col_right_func_name = arg2_num_col_right_func->getUnmangledName();
+                                    if(arg2_num_col_right_func_name == "__sub__"){
+                                        MyFile << "-";
+                                    }
+                                    MyFile << *arg2_num_col_right_right << "\n";
+                                }
+                            }          
                         }
                         else{
                             std::vector<codon::ir::Var *> arg2_col_var = arg2_col->getUsedVariables();            
@@ -2152,6 +2240,8 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                             std::string arg3_col_var_name = ""; // taking care of the column index of the first (left side) operand
                             if (arg3_col_instr != NULL){
+                                auto *arg3_num_col = arg3_col_instr->back();
+                                auto *arg3_num_col_inst = cast<CallInstr>(arg3_num_col);                            
                                 auto *arg3_col_func = util::getFunc(arg3_col_instr->getCallee());
                                 auto arg3_col_func_name = arg3_col_func->getUnmangledName();
                                 std::vector<codon::ir::Var *> arg3_col_var = arg3_col_instr->front()->getUsedVariables();
@@ -2161,12 +2251,54 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 }
                                 else{
                                     MyFile << "1\n";
-                                }
+                                } 
                                 if (arg3_col_func_name == "__sub__"){
                                     MyFile << "-";
-                                }            
-                                auto *arg3_num_col = arg3_col_instr->back();
-                                MyFile << *arg3_num_col << "\n";            
+                                }                                                               
+                                if(arg3_num_col_inst == NULL){   
+                                    MyFile << *arg3_num_col << "\n";                                                     
+                                }
+                                else{
+                                    auto *arg_3_num_col_left = arg3_num_col_inst->front();
+                                    auto *arg_3_num_col_right = arg3_num_col_inst->back();
+                                    std::vector<codon::ir::Var *> arg_3_num_col_left_vars = arg_3_num_col_left->getUsedVariables();
+                                    auto arg_3_num_col_left_name = arg_3_num_col_left_vars[0]->getName();
+                                    if(arg_3_num_col_left_name == pf_arg1){
+                                        MyFile << "0 ";
+                                    }
+                                    else{
+                                        MyFile << "1 ";
+                                    }
+                                    auto *arg_3_num_col_right_inst = cast<CallInstr>(arg_3_num_col_right);
+                                    if(arg_3_num_col_right_inst == NULL){
+                                        std::vector<codon::ir::Var *> arg_3_num_col_right_vars = arg_3_num_col_right->getUsedVariables();
+                                        auto arg_3_num_col_right_name = arg_3_num_col_right_vars[0]->getName();
+                                        if(arg_3_num_col_right_name == var_str_inner){
+                                            MyFile << "0 0\n";
+                                        }
+                                        else{
+                                            MyFile << "1 0\n";
+                                        }
+                                    }
+                                    else{
+                                        auto *arg3_num_col_right_left = arg_3_num_col_right_inst->front();
+                                        std::vector<codon::ir::Var *> arg3_num_col_right_left_vars =  arg3_num_col_right_left->getUsedVariables();
+                                        auto arg3_num_col_right_left_name = arg3_num_col_right_left_vars[0]->getName();
+                                        if(arg3_num_col_right_left_name == var_str_inner){
+                                            MyFile << "0 ";
+                                        }
+                                        else{
+                                            MyFile << "1 ";
+                                        }
+                                        auto *arg3_num_col_right_right = arg_3_num_col_right_inst->back();
+                                        auto *arg3_num_col_right_func = util::getFunc(arg_3_num_col_right_inst->getCallee());
+                                        auto arg3_num_col_right_func_name = arg3_num_col_right_func->getUnmangledName();
+                                        if(arg3_num_col_right_func_name == "__sub__"){
+                                            MyFile << "-";
+                                        }
+                                        MyFile << *arg3_num_col_right_right << "\n";
+                                    }
+                                }        
                             }
                             else{
                                 std::vector<codon::ir::Var *> arg3_col_var = arg3_col->getUsedVariables();            
