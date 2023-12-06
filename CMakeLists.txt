@@ -29,8 +29,8 @@ if(xz_ADDED)
 endif()
 
 set(VECTRON_FILES
-    ir/zdrp.cpp
-    ir/zdrp.h
+    ir/bypass.cpp
+    ir/bypass.h
     ir/func_repl.cpp
     ir/func_repl.h
     ir/loop_anlz.cpp
