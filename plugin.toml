@@ -1,9 +1,0 @@
-[about]
-name = "Vectron"
-description = "a high-performance auto-vectorization in bioinformatics"
-version = "0.0.1"
-supported = ">=0.15.0"
-
-[library]
-cpp = "build/libvectron"
-codon = "stdlib"
