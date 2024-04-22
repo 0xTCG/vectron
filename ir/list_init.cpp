@@ -13,8 +13,9 @@ using namespace codon::ir;
 
 void ListInitializer::transform(AssignInstr *v) {          
     auto *pf = getParentFunc();
-    auto pf_name = pf->getUnmangledName();
-    if(pf_name != "orig")
+    //auto pf_name = pf->getUnmangledName();
+    auto att_calc = util::hasAttribute(pf, "vectron_calc");    
+    if(!att_calc)
         return;  
     auto pf_arg1 = pf->arg_front()->getName();
     auto pf_arg2 = pf->arg_back()->getName();
@@ -22,7 +23,8 @@ void ListInitializer::transform(AssignInstr *v) {
     if (c == NULL)
         return;    
     auto *lst = util::getFunc(c->getCallee());
-    if (!lst || lst->getUnmangledName() != "listCR")
+    auto lst_att = util::hasAttribute(lst, "vectron_list");    
+    if (!lst || !lst_att)
       return;   
     else{       
         std::ofstream MyFile;

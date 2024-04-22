@@ -3,6 +3,7 @@
 #include "loop_anlz.h"
 #include "list_init.h"
 #include "bypass.h"
+#include "env_select.h"
 
 
 namespace vectron {
@@ -38,6 +39,7 @@ void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {
   pm->registerPass(std::make_unique<byPass>(), "core-folding-pass-group"); 
   pm->registerPass(std::make_unique<LoopAnalyzer>(), "core-folding-pass-group");
   pm->registerPass(std::make_unique<ListInitializer>(), "core-folding-pass-group"); 
+  pm->registerPass(std::make_unique<EvnSelector>(), "core-folding-pass-group");    
   pm->registerPass(std::make_unique<FuncReplacement>(), "core-folding-pass-group");    
   
   

@@ -47,17 +47,19 @@ void byPass::transform(ReturnInstr *v) {
     }            
     auto *pf = getParentFunc();
     auto pf_name = pf->getUnmangledName();
-    if(pf_name != "orig")
+    auto att_calc = util::hasAttribute(pf, "vectron_calc");    
+    if(!att_calc)
         return;
     std::vector<codon::ir::Value *> func = v->getUsedValues();
     auto *func_log = cast<CallInstr>(func[0]);
-    auto func_name = util::getFunc(func_log->getCallee())->getUnmangledName();    
-    if(func_name != "byPass")
+    auto func_name = util::getFunc(func_log->getCallee())->getUnmangledName();     
+    auto *by_pass_func = util::getFunc(func_log->getCallee());
+    auto att_bypass = util::hasAttribute(by_pass_func, "vectron_bypass");    
+    if(!att_bypass)
         return;
     auto *z_value = func_log->back();
     std::ofstream MyFile("byPass.txt");
     MyFile << *z_value << "\n";
-    
     
 }
 void byPass::handle(ReturnInstr *v) { transform(v); }

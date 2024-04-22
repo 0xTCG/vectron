@@ -25,8 +25,10 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
     int arg3_flag = 0;
     int flag = 0;
     auto *pf = getParentFunc();;
-    auto pf_name = pf->getUnmangledName();    
-    if (pf_name == "prep"){   
+    auto att_att = util::hasAttribute(pf, "vectron_init");
+    auto att_calc = util::hasAttribute(pf, "vectron_calc");
+    //auto pf_name = pf->getUnmangledName();    
+    if (att_att){   
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
         auto *check = v->getBody();
@@ -150,7 +152,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         }        
         MyFile.close();
     }    
-    else if (pf_name == "orig"){         
+    else if (att_calc){    
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
         auto *check = v->getBody();
@@ -164,7 +166,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         auto *w_inner = inner_loop->getActual();
         std::vector<codon::ir::Var *> vars_inner = w_inner->getUsedVariables();
         auto var_str_inner = vars_inner[0]->getName(); // inner loop's iterator's name  
-        auto *chk = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back());
+        auto *chk = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back());        
         if(chk == NULL){
             std::ofstream bw_manager("bw.txt");            
             bw_manager << "0\n0\n0\n0\n0\n0\n0\n0\n0\n";         
@@ -339,8 +341,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 auto *right_cond = cast<CallInstr>(main_if_ops[2]);
                 if (and_check == "false"){
                     right_cond = cast<CallInstr>(main_if_ops[1]); 
-                }
-
+                }                
                 std::vector<codon::ir::Value *> right_cond_vars = right_cond->getUsedValues();    
                 int build_flag = 0;   
                 auto *right_operator = util::getFunc(cast<CallInstr>(right_cond_vars[0])->getCallee());
@@ -516,7 +517,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 }
                 bw_manager << *right_rhs << "\n";      
             }              
-            else{             
+            else{          
                 auto *single_left_cond = cast<CallInstr>(main_true_branch);
                 //std::vector<codon::ir::Value *> left_cond_vars = left_cond->getUsedValues();
                 auto *left_operator = util::getFunc(single_left_cond->getCallee());
@@ -653,10 +654,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 bw_manager << *main_if_ops[1] << "\n";                
                 bw_manager << "0\n0\n0\n0\n";
             }
-            
             bw_manager.close();
-        }    
-        auto *ass = cast<CallInstr>(cast<SeriesFlow>(inner_loop->getBody())->back()); // assignment op inside the inner loop   
+        } 
+        auto *ass = cast<CallInstr>(cast<SeriesFlow>(inner_loop->getBody())->back()); // assignment op inside the inner loop    
         if (flag == 0){
             auto *main_else_branch = cast<IfFlow>(cast<SeriesFlow>(inner_loop->getBody())->back())->getFalseBranch();                        
             ass = cast<CallInstr>(cast<SeriesFlow>(main_else_branch)->back()); // assignment op inside the inner loop                
@@ -678,6 +678,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         auto *call_end_inner = cast<CallInstr>(e_inner);
         auto *call_start_inner = cast<CallInstr>(s_inner);
         std::ofstream MyFile("LoopInfo.txt");
+
         if (call_start_outer){ // writing the starting condition of the loop
             auto *start_func = util::getFunc(call_start_outer->getCallee());
             auto final_start = start_func->getUnmangledName();
@@ -687,6 +688,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             MyFile << *s_outer << "\n";     
         }
         MyFile << v->getStep() << "\n";     //writing the step condition of the loop
+        
         if (call_end_outer){ // writing the end condition of the loop
             auto *end_func = util::getFunc(call_end_outer->getCallee());
             auto final_end = end_func->getUnmangledName();            
@@ -721,7 +723,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         else{
             MyFile << *e_outer << "\n";
             MyFile << "0\n";   
-        }
+        }        
         if (call_start_inner){ // writing the starting condition of the loop
             auto *start_func_inner = util::getFunc(call_start_inner->getCallee());
             auto final_start_inner = start_func_inner->getUnmangledName();
@@ -769,13 +771,14 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         else{
             MyFile << *e_inner << "\n";
             MyFile << "0\n";   
-        }        
+        }                
         if (op == "min"){
             MyFile << "0\n";
         }
         else{ 
             MyFile << "1\n";
         }
+              
         if (op == "max" || op == "min"){
             auto *arg1 = cast<CallInstr>(right_side->front()); // the left side operand
             auto *arg1_inst = cast<CallInstr>(arg1->front()); 
@@ -794,11 +797,13 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();
+                auto *max_st_1 = util::getFunc(arg1_inst->getCallee());
+                auto max_att_1 = util::hasAttribute(max_st_1, "vectron_max");                                
                 if (arg1_func_name == "__add__" || arg1_func_name == "__sub__" || arg1_func_name == "__mul__" || arg1_func_name == "__div__" ){
                     MyFile << "1\n";
                 }
                 else{
-                    if(arg1_func_name == "max_store"){
+                    if(max_att_1){
                         MyFile << "0\n";    
                     }
                     else{
@@ -806,17 +811,19 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     }
                 }
             }
-            
+            ////
             if (arg2_inst == NULL){
                 MyFile << "0\n";
             }
             else{
                 auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();
+                auto *max_st_2 = util::getFunc(arg2_inst->getCallee());
+                auto max_att_2 = util::hasAttribute(max_st_2, "vectron_max");                                
                 if (arg2_func_name == "__add__" || arg2_func_name == "__sub__" || arg2_func_name == "__mul__" || arg2_func_name == "__div__"){
                     MyFile << "1\n";
                 }
                 else{
-                    if(arg2_func_name == "max_store"){
+                    if(max_att_2){
                         MyFile << "0\n";    
                     }
                     else{
@@ -825,27 +832,29 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 }                    
             }
             if (main_args == 0)
-                MyFile << "-1\n";  // reserved for min max with 3 arguments
-            else{
-                auto *arg3 = cast<CallInstr>(right_side->back()); // the right side operand                         
-                auto *arg3_inst = cast<CallInstr>(arg3->back());        
+                MyFile << "-1\n";  // reserved for min max with 3 arguments                                                  
+            else{                                                                                    
+                auto *arg3 = cast<CallInstr>(right_side->front()); // the right side operand                                         
+                auto *arg3_inst = cast<CallInstr>(arg3->back());                                                              
                 if (arg3_inst == NULL){
                     MyFile << "0\n";
                 }
                 else{
                     auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();   
+                    auto *max_st_3 = util::getFunc(arg3_inst->getCallee());
+                    auto max_att_3 = util::hasAttribute(max_st_3, "vectron_max");                                    
                     if (arg3_func_name == "__add__" || arg3_func_name == "__sub__" || arg3_func_name == "__mul__" || arg3_func_name == "__div__"){
                         MyFile << "1\n";
                     }
                     else{
-                        if(arg3_func_name == "max_store"){
+                        if(max_att_3){
                             MyFile << "0\n";    
                         }
                         else{
                             MyFile << "1\n";
                         }
                     }                               
-                }
+                }                
             }
             if (arg1_inst == NULL){
                 MyFile << "0\n0\n0\n0\n0\n" << *arg1->front() << "\n"; // writing down the constant value + reserved elements for further instructions                
@@ -853,7 +862,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();
-                if(arg1_func_name == "max_store"){
+                auto *max_st_4 = util::getFunc(arg1_inst->getCallee());
+                auto max_att_4 = util::hasAttribute(max_st_4, "vectron_max");                
+                if(max_att_4){
                     MyFile << "0\n0\n0\n0\n0\n0\n";
                     std::ofstream mx_file("mx_arg1.txt");
                     std::vector<codon::ir::Value *> mx_arg_1 = arg1_inst->getUsedValues();
@@ -960,7 +971,6 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }  
                         mx_file << "0\n";                 
                     }
-
                     auto *mx_arg_1_5 = cast<CallInstr>(mx_arg_1[4]);       
                     auto mx_arg_1_5_name = util::getFunc(cast<CallInstr>(mx_arg_1_5)->getCallee())->getUnmangledName();
                     if(mx_arg_1_5_name == "__add__" || mx_arg_1_5_name == "__sub__"){
@@ -1039,7 +1049,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                     }                                        
                     mx_file.close();                    
                 }
-                else{
+                else{             
                     auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();
                     if (arg1_func_name == "__add__" || arg1_func_name == "__sub__" || arg1_func_name == "__mul__" || arg1_func_name == "__div__"){
                         auto *arg1_op = cast<CallInstr>(arg1_inst->front()); // the left side operand
@@ -1051,7 +1061,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         std::vector<codon::ir::Var *> arg1_var_name = arg1_var->getUsedVariables();                        
                         auto *arg1_row_instr = cast<CallInstr>(arg1_row); // is arg1 row index a math op?
                         auto *arg1_col_instr = cast<CallInstr>(arg1_col); // is arg1 row index a math op?             
-                        auto arg1_fr_name = arg1_var_name[0]->getName(); // left side variable's name   
+                        auto arg1_fr_name = arg1_var_name[0]->getName(); // left side variable's name                            
                         if (arg1_func_name == "__mul__"){
                             MyFile << *arg1_const << "\n";
                         }
@@ -1060,13 +1070,13 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }
                         else{
                             MyFile << "1\n";
-                        }
+                        }                                                
                         std::string arg1_row_var_name = ""; // taking care of the row index of the first (left side) operand
                         if (arg1_row_instr != NULL){
                             auto *arg1_row_func = util::getFunc(arg1_row_instr->getCallee());
                             auto arg1_row_func_name = arg1_row_func->getUnmangledName();
                             std::vector<codon::ir::Var *> arg1_row_var = arg1_row_instr->front()->getUsedVariables();
-                            arg1_row_var_name = arg1_row_var[0]->getName();
+                            arg1_row_var_name = arg1_row_var[0]->getName();                            
                             if (var_str_outer == arg1_row_var_name){
                                 MyFile << "0\n";
                             }
@@ -1076,7 +1086,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             if (arg1_row_func_name == "__sub__"){
                                 MyFile << "-";
                             }            
-                            auto *arg1_num_row = arg1_row_instr->back();
+                            auto *arg1_num_row = arg1_row_instr->back();                   
                             MyFile << *arg1_num_row << "\n";            
                         }
                         else{
@@ -1091,7 +1101,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             MyFile << "0\n";
                         }
                         std::string arg1_col_var_name = ""; // taking care of the column index of the first (left side) operand
-                        if (arg1_col_instr != NULL){
+                        if (arg1_col_instr != NULL){                              
                             auto *arg1_num_col = arg1_col_instr->back();
                             auto *arg1_num_col_inst = cast<CallInstr>(arg1_num_col);                            
                             auto *arg1_col_func = util::getFunc(arg1_col_instr->getCallee());
@@ -1162,7 +1172,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 MyFile << "1\n";
                             }
                             MyFile << "0\n";
-                        }
+                        }                             
                         if (arg1_func_name == "__sub__"){
                             MyFile << "-";
                             MyFile << *arg1_const << "\n";
@@ -1171,12 +1181,13 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             if (cast<CallInstr>(arg1_const) == NULL){                            
                                 MyFile << *arg1_const << "\n"; // writing down the constant value + reserved elements for further instructions                            
                             }
-                            else{
+                            else{                                
                                 MyFile << "0\n";
                                 auto *m_call_1 = cast<CallInstr>(arg1_const);
                                 auto *m_call_1_func = util::getFunc(m_call_1->getCallee());
-                                auto m_call_1_name = m_call_1_func->getUnmangledName();                        
-                                if (m_call_1_name == "match_func"){
+                                auto m_call_1_name = m_call_1_func->getUnmangledName();  
+                                auto match_att_1 = util::hasAttribute(m_call_1_func, "vectron_match");                                                      
+                                if (match_att_1){                          
                                     std::vector<codon::ir::Value *> body_1 = m_call_1_func->getUsedValues();
                                     auto match_arg_1 = m_call_1_func->arg_front()->getName();
                                     auto match_arg_2 = m_call_1_func->arg_back()->getName();                                
@@ -1342,7 +1353,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             MyFile << "0\n";
                         }                    
                     }
-                    else{
+                    else{           
                         auto *arg1_fr = cast<CallInstr>(arg1_inst->front()); // the left side operand + its row index
                         auto *arg1_var = arg1_fr->front(); // the left side variable
                         auto *arg1_row = arg1_fr->back(); // the left side row index 
@@ -1424,7 +1435,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             }
             else{
                 auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();
-                if(arg2_func_name == "max_store"){
+                auto max_st_5 = util::getFunc(arg2_inst->getCallee());
+                auto max_att_5 = util::hasAttribute(max_st_5, "vectron_max");                                                                      
+                if(max_att_5){
                     MyFile << "0\n0\n0\n0\n0\n0\n";
                     std::ofstream mx_file("mx_arg2.txt");
                     std::vector<codon::ir::Value *> mx_arg_2 = arg2_inst->getUsedValues();
@@ -1612,7 +1625,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
 
                     mx_file.close();
                 }
-                else{                
+                else{            
                     auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();
                     if (arg2_func_name == "__add__" || arg2_func_name == "__sub__" || arg2_func_name == "__mul__" || arg2_func_name == "__div__"){
                         auto *arg2_op = cast<CallInstr>(arg2_inst->front()); // the left side operand
@@ -1748,8 +1761,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 MyFile << "0\n";
                                 auto *m_call_2 = cast<CallInstr>(arg2_const);
                                 auto *m_call_2_func = util::getFunc(m_call_2->getCallee());
-                                auto m_call_2_name = m_call_2_func->getUnmangledName();                            
-                                if (m_call_2_name == "match_func"){
+                                auto m_call_2_name = m_call_2_func->getUnmangledName();    
+                                auto match_att_2 = util::hasAttribute(m_call_2_func, "vectron_match");                                                        
+                                if (match_att_2){
                                     std::vector<codon::ir::Value *> body_2 = m_call_2_func->getUsedValues();
                                     auto match_arg_1 = m_call_2_func->arg_front()->getName();
                                     auto match_arg_2 = m_call_2_func->arg_back()->getName();
@@ -1993,7 +2007,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 }
             }
             if (main_args != 0){
-                auto *arg3 = cast<CallInstr>(right_side->back()); // the left side operand                
+                auto *arg3 = cast<CallInstr>(right_side->front()); // the left side operand                
                 auto *arg3_inst = cast<CallInstr>(arg3->back());
                 if (arg3_inst == NULL){
                     MyFile << "0\n0\n0\n0\n0\n" << *r_end << "\n"; // writing down the constant value + reserved elements for further instructions
@@ -2001,7 +2015,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 }
                 else{
                     auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();
-                    if(arg3_func_name == "max_store"){
+                    auto *max_st_6 = util::getFunc(arg3_inst->getCallee());
+                    auto max_att_6 = util::hasAttribute(max_st_6, "vectron_max");                    
+                    if(max_att_6){
                         MyFile << "0\n0\n0\n0\n0\n0\n";
                         std::ofstream mx_file("mx_arg3.txt");
                         std::vector<codon::ir::Value *> mx_arg_3 = arg3_inst->getUsedValues();
@@ -2187,7 +2203,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }                                        
                         mx_file.close();                         
                     }
-                    else{                    
+                    else{                  
                         auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();
                         if (arg3_func_name == "__add__" || arg3_func_name == "__sub__" || arg3_func_name == "__mul__" || arg3_func_name == "__div__"){
                             auto *arg3_op = cast<CallInstr>(arg3_inst->front()); // the left side operand
@@ -2323,8 +2339,9 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     MyFile << "0\n";
                                     auto *m_call_3 = cast<CallInstr>(arg3_const);
                                     auto *m_call_3_func = util::getFunc(m_call_3->getCallee());
-                                    auto m_call_3_name = m_call_3_func->getUnmangledName();                            
-                                    if (m_call_3_name == "match_func"){
+                                    auto m_call_3_name = m_call_3_func->getUnmangledName();  
+                                    auto match_att_3 = util::hasAttribute(m_call_3_func, "vectron_match");                                                              
+                                    if (match_att_3){
                                         std::vector<codon::ir::Value *> body_3 = m_call_3_func->getUsedValues();
                                         auto match_arg_1 = m_call_3_func->arg_front()->getName();
                                         auto match_arg_2 = m_call_3_func->arg_back()->getName();
@@ -2572,14 +2589,17 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
 
         }
         else
-            return;
+            return;        
         auto *arg1 = cast<CallInstr>(right_side->front()); // the left side operand
         auto *arg1_inst = cast<CallInstr>(arg1->front());
         std::string arg1_func_name = "";
+        bool max_att_7 = false;
         if(arg1_inst != NULL){
-            arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();   
+            arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();  
+            auto *max_st_7 = util::getFunc(arg1_inst->getCallee());
+            max_att_7 = util::hasAttribute(max_st_7, "vectron_max");             
         }
-        if (arg1_inst != NULL && arg1_func_name != "max_store"){      
+        if (arg1_inst != NULL && !max_att_7){      
             auto *arg1_op = cast<CallInstr>(arg1_inst->front()); // the left side operand        
             auto *arg1_fr = cast<CallInstr>(arg1_op->front()); // the left side variable + its row index                         
             if(arg1_fr != NULL){
@@ -2601,12 +2621,15 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         auto r_mid = r_mid_0->begin();        
         auto *arg2_inst = cast<CallInstr>(r_mid[1]);     
         std::string arg2_func_name = "";
+        bool max_att_8 = false;        
         if (arg2_inst != NULL){
             arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();             
+            auto *max_st_8 = util::getFunc(arg2_inst->getCallee());
+            max_att_8 = util::hasAttribute(max_st_8, "vectron_max");             
         }          
-        if (arg2_inst != NULL && arg2_func_name != "max_store"){
+        if (arg2_inst != NULL && !max_att_8){
             auto *arg2_op = cast<CallInstr>(arg2_inst->front()); // the left side operand
-            auto *arg2_fr = cast<CallInstr>(arg2_op->front()); // the left side variable + its row index   
+            auto *arg2_fr = cast<CallInstr>(arg2_op->front()); // the left side variable + its row index               
             if(arg2_fr != NULL){              
                 auto *arg2_var = arg2_fr->front(); // the left side variable              
                 std::vector<codon::ir::Var *> arg2_vars = arg2_var->getUsedVariables();            
@@ -2624,13 +2647,16 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         }
         auto *r_end = cast<CallInstr>(right_side->front())->back(); // the last argument of the main function (min or max)
         if (r_end != r_mid[1]){        
-            auto *arg3 = cast<CallInstr>(right_side->back()); // the right side operand                         
+            auto *arg3 = cast<CallInstr>(right_side->front()); // the right side operand                         
             auto *arg3_inst = cast<CallInstr>(arg3->back()); 
             std::string arg3_func_name = "";
+            bool max_att_9 = false;
             if(arg3_inst != NULL){
                 arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();   
+                auto *max_st_9 = util::getFunc(arg3_inst->getCallee());
+                max_att_9 = util::hasAttribute(max_st_9, "vectron_max");                  
             }       
-            if (arg3_inst != NULL && arg3_func_name != "max_store"){
+            if (arg3_inst != NULL && !max_att_9){
                 auto *arg3_op = cast<CallInstr>(arg3_inst->front()); // the left side operand
                 auto *arg3_fr = cast<CallInstr>(arg3_op->front()); // the left side variable + its row index                       
                 if(arg3_fr != NULL){
