@@ -2,6 +2,7 @@ from experimental.simd import *
 from bio import *
 import time
 import os
+import gpu
 
 var_type = "f32"
 
@@ -79,9 +80,9 @@ def orig_foo(h, m):
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1]), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6)) #101            
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6), q[i - 1][j - 1] + match_func(m[i - 1], 2, -4, -3, h[j - 1])) #110 
                     #q[i][j] = max(max_store(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6), max_store(s, i, j, l[i - 1][j - 1] - 2, q[i - 1][j - 1] - 6)) #111
-    #print(byPass(q[-1][-1], max_val(q), 800))
-    print(q[-1][-1])
-    return by_pass_foo(q[-1][-1], max_val(q), 800)
+    #print(by_pass_foo(q[-1][-1], max_val(q), 800))
+    #print(q[-1][-1])
+    return q[-1][-1]#by_pass_foo(q[-1][-1], max_val(q), 800)
 
 @vectron_init
 def prep_foo(x, y):
