@@ -2697,16 +2697,17 @@ namespace vectron {
                         "            seqs_t = tuple(list([[Vec(t[__][(_ * REG_SIZE): (_ + 1) * REG_SIZE], u8, 16) for _ in range(check)] for __ in range(MAX_LENGTH_Q)]))\n"
                         "            score = calculate(x, row, x_vec, seqs_t, matrices, H, V, check, params, score, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_col, H_col_mul, mat_col, mat_col_mul, V_col, V_col_mul, first_list, second_list, third_list, mx1_names_final, inds_mx1, mx2_names_final, inds_mx2, mx3_names_final, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3)\n"
                         "    return score\n";
+                std::ofstream MyFile("code.py");
+                MyFile << code << "\n";
+                MyFile.close();
                 M->parseCode(code);
-                std::ofstream code_file;
-                code_file << code;
-                code_file.close();
                 auto *sumOne = M->getOrRealizeFunc("sumOne", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr_int10, typ_ptr_int10, typ_ptr_int10, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8});
                 auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, lst1_ptr, lst2_ptr, lst3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});                        
                 v->replaceAll(sumOneCall);                                             
             }
             else{
-                std::cout << "F32\n";     
+                std::cout << "F32\n"; 
+                std::string code = "";    
                 std::ifstream loop_file("LoopInfo.txt");
                 std::basic_string min_check = "";
                 //std::string params = "";
@@ -4036,89 +4037,1755 @@ namespace vectron {
 
                 std::string mx_final = mx_1_checker + mx_2_checker + mx_3_checker;
                 int mx_final_i = stoi(mx_final);                
-                std::string code = 
-                                "from experimental.simd import *\n"
-                                "from bio import *\n"
-                                "import time\n"
-                                "import os\n"                
-                                "import gpu\n"
-                                "\n@gpu.kernel\n"
-                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3):\n"
-                                "    t = gpu.thread.x + gpu.block.x * gpu.block.dim.x\n"
-                                "    SIZE = 512\n"
-                                "    QUANTITY = len(sequences) // (SIZE * 2)\n"
-                                "    CUDA_XBLOCK_SIZE = 256\n"                                                                
-                                "    max_value = f32(0)\n" 
-                                "    a_1 = f32(args1[1])\n"
-                                "    b_1 = f32(args1[3])\n"
-                                "    am_1 = f32(args1[2])\n"
-                                "    mx2_arg2_vec = f32(inds_mx2[4])\n"
-                                "    mx2_arg3_vec = f32(inds_mx2[7])\n"
-                                "    mx3_arg2_vec = f32(inds_mx3[4])\n"
-                                "    mx3_arg3_vec = f32(inds_mx3[7])\n"
-                                "    L = bw_params[4]\n"
-                                "    U = bw_params[8]\n"                            
-                                "    matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
-                                "    matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
-                                "    matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
-                                "    for i in range(1, SIZE + 1):\n"                                 
-                                "        matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
-                                "        matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
-                                "        matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
-                                "        matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
-                                "        matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
-                                "        matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
-                                "    arg_1 = matrices if first_list == 0 else matrices_left if first_list == 2 else matrices_top\n"
-                                "    mx2_arg1 = matrices if mx2_names[0] == 0 else matrices_left if mx2_names[0] == 2 else matrices_top\n"
-                                "    mx2_arg2 = matrices if mx2_names[1] == 0 else matrices_left if mx2_names[1] == 2 else matrices_top\n"
-                                "    mx2_arg3 = matrices if mx2_names[2] == 0 else matrices_left if mx2_names[2] == 2 else matrices_top\n"
-                                "    mx3_arg1 = matrices if mx3_names[0] == 0 else matrices_left if mx3_names[0] == 2 else matrices_top\n"
-                                "    mx3_arg2 = matrices if mx3_names[1] == 0 else matrices_left if mx3_names[1] == 2 else matrices_top\n"                         
-                                "    mx3_arg3 = matrices if mx3_names[2] == 0 else matrices_left if mx3_names[2] == 2 else matrices_top\n"
-                                "    for i in range(outer_start, outer_stop, outer_step):\n"                                                    
-                                "        x_1_arg = x_params_1 * i\n"
-                                "        x_2_arg = x_params_2 * i\n"
-                                "        for j in range(inner_start, inner_stop, inner_step):\n"
-                                "            y_1_arg = y_params_1 * j\n"
-                                "            y_2_arg = y_params_2 * j\n"              
-                                "            if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
-                                "                if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
-                                "                    matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
-                                "                    matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
-                                "                    matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
-                                "            else:\n"
-                                "                arg_1_ind = j + params[14]\n"
-                                "                mx_2_ind_1 = j + inds_mx2[0]\n"
-                                "                mx_2_ind_2 = j + inds_mx2[2]\n"
-                                "                mx_2_ind_3 = j + inds_mx2[5]\n"
-                                "                mx_3_ind_1 = j + inds_mx3[0]\n"
-                                "                mx_3_ind_2 = j + inds_mx3[2]\n"
-                                "                mx_3_ind_3 = j + inds_mx3[5]\n"
-                                "                diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
-                                "                if checker_1 == 0:\n"
-                                "                    diagonal_value += f32(params[17])\n"
-                                "                else:\n"
-                                "                    if sequences[t * SIZE * 2 + i - 1] == 'N' or sequences[t * SIZE * 2 + j - 1 + SIZE] == 'N':\n"
-                                "                        diagonal_value += am_1\n"
+                switch(mx_final_i){
+                    case 0:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        a_1 = f32(args1[1])\n"
+                                "        b_1 = f32(args1[3])\n"
+                                "        am_1 = f32(args1[2])\n"
+                                "        x_ind_1 = args1[4]\n"
+                                "        y_ind_1 = args1[5]\n"                                
+                                "        a_2 = f32(args2[1])\n"
+                                "        b_2 = f32(args2[3])\n"
+                                "        am_2 = f32(args2[2])\n"
+                                "        x_ind_2 = args2[4]\n"
+                                "        y_ind_2 = args2[5]\n"                                                                
+                                "        a_3 = f32(args3[1])\n"
+                                "        b_3 = f32(args3[3])\n"
+                                "        am_3 = f32(args3[2])\n"                                
+                                "        x_ind_3 = args3[4]\n"
+                                "        y_ind_3 = args3[5]\n"                                
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        arg_1 = matrices if first_list == 0 else matrices_left if first_list == 2 else matrices_top\n"
+                                "        arg_2 = matrices if second_list == 0 else matrices_left if second_list == 2 else matrices_top\n"                                
+                                "        if params[11] != -1:\n"
+                                "            arg_3 = matrices if third_list == 0 else matrices_left if third_list == 2 else matrices_top\n"                                                                
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
                                 "                    else:\n"
-                                "                        diagonal_value += a_1 if sequences[t * SIZE * 2 + i - 1] == sequences[t * SIZE * 2 + j - 1 + SIZE] else b_1\n"                            
-                                "                diagonal_value *= f32(params[12])\n"
-                                "                mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
-                                "                mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
-                                "                top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_2_ind_1])\n"
-                                "                left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1])\n"   
-                                "                target_value = max(diagonal_value, top_value, left_value)\n"
-                                "                arg_1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)\n"
-                                "                mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n"
-                                "                mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                           
-                                "                if target_value > max_value:\n"
-                                "                    max_value = target_value\n"                                
-                                "    if max_value - target_value <= z_value:\n"
-                                "        scores[t] = target_value\n"
-                                "    else:\n"
-                                "        scores[t] = f32(-32768)\n"
-                                "def pair_sequences(targets, queries):\n"
-                                "    return [(target.strip(), query.strip()) for target, query in zip(targets, queries)]\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";
+                                    break;
+                                }
+                                case 1:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                       
+                                    break;
+                                }
+                                case 0:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                                                       
+                                    break;
+                                }
+                            }
+                            if(min_check == "1"){
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"     
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"      
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+                        }
+                        else{
+                            code +=
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n"; 
+                            if(min_check == "1"){
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"     
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"      
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+
+                        }    
+                code += 
+                    "                        arg_1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)\n"
+                    "                        arg_2[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                    
+                    "                        if params[11] != -1:\n"
+                    "                            arg_3[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";
+                        break;
+                    }
+                    case 1:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        a_1 = f32(args1[1])\n"
+                                "        b_1 = f32(args1[3])\n"
+                                "        am_1 = f32(args1[2])\n"
+                                "        x_ind_1 = args1[4]\n"
+                                "        y_ind_1 = args1[5]\n"                                
+                                "        a_2 = f32(args2[1])\n"
+                                "        b_2 = f32(args2[3])\n"
+                                "        am_2 = f32(args2[2])\n"     
+                                "        x_ind_2 = args2[4]\n"
+                                "        y_ind_2 = args2[5]\n"                                                           
+                                "        mx3_arg2_vec = f32(inds_mx3[4])\n"
+                                "        mx3_arg3_vec = f32(inds_mx3[7])\n"                         
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        arg_1 = matrices if first_list == 0 else matrices_left if first_list == 2 else matrices_top\n"
+                                "        arg_2 = matrices if second_list == 0 else matrices_left if second_list == 2 else matrices_top\n"                                
+                                "        mx3_arg1 = matrices if mx3_names[0] == 0 else matrices_left if mx3_names[0] == 2 else matrices_top\n"
+                                "        mx3_arg2 = matrices if mx3_names[1] == 0 else matrices_left if mx3_names[1] == 2 else matrices_top\n"                         
+                                "        mx3_arg3 = matrices if mx3_names[2] == 0 else matrices_left if mx3_names[2] == 2 else matrices_top\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";
+
+                                    break;
+                                }
+                                case 1:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                
+                                    break;
+                                }
+                                case 0:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";
+                                    break;
+                                }
+                            }
+                            if(min_check == "1"){
+                                code +=
+                                "                        diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                        if checker_1 == 0:\n"
+                                "                            diagonal_value += f32(params[17])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                diagonal_value += am_1\n"
+                                "                            else:\n"
+                                "                                diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                        diagonal_value *= f32(params[12])\n"
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"   
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"                                
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1])\n"                                   
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                        diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                        if checker_1 == 0:\n"
+                                "                            diagonal_value += f32(params[17])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                diagonal_value += am_1\n"
+                                "                            else:\n"
+                                "                                diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                        diagonal_value *= f32(params[12])\n"
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"     
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"                                
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1])\n"                                   
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n";
+                            }
+                        }
+                        else{
+                            code +=
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n";
+                            if(min_check == "1"){
+                                code +=
+                                "                        diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                        if checker_1 == 0:\n"
+                                "                            diagonal_value += f32(params[17])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                diagonal_value += am_1\n"
+                                "                            else:\n"
+                                "                                diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                        diagonal_value *= f32(params[12])\n"
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"   
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"                                
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1])\n"                                   
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                        diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                        if checker_1 == 0:\n"
+                                "                            diagonal_value += f32(params[17])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                diagonal_value += am_1\n"
+                                "                            else:\n"
+                                "                                diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                        diagonal_value *= f32(params[12])\n"
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"     
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"                                
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_3_ind_1])\n"                                   
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n";
+                            }
+
+                        }    
+                code += 
+                    "                        arg_1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)\n"
+                    "                        arg_2[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                    
+                    "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";
+                        break;
+                    }
+                    case 10:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        a_1 = f32(args1[1])\n"
+                                "        b_1 = f32(args1[3])\n"
+                                "        am_1 = f32(args1[2])\n"
+                                "        x_ind_1 = args1[4]\n"
+                                "        y_ind_1 = args1[5]\n"                                
+                                "        mx2_arg2_vec = f32(inds_mx2[4])\n"
+                                "        mx2_arg3_vec = f32(inds_mx2[7])\n"                                
+                                "        a_3 = f32(args3[1])\n"
+                                "        b_3 = f32(args3[3])\n"
+                                "        am_3 = f32(args3[2])\n"  
+                                "        x_ind_3 = args3[4]\n"
+                                "        y_ind_3 = args3[5]\n"                                                              
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        arg_1 = matrices if first_list == 0 else matrices_left if first_list == 2 else matrices_top\n"
+                                "        mx2_arg1 = matrices if mx2_names[0] == 0 else matrices_left if mx2_names[0] == 2 else matrices_top\n"
+                                "        mx2_arg2 = matrices if mx2_names[1] == 0 else matrices_left if mx2_names[1] == 2 else matrices_top\n"
+                                "        mx2_arg3 = matrices if mx2_names[2] == 0 else matrices_left if mx2_names[2] == 2 else matrices_top\n"                                
+                                "        if params[11] != -1:\n"
+                                "            arg_3 = matrices if third_list == 0 else matrices_left if third_list == 2 else matrices_top\n"                                                                
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";
+                                    break;
+                                }
+                                case 1:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                       
+                                    break;
+                                }
+                                case 0:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                                                       
+                                    break;
+                                }
+                            }
+                            if(min_check == "1"){
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+                        }
+                        else{
+                            code +=
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n"; 
+                            if(min_check == "1"){
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                            if checker_1 == 0:\n"
+                                "                                diagonal_value += f32(params[17])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                    diagonal_value += am_1\n"
+                                "                                else:\n"
+                                "                                    diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                            diagonal_value *= f32(params[12])\n"
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+
+                        }    
+                code += 
+                    "                        arg_1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)\n"
+                    "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                           
+                    "                        if params[11] != -1:\n"
+                    "                            arg_3[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";
+                        break;
+                    }
+                    case 11:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        a_1 = f32(args1[1])\n"
+                                "        b_1 = f32(args1[3])\n"
+                                "        am_1 = f32(args1[2])\n"
+                                "        x_ind_1 = args1[4]\n"
+                                "        y_ind_1 = args1[5]\n"
+                                "        mx2_arg2_vec = f32(inds_mx2[4])\n"
+                                "        mx2_arg3_vec = f32(inds_mx2[7])\n"
+                                "        mx3_arg2_vec = f32(inds_mx3[4])\n"
+                                "        mx3_arg3_vec = f32(inds_mx3[7])\n"
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True, collapse=1)\n"                                                               
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        arg_1 = matrices if first_list == 0 else matrices_left if first_list == 2 else matrices_top\n"
+                                "        mx2_arg1 = matrices if mx2_names[0] == 0 else matrices_left if mx2_names[0] == 2 else matrices_top\n"
+                                "        mx2_arg2 = matrices if mx2_names[1] == 0 else matrices_left if mx2_names[1] == 2 else matrices_top\n"
+                                "        mx2_arg3 = matrices if mx2_names[2] == 0 else matrices_left if mx2_names[2] == 2 else matrices_top\n"
+                                "        mx3_arg1 = matrices if mx3_names[0] == 0 else matrices_left if mx3_names[0] == 2 else matrices_top\n"
+                                "        mx3_arg2 = matrices if mx3_names[1] == 0 else matrices_left if mx3_names[1] == 2 else matrices_top\n"                         
+                                "        mx3_arg3 = matrices if mx3_names[2] == 0 else matrices_left if mx3_names[2] == 2 else matrices_top\n"
+                                "        @par(gpu=True, collapse=1)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code += 
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                    
+                                    break;
+                                }
+                                case 1:{
+                                    code += 
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                               
+                                    break;
+                                }
+                                case 0:{
+                                    code += 
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                              
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            code += 
+                                "                        arg_1_ind = j + params[16]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                     
+
+                        }
+                        if(min_check == "1"){
+                            code += 
+                                "                        diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                        if checker_1 == 0:\n"
+                                "                            diagonal_value += f32(params[17])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                diagonal_value += am_1\n"
+                                "                            else:\n"
+                                "                                diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                        diagonal_value *= f32(params[12])\n"
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"                                
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n";
+
+                        }
+                        else{
+                            code += 
+                                "                        diagonal_value = arg_1[t * (SIZE + 1) * (SIZE + 1) + (i + params[14]) * (SIZE + 1) + arg_1_ind] * f32(params[9])\n"
+                                "                        if checker_1 == 0:\n"
+                                "                            diagonal_value += f32(params[17])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_1] == 'N' or sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] == 'N':\n"
+                                "                                diagonal_value += am_1\n"
+                                "                            else:\n"
+                                "                                diagonal_value += a_1 if sequences[t * SIZE * 2 + i + x_ind_1] == sequences[t * SIZE * 2 + j + y_ind_1 + SIZE] else b_1\n"                            
+                                "                        diagonal_value *= f32(params[12])\n"
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"                                
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n";
+                        }
+                        code += 
+                                "                        arg_1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)\n"
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";   
+                        break;
+                    }
+                    case 100:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        mx1_arg2_vec = f32(inds_mx1[4])\n"
+                                "        mx1_arg3_vec = f32(inds_mx1[7])\n"                                
+                                "        a_2 = f32(args2[1])\n"
+                                "        b_2 = f32(args2[3])\n"
+                                "        am_2 = f32(args2[2])\n"                                
+                                "        x_ind_2 = args2[4]\n"
+                                "        y_ind_2 = args2[5]\n"                                
+                                "        a_3 = f32(args3[1])\n"
+                                "        b_3 = f32(args3[3])\n"
+                                "        am_3 = f32(args3[2])\n"                                
+                                "        x_ind_3 = args3[4]\n"
+                                "        y_ind_3 = args3[5]\n"                                
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        mx1_arg1 = matrices if mx1_names[0] == 0 else matrices_left if mx1_names[0] == 2 else matrices_top\n"
+                                "        mx1_arg2 = matrices if mx1_names[1] == 0 else matrices_left if mx1_names[1] == 2 else matrices_top\n"
+                                "        mx1_arg3 = matrices if mx1_names[2] == 0 else matrices_left if mx1_names[2] == 2 else matrices_top\n"
+                                "        arg_2 = matrices if second_list == 0 else matrices_left if second_list == 2 else matrices_top\n"                                
+                                "        if params[11] != -1:\n"
+                                "            arg_3 = matrices if third_list == 0 else matrices_left if third_list == 2 else matrices_top\n"                                                                
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";
+                                    break;
+                                }
+                                case 1:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                       
+                                    break;
+                                }
+                                case 0:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                                                       
+                                    break;
+                                }
+                            }
+                            if(min_check == "1"){
+                                code +=                            
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n" 
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"                                
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"     
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n" 
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"                                
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"     
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+                        }
+                        else{
+                            code +=
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n"; 
+                            if(min_check == "1"){
+                                code +=
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n" 
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"                                
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"     
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"    
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n" 
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"                                
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i - 1) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                            if checker_2 == 0:\n"
+                                "                                top_value += f32(params[23])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                    top_value += am_2\n"
+                                "                                else:\n"
+                                "                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                            top_value *= f32(params[18])\n"     
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+
+                        }    
+                code += 
+                    "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(diagonal_value)\n"                           
+                    "                        arg_2[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                    
+                    "                        if params[11] != -1:\n"
+                    "                            arg_3[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";
+                        break;
+                    }
+                    case 101:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        mx1_arg2_vec = f32(inds_mx1[4])\n"
+                                "        mx1_arg3_vec = f32(inds_mx1[7])\n"                                
+                                "        a_2 = f32(args2[1])\n"
+                                "        b_2 = f32(args2[3])\n"
+                                "        am_2 = f32(args2[2])\n"   
+                                "        x_ind_2 = args2[4]\n"
+                                "        y_ind_2 = args2[5]\n"                                                             
+                                "        mx3_arg2_vec = f32(inds_mx3[4])\n"
+                                "        mx3_arg3_vec = f32(inds_mx3[7])\n"                              
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        mx1_arg1 = matrices if mx1_names[0] == 0 else matrices_left if mx1_names[0] == 2 else matrices_top\n"
+                                "        mx1_arg2 = matrices if mx1_names[1] == 0 else matrices_left if mx1_names[1] == 2 else matrices_top\n"
+                                "        mx1_arg3 = matrices if mx1_names[2] == 0 else matrices_left if mx1_names[2] == 2 else matrices_top\n"
+                                "        arg_2 = matrices if second_list == 0 else matrices_left if second_list == 2 else matrices_top\n"                                
+                                "        mx3_arg1 = matrices if mx3_names[0] == 0 else matrices_left if mx3_names[0] == 2 else matrices_top\n"
+                                "        mx3_arg2 = matrices if mx3_names[1] == 0 else matrices_left if mx3_names[1] == 2 else matrices_top\n"                         
+                                "        mx3_arg3 = matrices if mx3_names[2] == 0 else matrices_left if mx3_names[2] == 2 else matrices_top\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";
+                                    break;
+                                }
+                                case 1:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";              
+                                    break;
+                                }
+                                case 0:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                  
+                                    break;
+                                }
+                            }
+                            if(min_check == "1"){
+                                code +=
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"       
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n";                                                         
+                            }
+                            else{
+                                code +=
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"       
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n";  
+                            }
+                        }
+                        else{
+                            code +=
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        arg_2_ind = j + params[22]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";
+                            if(min_check == "1"){
+                                code +=
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"       
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n";                                                         
+                            }
+                            else{
+                                code +=
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])\n"
+                                "                        if checker_2 == 0:\n"
+                                "                            top_value += f32(params[23])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':\n"
+                                "                                top_value += am_2\n"
+                                "                            else:\n"
+                                "                                top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2\n"                            
+                                "                        top_value *= f32(params[18])\n"       
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n";   
+                            }
+
+                        }    
+                code += 
+                    "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(diagonal_value)\n"                           
+                    "                        arg_2[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                    
+                    "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";
+                        break;
+                    }
+                    case 110:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        mx1_arg2_vec = f32(inds_mx1[4])\n"
+                                "        mx1_arg3_vec = f32(inds_mx1[7])\n"                                
+                                "        mx2_arg2_vec = f32(inds_mx2[4])\n"
+                                "        mx2_arg3_vec = f32(inds_mx2[7])\n"
+                                "        a_3 = f32(args3[1])\n"
+                                "        b_3 = f32(args3[3])\n"
+                                "        am_3 = f32(args3[2])\n"                                
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        mx1_arg1 = matrices if mx1_names[0] == 0 else matrices_left if mx1_names[0] == 2 else matrices_top\n"
+                                "        mx1_arg2 = matrices if mx1_names[1] == 0 else matrices_left if mx1_names[1] == 2 else matrices_top\n"
+                                "        mx1_arg3 = matrices if mx1_names[2] == 0 else matrices_left if mx1_names[2] == 2 else matrices_top\n"
+                                "        mx2_arg1 = matrices if mx2_names[0] == 0 else matrices_left if mx2_names[0] == 2 else matrices_top\n"
+                                "        mx2_arg2 = matrices if mx2_names[1] == 0 else matrices_left if mx2_names[1] == 2 else matrices_top\n"
+                                "        mx2_arg3 = matrices if mx2_names[2] == 0 else matrices_left if mx2_names[2] == 2 else matrices_top\n"
+                                "        if params[11] != -1:\n"
+                                "            arg_3 = matrices if third_list == 0 else matrices_left if third_list == 2 else matrices_top\n"                                                                
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";
+                                    break;
+                                }
+                                case 1:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                       
+                                    break;
+                                }
+                                case 0:{
+                                    code +=
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n";                                                       
+                                    break;
+                                }
+                            }
+                            if(min_check == "1"){
+                                code +=
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                            if checker_3 == 0:\n"
+                                "                                left_value += f32(params[29])\n"
+                                "                            else:\n"
+                                "                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                    left_value += am_3\n"
+                                "                                else:\n"
+                                "                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                            left_value *= f32(params[24])\n"  
+                                "                            target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                        else:\n"
+                                "                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                            mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                            top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                            target_value = min(diagonal_value, top_value)\n";
+                            }
+                        }
+                        else{
+                            code +=
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        arg_3_ind = j + params[28]\n"  
+                                "                        if params[11] != -1:\n"; 
+                            if(min_check == "1"){
+                                code +=
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                        left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                        if checker_3 == 0:\n"
+                                "                            left_value += f32(params[29])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                left_value += am_3\n"
+                                "                            else:\n"
+                                "                                left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                        left_value *= f32(params[24])\n"  
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                    else:\n"
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                        target_value = max(diagonal_value, top_value)\n";
+                            }
+                            else{
+                                code +=
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                        left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])\n"
+                                "                        if checker_3 == 0:\n"
+                                "                            left_value += f32(params[29])\n"
+                                "                        else:\n"
+                                "                            if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j y_ind_3 + SIZE] == 'N':\n"
+                                "                                left_value += am_3\n"
+                                "                            else:\n"
+                                "                                left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3\n"                            
+                                "                        left_value *= f32(params[24])\n"  
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n"                                                                                              
+                                "                    else:\n"
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                        target_value = min(diagonal_value, top_value)\n";
+                            }
+
+                        }    
+                code += 
+                    "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(diagonal_value)\n"                           
+                    "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n"                           
+                    "                        if params[11] != -1:\n"
+                    "                            arg_3[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n";
+                        break;
+                    }
+                    case 111:{
+                        code +=
+                                "def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"
+                                "    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY):\n"                                                         
+                                "        SIZE = 512\n"                                                               
+                                "        max_value = f32(0)\n" 
+                                "        mx1_arg2_vec = f32(inds_mx1[4])\n"
+                                "        mx1_arg3_vec = f32(inds_mx1[7])\n"  
+                                "        mx2_arg2_vec = f32(inds_mx2[4])\n"
+                                "        mx2_arg3_vec = f32(inds_mx2[7])\n"
+                                "        mx3_arg2_vec = f32(inds_mx3[4])\n"
+                                "        mx3_arg3_vec = f32(inds_mx3[7])\n"
+                                "        L = bw_params[4]\n"
+                                "        U = bw_params[8]\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"                                     
+                                "            matrices[t * (SIZE + 1) * (SIZE + 1)] = f32(mat_00)\n"
+                                "            matrices_left[t * (SIZE + 1) * (SIZE + 1)] = f32(V_00)\n"
+                                "            matrices_top[t * (SIZE + 1) * (SIZE + 1)] = f32(H_00)\n" 
+                                "            for i in range(1, SIZE + 1):\n"                                 
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = mat_row + mat_row_mul * f32(i)\n"
+                                "                matrices[t * (SIZE + 1) * (SIZE + 1) + i] = mat_col + mat_col_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = V_row + V_row_mul * f32(i)\n"
+                                "                matrices_left[t * (SIZE + 1) * (SIZE + 1) + i] = V_col + V_col_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1)] = H_row + H_row_mul * f32(i)\n"
+                                "                matrices_top[t * (SIZE + 1) * (SIZE + 1) + i] = H_col + H_col_mul * f32(i)\n"
+                                "        mx1_arg1 = matrices if mx1_names[0] == 0 else matrices_left if mx1_names[0] == 2 else matrices_top\n"
+                                "        mx1_arg2 = matrices if mx1_names[1] == 0 else matrices_left if mx1_names[1] == 2 else matrices_top\n"
+                                "        mx1_arg3 = matrices if mx1_names[2] == 0 else matrices_left if mx1_names[2] == 2 else matrices_top\n"
+                                "        mx2_arg1 = matrices if mx2_names[0] == 0 else matrices_left if mx2_names[0] == 2 else matrices_top\n"
+                                "        mx2_arg2 = matrices if mx2_names[1] == 0 else matrices_left if mx2_names[1] == 2 else matrices_top\n"
+                                "        mx2_arg3 = matrices if mx2_names[2] == 0 else matrices_left if mx2_names[2] == 2 else matrices_top\n"
+                                "        mx3_arg1 = matrices if mx3_names[0] == 0 else matrices_left if mx3_names[0] == 2 else matrices_top\n"
+                                "        mx3_arg2 = matrices if mx3_names[1] == 0 else matrices_left if mx3_names[1] == 2 else matrices_top\n"                         
+                                "        mx3_arg3 = matrices if mx3_names[2] == 0 else matrices_left if mx3_names[2] == 2 else matrices_top\n"
+                                "        @par(gpu=True)\n"                                  
+                                "        for t in range(QUANTITY):\n"
+                                "            for i in range(outer_start, outer_stop, outer_step):\n"                                                    
+                                "                x_1_arg = x_params_1 * i\n"
+                                "                x_2_arg = x_params_2 * i\n"
+                                "                for j in range(inner_start, inner_stop, inner_step):\n"
+                                "                    y_1_arg = y_params_1 * j\n"
+                                "                    y_2_arg = y_params_2 * j\n";                    
+                        if(bw != 0){
+                            switch(bw_param){
+                                case 2:{
+                                    code += 
+                                "                    if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                    
+                                    break;
+                                }
+                                case 1:{
+                                    code += 
+                                "                    if (x_1_arg + y_1_arg) <= L and (x_2_arg + y_2_arg) >= U:\n"
+                                "                        if (x_1_arg + y_1_arg) == L and (x_2_arg + y_2_arg) == U:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                               
+                                    break;
+                                }
+                                case 0:{
+                                    code += 
+                                "                    if (x_1_arg + y_1_arg) <= L:\n"
+                                "                        if (x_1_arg + y_1_arg) == L:\n"
+                                "                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)\n"
+                                "                    else:\n"
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                              
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            code += 
+                                "                        mx_1_ind_1 = j + inds_mx1[0]\n"
+                                "                        mx_1_ind_2 = j + inds_mx1[2]\n"
+                                "                        mx_1_ind_3 = j + inds_mx1[5]\n"
+                                "                        mx_2_ind_1 = j + inds_mx2[0]\n"
+                                "                        mx_2_ind_2 = j + inds_mx2[2]\n"
+                                "                        mx_2_ind_3 = j + inds_mx2[5]\n"
+                                "                        mx_3_ind_1 = j + inds_mx3[0]\n"
+                                "                        mx_3_ind_2 = j + inds_mx3[2]\n"
+                                "                        mx_3_ind_3 = j + inds_mx3[5]\n";                                                     
+
+                        }
+                        if(min_check == "1"){
+                            code += 
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = max(diagonal_value, top_value, left_value)\n";
+                        }
+                        else{
+                            code += 
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec\n"
+                                "                        diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])\n"                                
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1] = mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec if mx2_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[3]) * (SIZE + 1) + mx_2_ind_2] + mx2_arg2_vec > mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec else mx2_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[6]) * (SIZE + 1) + mx_2_ind_3] + mx2_arg3_vec\n"
+                                "                        top_value = f32(mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx2[1]) * (SIZE + 1) + mx_2_ind_1])\n"
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1] = mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec if mx3_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[3]) * (SIZE + 1) + mx_3_ind_2] + mx3_arg2_vec > mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec else mx3_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[6]) * (SIZE + 1) + mx_3_ind_3] + mx3_arg3_vec\n"
+                                "                        left_value = f32(mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx3[1]) * (SIZE + 1) + mx_3_ind_1])\n"   
+                                "                        target_value = min(diagonal_value, top_value, left_value)\n";
+                        }
+                        code += 
+                                "                        mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(diagonal_value)\n"                           
+                                "                        mx3_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(left_value)\n"
+                                "                        mx2_arg1[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(top_value)\n";
+                        break;
+                    }
+                        
+
+                }
+                code += 
+                                "                        if target_value > max_value:\n"
+                                "                            max_value = target_value\n"                                
+                                "            if f32(z_value) != f32(-1):\n"
+                                "                if max_value - target_value <= f32(z_value):\n"
+                                "                    scores[t] = target_value\n"
+                                "                else:\n"
+                                "                    scores[t] = f32(-32768)\n"
+                                "            else:\n"
+                                "                scores[t] = target_value\n"                                
+                                "    CUDA_XBLOCK_SIZE = 256\n"                                     
+                                "    num_blocks = QUANTITY // CUDA_XBLOCK_SIZE\n"                                                                                          
+                                "    kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY)\n"                                
                                 "def sumOne(s_x, s_y, byPass, params, args1, args2, args3, inds_1, inds_2, inds_3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):\n"
                                 "    SIZE = 512\n"
                                 "    CUDA_XBLOCK_SIZE = 256\n"                                                
@@ -4137,19 +5804,16 @@ namespace vectron {
                                 "        major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]\n"
                                 "    var = len(major_params_1)\n"
                                 "    QUANTITY = var * var\n"
-                                "    num_blocks = QUANTITY // CUDA_XBLOCK_SIZE\n"                            
-                                "    seqx_pair_init = [\"\" for _ in range(QUANTITY)]\n"
-                                "    seqy_pair_init = [\"\" for _ in range(QUANTITY)]\n"
+                                "    seqx_pair_init = ['' for seq in range(QUANTITY)]\n"
+                                "    seqy_pair_init = ['' for seq in range(QUANTITY)]\n"                                
                                 "    for j in range(len(major_params_1)):\n"
                                 "        for _ in range(var):\n"
-                                "            seqx_pair_init[j + (_ * var)] = str(major_params_1[j])\n"
-                                "    for _ in range(var):\n"
-                                "        for j in range(len(major_params_2)):\n"
-                                "            seqy_pair_init[j + (_ * var)] = str(major_params_2[j])\n"                             
+                                "            seqx_pair_init[(j * var) + _ ] = str(major_params_1[j])\n"
+                                "            seqy_pair_init[(j * var) + _ ] = str(major_params_2[_])\n"
                                 "    if len(seqx_pair_init) != len(seqy_pair_init):\n"
                                 "        print('Error: Number of target sequences does not match number of query sequences, They have to be equal for GPU')\n"
                                 "        print('Target Size:', len(seqx_pair_init), ', Query Size:', len(seqy_pair_init))\n"
-                                "    paired_sequences = pair_sequences(seqx_pair_init, seqy_pair_init)\n"                              
+                                "    paired_sequences = [(target.strip(), query.strip()) for target, query in zip(seqx_pair_init, seqy_pair_init)]\n"
                                 "    sequences_bytes = ''.join(pair[0] + pair[1] for pair in paired_sequences)\n"                             
                                 "    outer_start = params[0]\n"
                                 "    outer_step = params[1]\n"
@@ -4200,15 +5864,14 @@ namespace vectron {
                                 "    matrices = [f32(mat_rest)] * QUANTITY * (SIZE + 1) * (SIZE + 1)\n"
                                 "    H = [f32(H_rest)] * QUANTITY * (SIZE + 1) * (SIZE + 1)\n"
                                 "    V = [f32(V_rest)] * QUANTITY * (SIZE + 1) * (SIZE + 1)\n"
-                                "    align(scores, matrices, V, H, sequences_bytes, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names_final, inds_mx1, mx2_names_final, inds_mx2, mx3_names_final, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, grid = CUDA_XBLOCK_SIZE, block = num_blocks)\n"
+                                "    align(scores, matrices, V, H, sequences_bytes, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, H_00, H_col, H_col_mul, H_row, H_row_mul, mat_00, mat_col, mat_col_mul, mat_row, mat_row_mul, V_00, V_col, V_col_mul, V_row, V_row_mul, first_list, second_list, third_list, mx1_names_final, inds_mx1, mx2_names_final, inds_mx2, mx3_names_final, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY)\n"
                                 "    for score in scores:\n"
-                                "       print(score)\n";
+                                "       print(score)\n";              
                 std::ofstream MyFile("code.py");
                 MyFile << code << "\n";
                 MyFile.close();
-                M->parseCode(code);                
+                M->parseCode(code); 
                 auto *sumOne = M->getOrRealizeFunc("sumOne", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr_int10, typ_ptr_int10, typ_ptr_int10, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8});
-                //std::cout << "HERE:\n" << *sumOne << "\n";
                 auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, lst1_ptr, lst2_ptr, lst3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});                        
                 v->replaceAll(sumOneCall);                       
             }                                           
@@ -4217,8 +5880,6 @@ namespace vectron {
         }
 
     }
-
-
     void FuncReplacement::handle(CallInstr *v) { transform(v); }
 
     } // namespace vectron
