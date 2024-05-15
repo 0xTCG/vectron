@@ -65,4 +65,3 @@ Then run the test file:
 
 ## Test Configuration
 The `test_final.py` is now configured to calculate a banded Smith-Waterman alignment score using SIMD over `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. It will perform an all-to-all pairing and comparison between them. To change the sequences or their quantity, run `FileCreator.py` with `SEQ_NO_T` and `SEQ_NO_Q` values. To change the working mode from SIMD to SIMT for floating-point calculations, change `var_type` in `test_final.py` from `"i16"` to `"f32"`.
-```
