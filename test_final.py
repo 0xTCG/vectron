@@ -4,7 +4,7 @@ import time
 import os
 import gpu
 
-var_type = "f32"
+var_type = "i16"
 
 @__attribute__
 def vectron_calc():
