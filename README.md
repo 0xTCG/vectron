@@ -54,14 +54,18 @@ cmake --build build
 ```
 
 ## Running Tests
-After building Vectron, build the `test_file.py`:
+After building Vectron, build the `vectron.py`:
 ```
-codon build test_final.py -plugin <seq_folder_path> -plugin <vectron_folder_path> -release
+codon build vectron.py -release
 ```
-Then run the test file:
+Then run the Vectron providing the required paths:
 ```
-./test_final
+./vectron <seq_folder_path> <vectron_folder_path> <file_path>
+```
+Afterwards you can run the built file using:
+```
+./<file_path>
 ```
 
-## Test Configuration
-The `test_final.py` is now configured to calculate a banded Smith-Waterman alignment score using SIMD over `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. It will perform an all-to-all pairing and comparison between them. To change the sequences or their quantity, run `FileCreator.py` with `SEQ_NO_T` and `SEQ_NO_Q` values. To change the working mode from SIMD to SIMT for floating-point calculations, change `var_type` in `test_final.py` from `"i16"` to `"f32"`.
+## Experiments
+The experiments folder is populated with some of the most famous DP algorithms like banded Smith-Waterman, Needleman-Wunsch, Hamming Distance, Levenshtein Distance, Manhattan Tourist, Minimum Cost Path, and Longest Common Subsequence (in both integer and floating point versions). Alignment scores are calculated using sample string files `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. All DP algorithms perform an all-to-all pairing and comparison between them. 
