@@ -4,6 +4,7 @@ import time
 import os
 import gpu
 import sys
+from vectron.dispatcher import *
 
 var_type = "i16"
 
@@ -91,7 +92,6 @@ for j in f:
 f.close()
 
 print("BEGUN")
-print("RHI")
 with time.timing("Total: "):
     d = prep_foo(seqs_x, seqs_y)
 print("DONE")

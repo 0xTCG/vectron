@@ -59,9 +59,9 @@ void EvnSelector::transform(AssignInstr *v) {
         }
 
         // Parenthesize non-operand expressions based on var_value
-        std::string result;
+        std::string result = "";
         for (const auto& token : tokens) {
-            if (token == "*" || token == "+" || token == "-" || token == "/" || token == "(" || token == ")" || token == "//") {
+            if (token == "*" || token == "+" || token == "-" || token == "/" || token == "(" || token == ")" || token == "//" || token == "scores[i]") {
                 // Operand: Append directly to result
                 result += token;
             } else {

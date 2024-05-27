@@ -1,0 +1,167 @@
+def align(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY, inds_ptr):
+    def kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY, inds_ptr):
+        SIZE = 512
+        max_value = f32(0)
+        mx1_arg2_vec = f32(inds_mx1[4])
+        mx1_arg3_vec = f32(inds_mx1[7])
+        a_2 = f32(args2[1])
+        b_2 = f32(args2[3])
+        am_2 = f32(args2[2])
+        x_ind_2 = args2[4]
+        y_ind_2 = args2[5]                
+        a_3 = f32(args3[1])
+        b_3 = f32(args3[3])
+        am_3 = f32(args3[2])
+        x_ind_3 = args3[4]
+        y_ind_3 = args3[5]        
+        L = bw_params[4]
+        U = bw_params[8]
+        targ = matrices if inds_ptr[0] == 1 else matrices_top if inds_ptr[0] == 2 else matrices_left
+        mx1_arg1 = matrices if mx1_names[0] == 0 else matrices_left if mx1_names[0] == 2 else matrices_top
+        mx1_arg2 = matrices if mx1_names[1] == 0 else matrices_left if mx1_names[1] == 2 else matrices_top
+        mx1_arg3 = matrices if mx1_names[2] == 0 else matrices_left if mx1_names[2] == 2 else matrices_top
+        arg_1 = matrices if first_list == 0 else matrices_left if first_list == 2 else matrices_top
+        arg_2 = matrices if second_list == 0 else matrices_left if second_list == 2 else matrices_top
+        if params[11] != -1:
+            arg_3 = matrices if third_list == 0 else matrices_left if third_list == 2 else matrices_top
+        @par(gpu=True, collapse=1)
+        for t in range(QUANTITY):
+            for i in range(outer_start, outer_stop, outer_step):
+                x_1_arg = x_params_1 * i
+                x_2_arg = x_params_2 * i
+                for j in range(inner_start, inner_stop, inner_step):
+                    y_1_arg = y_params_1 * j
+                    y_2_arg = y_params_2 * j
+                    if (x_1_arg + y_1_arg) <= L:
+                        if (x_1_arg + y_1_arg) == L:
+                            matrices[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)
+                            matrices_left[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)
+                            matrices_top[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(-10000)
+                    else:
+                        if params[11] != -1:
+                            mx_1_ind_1 = j + inds_mx1[0]
+                            mx_1_ind_2 = j + inds_mx1[2]
+                            mx_1_ind_3 = j + inds_mx1[5]
+                            arg_2_ind = j + params[22]
+                            arg_3_ind = j + params[28]
+
+                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec
+                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])
+
+                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])
+                            if checker_2 == 0:
+                                top_value += f32(params[23])
+                            else:
+                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':
+                                    top_value += am_2
+                                else:
+                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2
+                            top_value *= f32(params[18])
+
+                            left_value = arg_3[t * (SIZE + 1) * (SIZE + 1) + (i + params[26]) * (SIZE + 1) + arg_3_ind] * f32(params[11])
+                            if checker_3 == 0:
+                                left_value += f32(params[29])
+                            else:
+                                if sequences[t * SIZE * 2 + i + x_ind_3] == 'N' or sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] == 'N':
+                                    left_value += am_3
+                                else:
+                                    left_value += a_3 if sequences[t * SIZE * 2 + i + x_ind_3] == sequences[t * SIZE * 2 + j + y_ind_3 + SIZE] else b_3
+                            left_value *= f32(params[24])
+                            target_value = max(diagonal_value, top_value, left_value)
+                            
+                            targ[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)
+                            if target_value > max_value:
+                                max_value = target_value
+                        else:
+                            mx_1_ind_1 = j + inds_mx1[0]
+                            mx_1_ind_2 = j + inds_mx1[2]
+                            mx_1_ind_3 = j + inds_mx1[5]
+                            arg_2_ind = j + params[22]
+
+                            mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1] = mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec if mx1_arg2[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[3]) * (SIZE + 1) + mx_1_ind_2] + mx1_arg2_vec > mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec else mx1_arg3[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[6]) * (SIZE + 1) + mx_1_ind_3] + mx1_arg3_vec
+                            diagonal_value = f32(mx1_arg1[t * (SIZE + 1) * (SIZE + 1) + (i + inds_mx1[1]) * (SIZE + 1) + mx_1_ind_1])
+
+                            top_value = arg_2[t * (SIZE + 1) * (SIZE + 1) + (i + params[20]) * (SIZE + 1) + arg_2_ind] * f32(params[10])
+                            if checker_2 == 0:
+                                top_value += f32(params[23])
+                            else:
+                                if sequences[t * SIZE * 2 + i + x_ind_2] == 'N' or sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] == 'N':
+                                    top_value += am_2
+                                else:
+                                    top_value += a_2 if sequences[t * SIZE * 2 + i + x_ind_2] == sequences[t * SIZE * 2 + j + y_ind_2 + SIZE] else b_2
+                            top_value *= f32(params[18])
+
+                            target_value = max(diagonal_value, top_value)
+                            
+                            targ[t * (SIZE + 1) * (SIZE + 1) + i * (SIZE + 1) + j] = f32(target_value)
+                            if target_value > max_value:
+                                max_value = target_value                                              
+            if f32(z_value) != f32(-1):
+                if max_value - target_value <= f32(z_value):
+                    scores[t] = target_value
+                else:
+                    scores[t] = f32(-32768)
+            else:
+                scores[t] = target_value
+    CUDA_XBLOCK_SIZE = 256
+    num_blocks = QUANTITY // CUDA_XBLOCK_SIZE
+    kernel(scores, matrices, matrices_left, matrices_top, sequences, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, first_list, second_list, third_list, mx1_names, inds_mx1, mx2_names, inds_mx2, mx3_names, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY, inds_ptr)
+def sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params):
+    SIZE = len(s_x[0])
+    CUDA_XBLOCK_SIZE = 256
+    z_value = f32(byPass)
+    major_outer_start = hyper_params[0]
+    major_outer_step = hyper_params[1]
+    major_outer_inst = hyper_params[3]
+    major_inner_start = hyper_params[4]
+    major_inner_step = hyper_params[5]
+    major_inner_inst = hyper_params[7]
+    major_params_1 = s_x[major_outer_start: len(s_x) + major_outer_inst: major_outer_step]
+    major_params_2 = s_y[major_inner_start: len(s_y) + major_inner_inst: major_inner_step]
+    if hyper_params[2] == -2:
+        major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
+    if hyper_params[6] == -1:
+        major_params_2 = s_x[major_inner_start: len(s_x) + major_inner_inst: major_inner_step]
+    var = len(major_params_1)
+    QUANTITY = var * var
+    seqx_pair_init = ['' for seq in range(QUANTITY)]
+    seqy_pair_init = ['' for seq in range(QUANTITY)]
+    for j in range(len(major_params_1)):
+        for _ in range(var):
+            seqx_pair_init[(j * var) + _ ] = str(major_params_1[j])
+            seqy_pair_init[(j * var) + _ ] = str(major_params_2[_])
+    if len(seqx_pair_init) != len(seqy_pair_init):
+        print('Error: Number of target sequences does not match number of query sequences, They have to be equal for GPU')
+        print('Target Size:', len(seqx_pair_init), ', Query Size:', len(seqy_pair_init))
+    paired_sequences = [(target.strip(), query.strip()) for target, query in zip(seqx_pair_init, seqy_pair_init)]
+    sequences_bytes = ''.join(pair[0] + pair[1] for pair in paired_sequences)
+    outer_start = params[0]
+    outer_step = params[1]
+    outer_stop = 0
+    if params[2] == -1:
+        outer_stop += len(s_x[0])
+    elif params[2] == -2:
+        outer_stop += len(s_y[0])
+    outer_stop += params[3]
+    inner_start = params[4]
+    inner_step = params[5]
+    inner_stop = 0
+    if params[6] == -1:
+        inner_stop += len(s_x[0])
+    elif params[6] == -2:
+        inner_stop += len(s_y[0])
+    inner_stop += params[7]
+    lens = [len(s_x[0]), len(s_y[0])]
+    scores = [f32(0)] * QUANTITY
+    max_score = [f32(0)] * QUANTITY
+    matrices_nv = [[0 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else 0 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    matrices = [f32(item) for sublist in matrices_nv for item in sublist] * QUANTITY
+    H_nv = [[-10000 if (_ == 0 and __ == 0) else (-5 + __ * (-2)) if (_ == 0 and __ > 0) else -20000 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    H = [f32(item) for sublist in H_nv for item in sublist] * QUANTITY
+    V_nv = [[-4000 if (_ == 0 and __ == 0) else (-6 + _ * (-2)) if (__ == 0 and _ > 0) else -3000 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    V = [f32(item) for sublist in V_nv for item in sublist] * QUANTITY
+    align(scores, matrices, V, H, sequences_bytes, params, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, args1, args2, args3, first_list, second_list, third_list, mx1_names_final, inds_mx1, mx2_names_final, inds_mx2, mx3_names_final, inds_mx3, z_value, max_score, bw_params, x_params_1, x_params_2, y_params_1, y_params_2, checker_1, checker_2, checker_3, QUANTITY, inds_ptr)
+    for i in range(len(scores)):
+        scores[i] = scores[i]
+        print(scores[i])
+

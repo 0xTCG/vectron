@@ -106,7 +106,7 @@ void byPass::transform(ReturnInstr *v) {
                             extracted_text = extracted_text.substr(0, comment_pos);
                         }
                         std::regex regex(R"(\b\w+(?:\[[^\]]*\])*\[-1\]\[-1\])");
-                        extracted_text = std::regex_replace(extracted_text, regex, "score");
+                        extracted_text = std::regex_replace(extracted_text, regex, "scores[i]");
 
                         // Store the extracted text if it's not empty
                         if (!extracted_text.empty()) {

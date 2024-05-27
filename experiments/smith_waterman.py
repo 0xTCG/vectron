@@ -4,6 +4,7 @@ import time
 import os
 import gpu
 import sys
+from vectron.dispatcher import *
 
 var_type = "i16"
 
@@ -67,6 +68,7 @@ def orig_foo(h, m):
                         s[i][j] = -10000
             else:
                 q[i][j] = max(q[i - 1][j - 1] + match_func_foo(m[i - 1], 2, -4, -3, h[j - 1]), max_store_foo(s, i, j, s[i - 1][j] - 2, q[i - 1][j] - 6), max_store_foo(l, i, j, l[i][j - 1] - 2, q[i][j - 1] - 6))
+    print(q[-1][-1])
     return q[-1][-1]
 
 @vectron_init
@@ -95,7 +97,6 @@ for j in f:
 f.close()
 
 print("BEGUN")
-print("RHI")
 with time.timing("Total: "):
     d = prep_foo(seqs_x, seqs_y)
 print("DONE")

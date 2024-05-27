@@ -4,6 +4,7 @@ import time
 import os
 import gpu
 import sys
+from vectron.dispatcher import *
 
 var_type = "i16"
 
@@ -57,7 +58,7 @@ def orig_foo(h, m):
     q = [[0 if (_ == 0 and __ == 0) else (1 + _ * (2)) if (__ == 0 and _ > 0) else (1 + __ * (3)) if (_ == 0 and __ > 0) else 0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):       
-            q[i][j] = max(q[i - 1][j] + match_func_foo(m[i - 1], 0, 3, 1, h[j - 1]), q[i][j - 1] + match_func_foo(m[i - 1], 0, 3, 1, h[j - 1]), q[i - 1][j - 1] + match_func_foo(m[i - 1], 0, 3, 1, h[j - 1])) 
+            q[i][j] = max(q[i - 1][j - 1] + match_func_foo(m[i - 1], 2, -3, -1, h[j - 1]), q[i][j - 1] + match_func_foo(m[i - 1], 3, -3, -2, h[j - 1]), q[i - 1][j] + match_func_foo(m[i - 1], 1, -2, -1, h[j - 1])) 
     print(q[-1][-1])            
     return q[-1][-1]
 
@@ -87,7 +88,6 @@ for j in f:
 f.close()
 
 print("BEGUN")
-print("RHI")
 with time.timing("Total: "):
     d = prep_foo(seqs_x, seqs_y)
 print("DONE")
