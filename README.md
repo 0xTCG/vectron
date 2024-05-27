@@ -35,6 +35,9 @@ git clone https://github.com/exaloop/codon && \
     cmake -S . -B build_release -DCMAKE_BUILD_TYPE=Release -DCODON_GPU=ON -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_DIR=../codon-llvm/install/lib/cmake/llvm -G Ninja -DCMAKE_INSTALL_PREFIX=$(pwd)/install_release -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON && cmake --build build_release && cmake --install build_release
 ```
 
+## Copying the Libraries
+After Codon is built move the contents of the ```stdlib``` (```stdlib/experimental``` and ```stdlin/vectron```) folder to ```{Codon_INSTALL_PATH}/codon/install_release/lib/codon/stdlib/```
+
 ## Building Vectron
 Follow these steps to clone and build Vectron:
 ```
