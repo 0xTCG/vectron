@@ -1480,6 +1480,9 @@ namespace vectron {
             std::remove("arg_1.txt");
             std::remove("arg_2.txt");
             std::remove("arg_3.txt");
+            std::remove("mx_arg1.txt");
+            std::remove("mx_arg2.txt");
+            std::remove("mx_arg3.txt");            
             std::remove("bw.txt");
             std::remove("byPass.txt");
             std::remove("lst_1.txt");
