@@ -59,7 +59,7 @@ cmake --build build
 ## Running Tests
 After building Vectron, build the `vectron.py`:
 ```
-codon build vectron.py -release
+codon build vectron.codon -release
 ```
 Then run the Vectron providing the required paths:
 ```
