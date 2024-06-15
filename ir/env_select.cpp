@@ -10,45 +10,27 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <unordered_map> 
 
 
 namespace vectron {
-
+extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes; 
 using namespace codon::ir;
 
 
-void EvnSelector::transform(AssignInstr *v) {          
+void EvnSelector::transform(AssignInstr *v) {        
     auto var_name = v->getLhs()->getName();
     if (var_name == "var_type"){
-        std::ofstream MyFile("var_type.txt");
-        auto *var_value = v->getRhs();
 
-        MyFile << *var_value;
-        MyFile.close();
-        std::ifstream varFile("var_type.txt");
-        std::string var_value_str;
-        std::getline(varFile, var_value_str);
-        varFile.close();
-        std::ifstream byPassFile("byPass.txt");
-        std::string line;
-        std::string first_line;
-        std::string expression;
-        if (byPassFile.is_open()) {
-            for (int i = 0; i < 2; ++i) {
-                std::getline(byPassFile, line);
-                if (i == 0){
-                    first_line = line;
-                }
-                if (i == 1) {
-                    expression = line;
-                    break;
-                }
-            }
-            byPassFile.close();
-        } else {
-            std::cerr << "Unable to open byPass.txt\n";
-            return;
-        }
+        auto *var_value = v->getRhs();
+        std::ostringstream var_oss;                                                                             
+        var_oss << *var_value;
+        std::string var_str = var_oss.str();
+        std::map<std::string, std::string> var_attributes{{"Value", var_str}}; 
+        globalAttributes["var"] = var_attributes;               
+        auto bypass_attr = globalAttributes["bypass"];     
+        std::string first_line = bypass_attr["Value"];
+        std::string expression = bypass_attr["Expression"];
 
         // Tokenize the expression by spaces
         std::stringstream ss(expression);
@@ -66,7 +48,7 @@ void EvnSelector::transform(AssignInstr *v) {
                 result += token;
             } else {
                 // Non-operand: Encompass in f32(...) or i16(...) based on var_value
-                result += (var_value_str == "\"i16\"") ? "i16(" + token + ")" : "f32(" + token + ")";
+                result += (var_str == "\"i16\"") ? "i16(" + token + ")" : "f32(" + token + ")";
             }
             // Add a space after each token
             result += " ";
@@ -74,10 +56,8 @@ void EvnSelector::transform(AssignInstr *v) {
 
         // Remove the trailing space
         result.pop_back();   
-        std::ofstream outFile("byPass.txt");
-        outFile << first_line << "\n";
-        outFile << result;
-        outFile.close();   
+        std::map<std::string, std::string> attributes{{"Value", first_line}, {"Expression", result}}; 
+        globalAttributes["bypass"] = attributes;    
 
     }
     else{
