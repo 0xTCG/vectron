@@ -13,9 +13,10 @@
 #include <algorithm>
 #include <cctype>
 #include <locale>
+#include <unordered_map> 
 
 namespace vectron {
-
+extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes; 
 using namespace codon::ir;
 
 std::vector<std::string> split_first(const std::string &s, char delimiter) {
@@ -115,15 +116,12 @@ void ListInitializer::transform(CallInstr *v) {
         std::cerr << "Error: Extracted lines count should be between 1 to 3 " << extracted_lines.size() << std::endl;
         return;
     }
-
+    
     // Create and write to output files
     for (int i = 0; i < extracted_lines.size(); ++i) {
-        std::ofstream outfile("lst_" + std::to_string(i+1) + ".txt");
-        if (!outfile) {
-            std::cerr << "Error: Unable to create output file\n";
-            continue;
-        }
-
+        std::string outfile_name = "lst_";
+        outfile_name += std::to_string(i+1);         
+        //std::ofstream outfile("lst_" + std::to_string(i+1) + ".txt");
         // Split the line by the first occurrence of '=' to get variable name and list comprehension
         std::vector<std::string> parts = split_first(extracted_lines[i], '=');
         if (parts.size() != 2) {
@@ -136,11 +134,13 @@ void ListInitializer::transform(CallInstr *v) {
 
         trim(parts[0]);
         trim(parts[1]);
-        
-                
-        outfile << parts[0] << std::endl;  // Variable name
-        outfile << parts[1] << std::endl;  // List comprehension
-        outfile.close();
+        //std::cout << "Parts 0: " << parts[0] << std::endl;
+        //std::cout << "Parts 1: " << parts[1] << std::endl;
+        std::map<std::string, std::string> outfile_attributes{{"part_0", parts[0]}, {"part_1", parts[1]}}; 
+        globalAttributes[outfile_name] =outfile_attributes;
+        //outfile << parts[0] << std::endl;  // Variable name
+        //outfile << parts[1] << std::endl;  // List comprehension
+        //outfile.close();
     }
 }
 
