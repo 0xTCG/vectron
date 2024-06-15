@@ -6,52 +6,20 @@
 #include <iostream>
 #include <cstdio>
 #include <regex>
+#include <unordered_map> 
+
 
 namespace vectron {
-
+std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes; 
 using namespace codon::ir;
 
 
-void byPass::transform(ReturnInstr *v) {
-    if(std::filesystem::exists("LoopInfo.txt")){
-        std::remove("LoopInfo.txt");
-    }
-    if(std::filesystem::exists("Prep_info.txt")){
-        std::remove("Prep_info.txt");
-    }
-    if(std::filesystem::exists("arg_1.txt")){
-        std::remove("arg_1.txt");
-    }
-    if(std::filesystem::exists("arg_2.txt")){
-        std::remove("arg_2.txt");
-    }
-    if(std::filesystem::exists("arg_3.txt")){
-        std::remove("arg_3.txt");
-    }
-    if(std::filesystem::exists("mx_arg1.txt")){
-        std::remove("mx_arg1.txt");
-    }
-    if(std::filesystem::exists("mx_arg2.txt")){
-        std::remove("mx_arg2.txt");
-    }
-    if(std::filesystem::exists("mx_arg3.txt")){
-        std::remove("mx_arg3.txt");
-    }
-    if(std::filesystem::exists("lst_1.txt")){
-        std::remove("lst_1.txt");
-    }
-    if(std::filesystem::exists("lst_2.txt")){
-        std::remove("lst_2.txt");
-    }
-    if(std::filesystem::exists("lst_3.txt")){
-        std::remove("lst_3.txt");
-    }            
+void byPass::transform(ReturnInstr *v) {  
     auto *pf = getParentFunc();
     auto pf_name = pf->getUnmangledName();
-    auto att_calc = util::hasAttribute(pf, "vectron_calc");    
+    auto att_calc = util::hasAttribute(pf, "vectron_calc");   
     if(!att_calc)
         return;
-    std::ofstream MyFile("byPass.txt");
     std::vector<codon::ir::Value *> func = v->getUsedValues();
     auto *func_log = cast<CallInstr>(func[0]);
     auto func_name = util::getFunc(func_log->getCallee())->getUnmangledName();     
@@ -125,13 +93,19 @@ void byPass::transform(ReturnInstr *v) {
             std::cerr << "Error: No return statement found in function decorated with @vectron_calc\n";
             return;
         }
-        MyFile << -1 << "\n";
-        MyFile << extracted_lines[0];
+        //int bp;
+        //pf->setAttribute(bp, -1);
+        std::map<std::string, std::string> attributes{{"Value", "-1"}, {"Expression", extracted_lines[0]}};  
+        //pf->setAttribute(std::make_unique<codon::ir::KeyValueAttribute>(attributes));                           
+        globalAttributes["bypass"] = attributes;        
     }
     else{
         auto *z_value = func_log->back();
-        MyFile << *z_value << "\n";
-        MyFile << "score";
+        std::ostringstream oss;                                                                             
+        oss << *z_value;                                                                                    
+        std::string z_value_str = oss.str(); 
+        std::map<std::string, std::string> attributes{{"Value", z_value_str}, {"Expression", "score"}}; 
+        globalAttributes["bypass"] = attributes;               
     }
     
 }
