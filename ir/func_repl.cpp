@@ -8,26 +8,122 @@
 #include "codon/parser/peg/peg.h"
 #include <iostream>
 #include <fstream>
+#include <unordered_map> 
 
 namespace vectron {
-
+    extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes; 
     using namespace codon::ir;
 
 
-    void FuncReplacement::transform(CallInstr *v) {  
+    void FuncReplacement::transform(CallInstr *v) {      
         auto *M = v->getModule(); 
         auto *orig = util::getFunc(v->getCallee());
         auto att_att = util::hasAttribute(orig, "vectron_init");
         if (!att_att)
             return;   
         else{
+            int checker_1 = 0;
+            int checker_2 = 0;
+            int checker_3 = 0;     
+            std::string mx_1_checker = "0";
+            std::string mx_2_checker = "0";
+            std::string mx_3_checker = "0";       
+            auto bypass_attr = globalAttributes["bypass"];                                                       
             std::string code = "";
-            std::ifstream var_file("var_type.txt");
-            std::basic_string var_type = "";
-            std::getline(var_file, var_type);         
-
-
-            std::ifstream loop_file("LoopInfo.txt");
+            auto params_attr = globalAttributes["params"];
+            std::map<std::string, std::string> arg1_attr;
+            std::map<std::string, std::string> arg2_attr;
+            std::map<std::string, std::string> arg3_attr;
+            std::map<std::string, std::string> mx1_attr;
+            std::map<std::string, std::string> mx2_attr;
+            std::map<std::string, std::string> mx3_attr;
+            auto arg1_finder = globalAttributes.find("arg1");
+            if (arg1_finder != globalAttributes.end()) {
+                checker_1 = 1;
+                arg1_attr = globalAttributes["arg1"];  
+            }                
+            auto arg2_finder = globalAttributes.find("arg2");
+            if (arg2_finder != globalAttributes.end()) {
+                checker_2 = 1;
+                arg2_attr = globalAttributes["arg2"];  
+            }
+            auto arg3_finder = globalAttributes.find("arg3");
+            if (arg3_finder != globalAttributes.end()) {
+                checker_3 = 1;
+                arg3_attr = globalAttributes["arg3"];  
+            }
+            auto mx1_finder = globalAttributes.find("mx1");
+            if (mx1_finder != globalAttributes.end()) {
+                mx_1_checker = "1";
+                mx1_attr = globalAttributes["mx1"];
+            }            
+            auto mx2_finder = globalAttributes.find("mx2");
+            if (mx2_finder != globalAttributes.end()) {
+                mx_2_checker = "1";
+                mx2_attr = globalAttributes["mx2"];
+            }    
+            auto mx3_finder = globalAttributes.find("mx3");
+            if (mx3_finder != globalAttributes.end()) {
+                mx_3_checker = "1";
+                mx3_attr = globalAttributes["mx3"];
+            }    
+            int lst1[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            std::vector<Value*> lst1_arr;        
+            int lst2[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            std::vector<Value*> lst2_arr;  
+            int lst3[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            std::vector<Value*> lst3_arr;        
+            std::string lst1_name = "";
+            std::string lst2_name = "";
+            std::string lst3_name = "";
+            std::string lst1_eq = "";
+            std::string lst2_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";
+            std::string lst3_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";            
+            auto lst1_finder = globalAttributes.find("lst_1");
+            if (lst1_finder != globalAttributes.end()) {
+                auto lst_1 = globalAttributes["lst_1"]; 
+                lst1_name = lst_1["part_0"];
+                lst1_eq = lst_1["part_1"];                 
+            }
+            auto lst2_finder = globalAttributes.find("lst_2");
+            if (lst2_finder != globalAttributes.end()) {
+                auto lst_2 = globalAttributes["lst_2"]; 
+                lst2_name = lst_2["part_0"];
+                lst2_eq = lst_2["part_1"];             
+            }
+            auto lst3_finder = globalAttributes.find("lst_3");
+            if (lst3_finder != globalAttributes.end()) {
+                auto lst_3 = globalAttributes["lst_3"]; 
+                lst3_name = lst_3["part_0"];
+                lst3_eq = lst_3["part_1"]; 
+            }                                   
+            auto var_value = globalAttributes["var"];                                                       
+                                                   
+            auto lst_2 = globalAttributes["lst_2"];                                                       
+            auto lst_3 = globalAttributes["lst_3"]; 
+            auto prep = globalAttributes["prep"];  
+            int bw_temp[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+            auto bw_finder = globalAttributes.find("bw");
+            if (bw_finder != globalAttributes.end()) {            
+                auto bw_mat = globalAttributes["bw"];  
+                bw_temp[0] = std::stoi(bw_mat["bw_00"]);
+                bw_temp[1] = std::stoi(bw_mat["bw_01"]);
+                bw_temp[2] = std::stoi(bw_mat["bw_02"]);
+                bw_temp[3] = std::stoi(bw_mat["bw_03"]);
+                bw_temp[4] = std::stoi(bw_mat["bw_04"]);
+                bw_temp[5] = std::stoi(bw_mat["bw_05"]);
+                bw_temp[6] = std::stoi(bw_mat["bw_06"]);
+                bw_temp[7] = std::stoi(bw_mat["bw_07"]);
+                bw_temp[8] = std::stoi(bw_mat["bw_08"]);                
+            }
+        
+            std::vector<Value*> bw_arr;  
+            int bw = 0;
+            int bw_param = bw_temp[0];
+            for(int i = 0; i < 9; i++){
+                bw += bw_temp[i];
+            }            
+            std::string var_type = var_value["Value"];     
             std::basic_string min_check = "";
             //std::string params = "";
             std::string temp_reader = "";
@@ -36,16 +132,41 @@ namespace vectron {
             int array_ind_1[4] = {2, 0, 0, 1};
             int array_ind_2[4] = {2, 0, 0, 1};
             int array_ind_3[4] = {2, 0, 0, 1};
-            for(int i = 0; i < 34; i++){
-                if(loop_file.eof()){
-                break;
-                }        
-                std::getline(loop_file, temp_reader);
-                params_test[i] = temp_reader;
-                if(i == 8){
-                min_check = temp_reader;
-                }
-            }
+            min_check = params_attr["params_08"];
+            params_test[0] = params_attr["params_00"];
+            params_test[1] = params_attr["params_01"];
+            params_test[2] = params_attr["params_02"];
+            params_test[3] = params_attr["params_03"];
+            params_test[4] = params_attr["params_04"];
+            params_test[5] = params_attr["params_05"];
+            params_test[6] = params_attr["params_06"];
+            params_test[7] = params_attr["params_07"];
+            params_test[8] = params_attr["params_08"];
+            params_test[9] = params_attr["params_09"];
+            params_test[10] = params_attr["params_10"];
+            params_test[11] = params_attr["params_11"];
+            params_test[12] = params_attr["params_12"];
+            params_test[13] = params_attr["params_13"];
+            params_test[14] = params_attr["params_14"];
+            params_test[15] = params_attr["params_15"];
+            params_test[16] = params_attr["params_16"];
+            params_test[17] = params_attr["params_17"];
+            params_test[18] = params_attr["params_18"];
+            params_test[19] = params_attr["params_19"];
+            params_test[20] = params_attr["params_20"];
+            params_test[21] = params_attr["params_21"];
+            params_test[22] = params_attr["params_22"];
+            params_test[23] = params_attr["params_23"];
+            params_test[24] = params_attr["params_24"];
+            params_test[25] = params_attr["params_25"];
+            params_test[26] = params_attr["params_26"];
+            params_test[27] = params_attr["params_27"];
+            params_test[28] = params_attr["params_28"];
+            params_test[29] = params_attr["params_29"];
+            params_test[30] = params_attr["params_30"];
+            params_test[31] = params_attr["params_31"];
+            params_test[32] = params_attr["params_32"];
+            params_test[33] = params_attr["params_33"];
 
             static int64_t min_check_int = std::stoi(min_check);
             auto *min_check_ptr = M->getInt(min_check_int);
@@ -159,19 +280,21 @@ namespace vectron {
                     params[i] = std::stoi(params_test[i]);
                     }            
                 }
-                if(i != 16 || i != 22 || i != 28){                 
+                if(i != 16 && i != 22 && i != 28){                 
                     params[i] = std::stoi(params_test[i]);
                 }
                 }        
 
             }
-            std::ifstream prep_file("Prep_info.txt");      
-            int hyper_p[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-            for(int i = 0; i < 8; i++){
-                std::getline(prep_file, temp_reader);
-                hyper_p[i] = std::stoi(temp_reader);
-            }
-            prep_file.close();
+            int hyper_p[8] = {0, 0, 0, 0, 0, 0, 0, 0};            
+            hyper_p[0] = std::stoi(prep["prep_00"]);
+            hyper_p[1] = std::stoi(prep["prep_01"]);
+            hyper_p[2] = std::stoi(prep["prep_02"]);
+            hyper_p[3] = std::stoi(prep["prep_03"]);
+            hyper_p[4] = std::stoi(prep["prep_04"]);
+            hyper_p[5] = std::stoi(prep["prep_05"]);
+            hyper_p[6] = std::stoi(prep["prep_06"]);
+            hyper_p[7] = std::stoi(prep["prep_07"]);
             std::vector<Value*> hyper_params_arr;    
             for(int i = 0; i < 8; i++){
                 hyper_params_arr.push_back(M->getInt(hyper_p[i]));
@@ -256,50 +379,39 @@ namespace vectron {
                 params_arr.push_back(M->getInt(params[i]));
             }
             Value *params_ptr = util::makeTuple(params_arr, M);      
-            loop_file.close();     
-            int checker_1 = 1;
-            int checker_2 = 1;
-            int checker_3 = 1;
+
             int args1_test[6] = {0, 0, 0, 0, 0, -1};
             std::vector<Value*> arg1_arr;    
             int args2_test[6] = {0, 0, 0, 0, 0, -1};
             std::vector<Value*> arg2_arr;    
             int args3_test[6] = {0, 0, 0, 0, 0, -1};
             std::vector<Value*> arg3_arr;        
+            if(checker_1 == 1){
+                args1_test[0] = std::stoi(arg1_attr["arg1_00"]);
+                args1_test[1] = std::stoi(arg1_attr["arg1_01"]);
+                args1_test[2] = std::stoi(arg1_attr["arg1_02"]);
+                args1_test[3] = std::stoi(arg1_attr["arg1_03"]);
+                args1_test[4] = std::stoi(arg1_attr["arg1_04"]);
+                args1_test[5] = std::stoi(arg1_attr["arg1_05"]);
+            }
+            if(checker_2 == 1){
+                args2_test[0] = std::stoi(arg2_attr["arg2_00"]);
+                args2_test[1] = std::stoi(arg2_attr["arg2_01"]);
+                args2_test[2] = std::stoi(arg2_attr["arg2_02"]);
+                args2_test[3] = std::stoi(arg2_attr["arg2_03"]);
+                args2_test[4] = std::stoi(arg2_attr["arg2_04"]);
+                args2_test[5] = std::stoi(arg2_attr["arg2_05"]);
+            }
+            if(checker_3 == 1){
+                args3_test[0] = std::stoi(arg3_attr["arg3_00"]);
+                args3_test[0] = std::stoi(arg3_attr["arg3_00"]);
+                args3_test[1] = std::stoi(arg3_attr["arg3_01"]);
+                args3_test[2] = std::stoi(arg3_attr["arg3_02"]);
+                args3_test[3] = std::stoi(arg3_attr["arg3_03"]);
+                args3_test[4] = std::stoi(arg3_attr["arg3_04"]);
+                args3_test[5] = std::stoi(arg3_attr["arg3_05"]);
+            }
 
-            std::ifstream arg_1_file("arg_1.txt");
-            if(!arg_1_file){
-                checker_1 = 0;
-            }
-            else{
-                for(int i = 0; i < 6; i++){
-                std::getline(arg_1_file, temp_reader);
-                args1_test[i] = std::stoi(temp_reader);
-                }
-            }
-            arg_1_file.close();
-            std::ifstream arg_2_file("arg_2.txt");
-            if(!arg_2_file){
-                checker_2 = 0;
-            }
-            else{
-                for(int i = 0; i < 6; i++){
-                std::getline(arg_2_file, temp_reader);
-                args2_test[i] = std::stoi(temp_reader);
-                }
-            }     
-            arg_2_file.close();
-            std::ifstream arg_3_file("arg_3.txt");
-            if(!arg_3_file){
-                checker_3 = 0;
-            }
-            else{
-                for(int i = 0; i < 6; i++){
-                std::getline(arg_3_file, temp_reader);
-                args3_test[i] = std::stoi(temp_reader);
-                }
-            } 
-            arg_3_file.close();
             auto *checker_1_ptr = M->getInt(checker_1);
             auto *checker_2_ptr = M->getInt(checker_2);
             auto *checker_3_ptr = M->getInt(checker_3);
@@ -311,61 +423,6 @@ namespace vectron {
             Value *args1_ptr = util::makeTuple(arg1_arr, M);    
             Value *args2_ptr = util::makeTuple(arg2_arr, M);    
             Value *args3_ptr = util::makeTuple(arg3_arr, M);    
-
-            int lst1[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> lst1_arr;        
-            int lst2[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> lst2_arr;  
-            int lst3[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> lst3_arr;        
-            std::string lst1_name = "";
-            std::string lst2_name = "";
-            std::string lst3_name = "";
-            std::string lst1_eq = "";
-            std::string lst2_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";
-            std::string lst3_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";
-            std::ifstream lst_1_file("lst_1.txt");
-            if(lst_1_file){
-                for(int i = 0; i < 2; i++){
-                if(i == 0){
-                    std::getline(lst_1_file, temp_reader);
-                    lst1_name = temp_reader;
-                }
-                else{
-                    std::getline(lst_1_file, temp_reader);
-                    lst1_eq = temp_reader;
-                }
-                }
-            }
-            lst_1_file.close();
-            std::ifstream lst_2_file("lst_2.txt");
-            if(lst_2_file){
-                for(int i = 0; i < 2; i++){
-                if(i == 0){
-                    std::getline(lst_2_file, temp_reader);
-                    lst2_name = temp_reader;
-                }
-                else{
-                    std::getline(lst_2_file, temp_reader);
-                    lst2_eq = temp_reader;
-                }
-                }
-            }
-            lst_2_file.close();
-            std::ifstream lst_3_file("lst_3.txt");
-            if(lst_3_file){
-                for(int i = 0; i < 2; i++){
-                if(i == 0){
-                    std::getline(lst_3_file, temp_reader);
-                    lst3_name = temp_reader;
-                }
-                else{
-                    std::getline(lst_3_file, temp_reader);
-                    lst3_eq = temp_reader;
-                }
-                }
-            }
-            lst_3_file.close();
             //for(int i = 0; i < 10; i++){
             //    lst1_arr.push_back(M->getInt(lst1[i]));
             //    lst2_arr.push_back(M->getInt(lst2[i]));
@@ -379,34 +436,15 @@ namespace vectron {
             auto *lst3_name_ptr = M->getString(lst3_name);          
             int byPass = -1;
             std::string byPass_mat = "";
-            std::ifstream byPass_file("byPass.txt");
-            if(byPass_file){
-                std::getline(byPass_file, temp_reader);
-                byPass = stoi(temp_reader);
-                std::getline(byPass_file, temp_reader);
-                byPass_mat = temp_reader;
+            byPass = stoi(bypass_attr["Value"]);
+            byPass_mat = bypass_attr["Expression"];
 
-            }
             auto *byPass_mat_ptr = M->getString(byPass_mat);
             auto *byPass_ptr = M->getInt(byPass);
             auto *args_1 = v->front();
             auto *args_2 = v->back();
-            std::ifstream bw_file("bw.txt");
-            int bw_temp[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> bw_arr;  
-            int bw = 0;
-            int bw_param = 0;
-            for(int i = 0; i < 9; i++){
-                std::getline(bw_file, temp_reader);
-                bw_temp[i] = std::stoi(temp_reader);
-                bw += bw_temp[i];
-                if(i == 0){
-                    bw_param = bw_temp[i];
-                }
-            }
             static int64_t bw_param_stat = bw_param;
             static int64_t bw_stat = bw;                         
-            bw_file.close();  
             int t1_l = 0;
             int t2_l = 0;     
             int t3_l = 0;
@@ -468,10 +506,6 @@ namespace vectron {
             }
             Value *bw_ptr = util::makeTuple(bw_arr, M); 
 
-            std::string mx_1_checker = "1";
-            std::string mx_2_checker = "1";
-            std::string mx_3_checker = "1";      
-
             std::string mx_1_array_str[3] = {"0", "0", "0"};
             std::vector<Value*> mx1_arr_str;  
             std::string mx_2_array_str[3] = {"0", "0", "0"};
@@ -486,135 +520,49 @@ namespace vectron {
             int mx_3_array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
             std::vector<Value*> mx3_arr;                
 
-            std::ifstream mx_1_file("mx_arg1.txt");
-            if(!mx_1_file){
-                mx_1_checker = "0";
+            if(mx_1_checker == "1"){
+                mx_1_array_str[0] = mx1_attr["mx1_00"].substr(0, mx1_attr["mx1_00"].find('.'));
+                mx_1_array_str[1] = mx1_attr["mx1_03"].substr(0, mx1_attr["mx1_03"].find('.'));
+                mx_1_array_str[2] = mx1_attr["mx1_07"].substr(0, mx1_attr["mx1_07"].find('.'));
+                mx_1_array[0] = std::stoi(mx1_attr["mx1_01"]);
+                mx_1_array[1] = std::stoi(mx1_attr["mx1_02"]);
+                mx_1_array[2] = std::stoi(mx1_attr["mx1_04"]);
+                mx_1_array[3] = std::stoi(mx1_attr["mx1_05"]);
+                mx_1_array[4] = std::stoi(mx1_attr["mx1_06"]);
+                mx_1_array[5] = std::stoi(mx1_attr["mx1_08"]);
+                mx_1_array[6] = std::stoi(mx1_attr["mx1_09"]);
+                mx_1_array[7] = std::stoi(mx1_attr["mx1_10"]);                                                                                     
             }
-            else{
-                for(int i = 0; i < 11; i++){
-                std::getline(mx_1_file, temp_reader);
-                if(i == 0){
-                    mx_1_array_str[0] = temp_reader.substr(0, temp_reader.find('.'));
-                }
-                if(i == 3){
-                    mx_1_array_str[1] = temp_reader.substr(0, temp_reader.find('.'));
-                }          
-                if(i == 7){
-                    mx_1_array_str[2] = temp_reader.substr(0, temp_reader.find('.'));
-                }
-                if(i == 1){
-                    mx_1_array[0] = std::stoi(temp_reader);
-                }
-                if(i == 2){
-                    mx_1_array[1] = std::stoi(temp_reader);
-                }
-                if(i == 4){
-                    mx_1_array[2] = std::stoi(temp_reader);
-                }
-                if(i == 5){
-                    mx_1_array[3] = std::stoi(temp_reader);
-                }
-                if(i == 6){
-                    mx_1_array[4] = std::stoi(temp_reader);
-                }
-                if(i == 8){
-                    mx_1_array[5] = std::stoi(temp_reader);
-                }
-                if(i == 9){
-                    mx_1_array[6] = std::stoi(temp_reader);
-                }
-                if(i == 10){
-                    mx_1_array[7] = std::stoi(temp_reader);
-                }                                                                                
-                }
+
+            if(mx_2_checker == "1"){
+                mx_2_array_str[0] = mx2_attr["mx2_00"].substr(0, mx2_attr["mx2_00"].find('.'));
+                mx_2_array_str[1] = mx2_attr["mx2_03"].substr(0, mx2_attr["mx2_03"].find('.'));
+                mx_2_array_str[2] = mx2_attr["mx2_07"].substr(0, mx2_attr["mx2_07"].find('.'));
+                mx_2_array[0] = std::stoi(mx2_attr["mx2_01"]);
+                mx_2_array[1] = std::stoi(mx2_attr["mx2_02"]);
+                mx_2_array[2] = std::stoi(mx2_attr["mx2_04"]);
+                mx_2_array[3] = std::stoi(mx2_attr["mx2_05"]);
+                mx_2_array[4] = std::stoi(mx2_attr["mx2_06"]);
+                mx_2_array[5] = std::stoi(mx2_attr["mx2_08"]);
+                mx_2_array[6] = std::stoi(mx2_attr["mx2_09"]);
+                mx_2_array[7] = std::stoi(mx2_attr["mx2_10"]);                                                                                     
             }
-            mx_1_file.close();
-            std::ifstream mx_2_file("mx_arg2.txt");
-            if(!mx_2_file){
-                mx_2_checker = "0";
-            }      
-            else{
-                for(int i = 0; i < 11; i++){
-                std::getline(mx_2_file, temp_reader);
-                if(i == 0){
-                    mx_2_array_str[0] = temp_reader.substr(0, temp_reader.find('.'));
-                }
-                if(i == 3){
-                    mx_2_array_str[1] = temp_reader.substr(0, temp_reader.find('.'));
-                }          
-                if(i == 7){
-                    mx_2_array_str[2] = temp_reader.substr(0, temp_reader.find('.'));
-                }
-                if(i == 1){
-                    mx_2_array[0] = std::stoi(temp_reader);
-                }
-                if(i == 2){
-                    mx_2_array[1] = std::stoi(temp_reader);
-                }
-                if(i == 4){
-                    mx_2_array[2] = std::stoi(temp_reader);
-                }
-                if(i == 5){
-                    mx_2_array[3] = std::stoi(temp_reader);
-                }
-                if(i == 6){
-                    mx_2_array[4] = std::stoi(temp_reader);
-                }
-                if(i == 8){
-                    mx_2_array[5] = std::stoi(temp_reader);
-                }
-                if(i == 9){
-                    mx_2_array[6] = std::stoi(temp_reader);
-                }
-                if(i == 10){
-                    mx_2_array[7] = std::stoi(temp_reader);
-                }                                                                                
-                }
-            } 
-            mx_2_file.close();   
-            std::ifstream mx_3_file("mx_arg3.txt");   
-            if(!mx_3_file){
-                mx_3_checker = "0";
-            }       
-            else{
-                for(int i = 0; i < 11; i++){
-                std::getline(mx_3_file, temp_reader);
-                if(i == 0){
-                    mx_3_array_str[0] = temp_reader.substr(0, temp_reader.find('.'));
-                }
-                if(i == 3){
-                    mx_3_array_str[1] = temp_reader.substr(0, temp_reader.find('.'));
-                }          
-                if(i == 7){
-                    mx_3_array_str[2] = temp_reader.substr(0, temp_reader.find('.'));
-                }
-                if(i == 1){
-                    mx_3_array[0] = std::stoi(temp_reader);
-                }
-                if(i == 2){
-                    mx_3_array[1] = std::stoi(temp_reader);
-                }
-                if(i == 4){
-                    mx_3_array[2] = std::stoi(temp_reader);
-                }
-                if(i == 5){
-                    mx_3_array[3] = std::stoi(temp_reader);
-                }
-                if(i == 6){
-                    mx_3_array[4] = std::stoi(temp_reader);
-                }
-                if(i == 8){
-                    mx_3_array[5] = std::stoi(temp_reader);
-                }
-                if(i == 9){
-                    mx_3_array[6] = std::stoi(temp_reader);
-                }
-                if(i == 10){
-                    mx_3_array[7] = std::stoi(temp_reader);
-                }                                                                                
-                }
+
+            if(mx_3_checker == "1"){
+                mx_3_array_str[0] = mx3_attr["mx3_00"].substr(0, mx3_attr["mx3_00"].find('.'));
+                mx_3_array_str[1] = mx3_attr["mx3_03"].substr(0, mx3_attr["mx3_03"].find('.'));
+                mx_3_array_str[2] = mx3_attr["mx3_07"].substr(0, mx3_attr["mx3_07"].find('.'));
+                mx_3_array[0] = std::stoi(mx3_attr["mx3_01"]);
+                mx_3_array[1] = std::stoi(mx3_attr["mx3_02"]);
+                mx_3_array[2] = std::stoi(mx3_attr["mx3_04"]);
+                mx_3_array[3] = std::stoi(mx3_attr["mx3_05"]);
+                mx_3_array[4] = std::stoi(mx3_attr["mx3_06"]);
+                mx_3_array[5] = std::stoi(mx3_attr["mx3_08"]);
+                mx_3_array[6] = std::stoi(mx3_attr["mx3_09"]);
+                mx_3_array[7] = std::stoi(mx3_attr["mx3_10"]);                                                                                     
             }
-            mx_3_file.close();   
+
+
             for(int i = 0; i < 8; i++){
                 mx1_arr.push_back(M->getInt(mx_1_array[i]));
                 mx2_arr.push_back(M->getInt(mx_2_array[i]));
@@ -1476,20 +1424,6 @@ namespace vectron {
                 fileOut << l << "\n";
             }                
             fileOut.close();
-            std::remove("var_type.txt");
-            std::remove("arg_1.txt");
-            std::remove("arg_2.txt");
-            std::remove("arg_3.txt");
-            std::remove("mx_arg1.txt");
-            std::remove("mx_arg2.txt");
-            std::remove("mx_arg3.txt");            
-            std::remove("bw.txt");
-            std::remove("byPass.txt");
-            std::remove("lst_1.txt");
-            std::remove("lst_2.txt");
-            std::remove("lst_3.txt");
-            std::remove("Prep_info.txt");
-            std::remove("LoopInfo.txt");
             std::remove("script_name.txt");
             if (var_type == "\"i16\""){             
                 auto *sumOne = M->getOrRealizeFunc("vectron_cpu", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8}, {bw_param_stat, bw_stat, mx_i, min_check_int}, "std.vectron.dispatcher");
