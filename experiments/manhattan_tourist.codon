@@ -58,7 +58,7 @@ def orig_foo(h, m):
     q = [[0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]   
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):       
-            q[i][j] = max(q[i][j - 1] + match_func_foo(m[i - 1], 4, 1, 0, h[j - 1]), q[i - 1][j] + match_func_foo(m[i - 1], 5, 3, 1, h[j - 1])) 
+            q[i][j] = max(q[i][j - 1] + match_func_foo(m[i - 1], 4, 1, 0, h[j - 1]), 0, q[i - 1][j] + match_func_foo(m[i - 1], 5, 3, 1, h[j - 1])) 
     print(q[-1][-1])
     return q[-1][-1]
 
