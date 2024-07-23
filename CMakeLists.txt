@@ -46,8 +46,8 @@ add_library(vectron SHARED ${VECTRON_FILES})
 # Remove the find_package(LLVM REQUIRED CONFIG) line
 # Remove the add_definitions(${LLVM_DEFINITIONS_LIST}) line
 
-set(CODON_PATH "/home/souren/codon/install_release")
-set(LLVM_CUSTOM_PATH "/home/souren/codon-llvm/install")  # Add this line
+set(CODON_PATH "/codon/install_release")
+set(LLVM_CUSTOM_PATH "/llvm-project/llvm/build")  # Add this line
 
 # Include directories for your custom LLVM
 target_include_directories(vectron PRIVATE 
