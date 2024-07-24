@@ -12,7 +12,7 @@ with open("/vectron/experiments_docker/data/CPP_medium/seqx_262144.txt", "w") as
         for i in range(var):
             file.writelines(seqx_data[j])
 
-with open("./data/CPP_medium/seqy_262144.txt", "w") as file:
+with open("/vectron/experiments_docker/data/CPP_medium/seqy_262144.txt", "w") as file:
     for i in range(var):
         file.writelines(seqy_data)
 
