@@ -6,7 +6,7 @@ seq_path = sys.argv[1]
 vectron_path = sys.argv[2]
 file_name = sys.argv[3]
 
-with open("script_name.txt", 'w') as s:
+with open("/vectron/experiments_docker/source/Vectron_FLOAT/script_name.txt", 'w') as s:
     s.write(sys.argv[3])
 s.close()
 
