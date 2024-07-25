@@ -61,9 +61,9 @@ void ListInitializer::transform(CallInstr *v) {
         return;       
     
     // Open the file containing the path to Python script
-    std::ifstream infile("script_name.txt");
+    std::ifstream infile("/vectron/experiments_docker/source/script_name.txt");
     if (!infile) {
-        std::cerr << "Error: Unable to open script_name.txt\n";
+        std::cerr << "Error: Unable to open /vectron/experiments_docker/source/script_name.txt\n";
         return;
     }
 
