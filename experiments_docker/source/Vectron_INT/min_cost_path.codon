@@ -6,7 +6,7 @@ import gpu
 import sys
 from vectron.dispatcher import *
 
-var_type = "f32"
+var_type = "i16"
 
 @__attribute__
 def vectron_calc():
