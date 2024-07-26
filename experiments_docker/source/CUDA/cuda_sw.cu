@@ -6,7 +6,9 @@
 #include <utility>
 #include <chrono>
 #include <cuda_runtime.h>
+#include <iomanip> 
 #include "utils.h"
+
 
 constexpr int SIZE = 512; 
 constexpr int QUANTITY = 256; 
