@@ -7,7 +7,7 @@
 #include <iomanip> 
 
 constexpr int SIZE = 512;
-constexpr int QUANTITY = 4096;
+int QUANTITY = 0;
  
 using dp_mat = std::vector<std::vector<int>>;
 
@@ -120,7 +120,7 @@ std::vector<std::pair<std::string, std::string>> pair_sequences(const std::vecto
 int main(int argc, char* argv[]) {
     std::string target_file = argv[argc - 1];
     std::string query_file = argv[argc - 2];
-
+    QUANTITY = target_sequences.size();
     std::vector<std::string> target_sequences = read_sequences_from_file(target_file);
     std::vector<std::string> query_sequences = read_sequences_from_file(query_file);
 
