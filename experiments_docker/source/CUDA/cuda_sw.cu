@@ -11,13 +11,13 @@
 
 
 constexpr int SIZE = 512; 
-int QUANTITY = 0;
+int QUANTITY = 0; 
 constexpr int CUDA_XBLOCK_SIZE = 256; 
 
 using dp_mat = float[SIZE + 1][SIZE + 1];
 
 __global__
-void align(float *scores, dp_mat *matrices, dp_mat *matrices_left, dp_mat *matrices_top, char *sequences, size_t size) {
+void align(float *scores, dp_mat *matrices, dp_mat *matrices_left, dp_mat *matrices_top, char *sequences, size_t size, int QUANTITY) {
     const int t = threadIdx.x + blockIdx.x * blockDim.x;
 
     if (t >= QUANTITY)
@@ -102,7 +102,7 @@ void sw_cuda_alpern(std::vector<std::pair<std::string, std::string>> const seque
     }
     cudaMemcpy(dev_input, sequences_bytes, input_size, cudaMemcpyHostToDevice);
     auto const start_time_kernel = std::chrono::steady_clock::now();
-    align<<<num_blocks, CUDA_XBLOCK_SIZE>>>(dev_output, dev_matrices, dev_matrices_left, dev_matrices_top, dev_input, SIZE);
+    align<<<num_blocks, CUDA_XBLOCK_SIZE>>>(dev_output, dev_matrices, dev_matrices_left, dev_matrices_top, dev_input, SIZE, QUANTITY);
     auto const end_time_kernel = std::chrono::steady_clock::now();    
     cudaMemcpy(scores.data(), dev_output, output_size, cudaMemcpyDeviceToHost);
     
