@@ -7,7 +7,7 @@
 #include <iomanip> 
 
 constexpr int SIZE = 512;
-constexpr int QUANTITY = 4096;
+int QUANTITY = 0;
  
 using dp_mat = std::vector<std::vector<int16_t>>;
 
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::string> target_sequences = read_sequences_from_file(target_file);
     std::vector<std::string> query_sequences = read_sequences_from_file(query_file);
-
+    QUANTITY = target_sequences.size();
     if (target_sequences.size() != query_sequences.size()) {
         std::cerr << "Error: Number of target sequences does not match number of query sequences." << std::endl;
         std::cout << "Target Size: " << target_sequences.size() << ", Query Size: " << query_sequences.size() << "\n";
