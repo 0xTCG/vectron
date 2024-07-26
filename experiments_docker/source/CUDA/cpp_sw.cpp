@@ -7,7 +7,7 @@
 #include <iomanip> 
 
 constexpr int SIZE = 512;
-constexpr int QUANTITY = 256;
+int QUANTITY = 0;
  
 using dp_mat = std::vector<std::vector<float>>;
 
@@ -91,6 +91,7 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences) {
         dummy = e;
     }
 
+
     auto const end_time = std::chrono::steady_clock::now();
     std::cout << std::fixed << std::setprecision(2) 
           << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
@@ -123,6 +124,8 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::string> target_sequences = read_sequences_from_file(target_file);
     std::vector<std::string> query_sequences = read_sequences_from_file(query_file);
+
+    QUANTITY = target_sequences.size();
 
     if (target_sequences.size() != query_sequences.size()) {
         std::cerr << "Error: Number of target sequences does not match number of query sequences." << std::endl;
