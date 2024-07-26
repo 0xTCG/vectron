@@ -113,7 +113,7 @@ void sw_cuda_alpern(std::vector<std::pair<std::string, std::string>> const seque
     //    std::cout << e << "\n";
     //}
     // Simulating the score printing CPU load
-    volatile int dummy;
+    volatile float dummy;
     for (auto e : scores) {
         dummy = e;
     }
