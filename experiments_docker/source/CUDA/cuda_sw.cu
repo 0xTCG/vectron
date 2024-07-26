@@ -117,9 +117,10 @@ void sw_cuda_alpern(std::vector<std::pair<std::string, std::string>> const seque
     for (auto e : scores) {
         dummy = e;
     }
-    auto const end_time = std::chrono::steady_clock::now();    
-    std::cout << "Kernel Time: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time_kernel - start_time_kernel).count() << std::endl;        
-    std::cout << "Time: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() << std::endl;        
+    auto const end_time = std::chrono::steady_clock::now();
+    std::cout << std::fixed << std::setprecision(2) 
+          << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
+          << std::endl;
 }
 
 std::vector<std::string> read_sequences_from_file(const std::string &filename) {
