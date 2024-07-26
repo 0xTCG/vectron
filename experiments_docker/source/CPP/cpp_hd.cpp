@@ -85,10 +85,10 @@ std::vector<std::pair<std::string, std::string>> pair_sequences(const std::vecto
 int main(int argc, char* argv[]) {
     std::string target_file = argv[argc - 1];
     std::string query_file = argv[argc - 2];
-    QUANTITY = target_sequences.size();
+    
     std::vector<std::string> target_sequences = read_sequences_from_file(target_file);
     std::vector<std::string> query_sequences = read_sequences_from_file(query_file);
-
+    QUANTITY = target_sequences.size();
     if (target_sequences.size() != query_sequences.size()) {
         std::cerr << "Error: Number of target sequences does not match number of query sequences." << std::endl;
         std::cout << "Target Size: " << target_sequences.size() << ", Query Size: " << query_sequences.size() << "\n";
