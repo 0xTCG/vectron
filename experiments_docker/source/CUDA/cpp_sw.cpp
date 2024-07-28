@@ -75,7 +75,7 @@ void align(std::vector<float> &scores, std::vector<dp_mat> &matrices,
 
 //#pragma endscop
 
-void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences) {
+void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     std::vector<float> scores(QUANTITY);
     std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<float>(SIZE + 1)));
     std::vector<dp_mat> matrices_left(QUANTITY, dp_mat(SIZE + 1, std::vector<float>(SIZE + 1)));
@@ -131,7 +131,8 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::pair<std::string, std::string>> paired_sequences = pair_sequences(target_sequences, query_sequences);
 
-    sw_cpu(paired_sequences);
+    sw_cpu(paired_sequences, QUANTITY
+     );
 
     return 0;
 }
