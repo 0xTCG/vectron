@@ -47,7 +47,7 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
     }
 }
 
-void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences) {
+void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     std::vector<int16_t> scores(QUANTITY);
     std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int16_t>(SIZE + 1)));
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::pair<std::string, std::string>> paired_sequences = pair_sequences(target_sequences, query_sequences);
 
-    sw_cpu(paired_sequences);
+    sw_cpu(paired_sequences, QUANTITY);
 
     return 0;
 }
