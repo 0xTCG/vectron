@@ -72,7 +72,7 @@ void align(float *scores, dp_mat *matrices, dp_mat *matrices_left, dp_mat *matri
     scores[t] = target_value;
 }
 
-void sw_cuda_alpern(std::vector<std::pair<std::string, std::string>> const sequences) {
+void sw_cuda_alpern(std::vector<std::pair<std::string, std::string>> const sequences, int QUANTITY) {
     int const num_blocks = QUANTITY / CUDA_XBLOCK_SIZE;
 
     std::vector<float> scores(QUANTITY);
@@ -155,7 +155,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::pair<std::string, std::string>> paired_sequences = pair_sequences(target_sequences, query_sequences);
 
-    sw_cuda_alpern(paired_sequences);
+    sw_cuda_alpern(paired_sequences, QUANTITY);
 
     return 0;
 }
