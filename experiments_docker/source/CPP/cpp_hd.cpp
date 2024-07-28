@@ -35,7 +35,7 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
                     diagonal_value += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? match : mismatch);
                 }
 
-                matrices[t][i][j] = target_value;
+                matrices[t][i][j] = diagonal_value;
 
             }
         }
