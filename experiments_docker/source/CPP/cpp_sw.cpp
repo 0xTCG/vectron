@@ -82,14 +82,10 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences) {
     std::vector<dp_mat> matrices_top(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
     auto const start_time = std::chrono::steady_clock::now();
     align(scores, matrices, matrices_left, matrices_top, sequences);
-    //for (auto e : scores) {
-    //    std::cout << e << "\n";
-    //}
-    // Simulating the score printing CPU load
-    volatile int dummy;
     for (auto e : scores) {
-        dummy = e;
+        std::cout << e << "\n";
     }
+
 
     auto const end_time = std::chrono::steady_clock::now();
     std::cout << std::fixed << std::setprecision(2) 
