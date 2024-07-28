@@ -111,14 +111,10 @@ void sw_cuda_alpern(std::vector<std::pair<std::string, std::string>> const seque
     cudaFree(dev_matrices_left);
     cudaFree(dev_matrices_top);
     cudaFree(dev_output);
-    //for (auto e : scores) {
-    //    std::cout << e << "\n";
-    //}
-    // Simulating the score printing CPU load
-    volatile float dummy;
     for (auto e : scores) {
-        dummy = e;
+        std::cout << e << "\n";
     }
+
     auto const end_time = std::chrono::steady_clock::now();
     std::cout << std::fixed << std::setprecision(2) 
           << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
