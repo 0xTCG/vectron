@@ -25,7 +25,7 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
         for (int16_t i = 1; i < SIZE + 1; ++i) {
             for (int16_t j = 1; j < SIZE + 1; ++j) {
 //q[i][j] = max(q[i - 1][j] + match_func(m[i - 1], 5, 3, 1, h[j - 1]), q[i][j - 1] + match_func(m[i - 1], 4, 1, 0, h[j - 1])) 
-                int16_t diagonal_value = matrices[t][i - 1][j - 1];
+                //int16_t diagonal_value = matrices[t][i - 1][j - 1];
                 int16_t m_value_row = 0;
                 if (sequences[t].first[i - 1] == 'N' || sequences[t].second[j - 1] == 'N') {
                     m_value_row += ambig;
