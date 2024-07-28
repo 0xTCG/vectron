@@ -63,7 +63,7 @@ def orig_foo(h, m):
                         q[i][j] = -10000
             else:
                 q[i][j] = max(q[i - 1][j - 1] + match_func_foo(m[i - 1], 0, 1, 1, h[j - 1]), q[i][j - 1] + 1, q[i - 1][j] + 1)
-    #print(q[-1][-1])
+    print(q[-1][-1])
     return q[-1][-1]
 
 @vectron_init
