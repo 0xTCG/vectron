@@ -13,7 +13,7 @@ int QUANTITY = 0;
 using dp_mat = std::vector<std::vector<int16_t>>;
 
 void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,           
-           std::vector<std::pair<std::string, std::string>> const &sequences) {
+           std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     auto const gap_o = 1;
     auto const mismatch = 4;
     auto const match = 2;
@@ -56,7 +56,7 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, i
     std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int16_t>(SIZE + 1)));
 
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, sequences);
+    align(scores, matrices, sequences, QUANTITY);
     for (auto e : scores) {
         std::cout << e << "\n";
     }
