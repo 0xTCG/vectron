@@ -12,7 +12,7 @@ int QUANTITY = 0;
 using dp_mat = std::vector<std::vector<float>>;
 
 void init(std::vector<dp_mat> &matrices, std::vector<dp_mat> &matrices_left, std::vector<dp_mat>             
-&matrices_top) {                                                                                             
+&matrices_top, int QUANTITY) {                                                                                             
     auto const gap_o = -4.0f;                                                                                 
     auto const gap_e = -2.0f;                                                                                 
                                                                                                             
@@ -35,13 +35,13 @@ void init(std::vector<dp_mat> &matrices, std::vector<dp_mat> &matrices_left, std
                                                                                                          
 void align(std::vector<float> &scores, std::vector<dp_mat> &matrices,                                          
         std::vector<dp_mat> &matrices_left, std::vector<dp_mat> &matrices_top,                            
-        std::vector<std::pair<std::string, std::string>> const &sequences) {                              
+        std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {                              
     auto const mismatch = -4.0f;                                                                              
     auto const match = 2.0f;                                                                                  
     auto const ambig = -3.0f;                                                                                 
     auto const gap_o = -4.0f;                                                                                 
     auto const gap_e = -2.0f;                                                                                                                 
-    init(matrices, matrices_left, matrices_top);   
+    init(matrices, matrices_left, matrices_top, QUANTITY);   
     for (int t = 0; t < QUANTITY; ++t) {                                                                     
         float target_value;
         float max_value = 0.0f;
@@ -81,7 +81,7 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, i
     std::vector<dp_mat> matrices_left(QUANTITY, dp_mat(SIZE + 1, std::vector<float>(SIZE + 1)));
     std::vector<dp_mat> matrices_top(QUANTITY, dp_mat(SIZE + 1, std::vector<float>(SIZE + 1)));
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, matrices_left, matrices_top, sequences);
+    align(scores, matrices, matrices_left, matrices_top, sequences, QUANTITY);
     for (auto e : scores) {
         std::cout << e << "\n";
     }
