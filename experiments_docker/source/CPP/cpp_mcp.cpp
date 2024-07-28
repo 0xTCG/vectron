@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -56,14 +57,10 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences) {
 
     auto const start_time = std::chrono::steady_clock::now();
     align(scores, matrices, sequences);
-    //for (auto e : scores) {
-    //    std::cout << e << "\n";
-    //}
-    // Simulating the score printing CPU load
-    volatile int dummy;
     for (auto e : scores) {
-        dummy = e;
+        std::cout << e << "\n";
     }
+
     auto const end_time = std::chrono::steady_clock::now();
     std::cout << std::fixed << std::setprecision(2) 
           << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
