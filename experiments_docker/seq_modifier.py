@@ -1,8 +1,8 @@
 import sys
 
-var = sys.argv[-1]
+var = int(sys.argv[-1])
 
-if var == "16":
+if var == 16:
     # Read sequences from seqx.txt and seqy.txt
     with open("/vectron/experiments_docker/data/float_small/seqx.txt", "r") as file:
         seqx_data = file.readlines()
@@ -20,7 +20,7 @@ if var == "16":
             file.writelines(seqy_data)
 
     print("Done")
-elif var == "32":
+elif var == 32:
     # Read sequences from seqx.txt and seqy.txt
     with open("/vectron/experiments_docker/data/float_medium/seqx.txt", "r") as file:
         seqx_data = file.readlines()
@@ -38,7 +38,7 @@ elif var == "32":
             file.writelines(seqy_data)
 
     print("Done")
-elif var == "64":
+elif var == 64:
     # Read sequences from seqx.txt and seqy.txt
     with open("/vectron/experiments_docker/data/int_small/seqx.txt", "r") as file:
         seqx_data = file.readlines()
@@ -66,7 +66,7 @@ elif var == "64":
             file.writelines(seqy_data)
 
     print("Done")
-elif var == "512":
+elif var == 512:
     # Read sequences from seqx.txt and seqy.txt
     with open("/vectron/experiments_docker/data/int_medium/seqx.txt", "r") as file:
         seqx_data = file.readlines()
@@ -84,7 +84,7 @@ elif var == "512":
             file.writelines(seqy_data)
 
     print("Done")
-elif var == "2048":
+elif var == 2048:
     # Read sequences from seqx.txt and seqy.txt
     with open("/vectron/experiments_docker/data/int_large/seqx.txt", "r") as file:
         seqx_data = file.readlines()
