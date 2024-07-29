@@ -17,12 +17,12 @@ RUN git clone https://github.com/exaloop/codon.git ${VECTRON_CODON_PATH} && \
 # Update PATH environment variable
 ENV PATH=/codon/install_release/bin/:$PATH
 
-ENV CPY_NMR=2
+ENV CPY_NMR=3
 
 RUN mkdir -p /codon/install_release/lib/codon/plugins/seq
 
 # Build Seq
-RUN git clone --depth 1 https://github.com/exaloop/seq.git ${VECTRON_SEQ_PATH} && \
+RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
     cd $VECTRON_SEQ_PATH && \
     cmake -S . -B build -G Ninja  \
          -DCMAKE_BUILD_TYPE=Release \
