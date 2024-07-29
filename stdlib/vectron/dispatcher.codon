@@ -133,25 +133,6 @@ import align_gpu_min_111_and
 import align_gpu_min_111_one
 import align_gpu_min_111
 
-@__attribute__
-def vectron_calc():
-    pass
-@__attribute__
-def vectron_init():    
-    pass
-@__attribute__
-def vectron_list():    
-    pass
-@__attribute__
-def vectron_bypass():
-    pass
-@__attribute__
-def vectron_max():
-    pass
-@__attribute__
-def vectron_match():
-    pass
-
 def vectron_cpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params, bw_param_stat: Static[int], bw_stat: Static[int], mx_i_final: Static[int], min_check: Static[int]):
     if mx_i_final == 0:
         if min_check == 1:
