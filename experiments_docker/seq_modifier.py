@@ -1,6 +1,6 @@
 import sys
 
-var = sys.argv[-1]
+var = int(sys.argv[-1])
 
 if var == "16":
     # Read sequences from seqx.txt and seqy.txt
