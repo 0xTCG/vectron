@@ -14,6 +14,25 @@ compile time and be auto-vectorized.
 
 var_type = "i16"
 
+@__attribute__
+def vectron_calc():
+    pass
+@__attribute__
+def vectron_init():    
+    pass
+@__attribute__
+def vectron_list():    
+    pass
+@__attribute__
+def vectron_bypass():
+    pass
+@__attribute__
+def vectron_max():
+    pass
+@__attribute__
+def vectron_match():
+    pass
+
 @vectron_bypass
 def by_pass_foo(a, b, c):
     return 0
