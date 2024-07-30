@@ -10,12 +10,12 @@ if var == 16:
     with open("/vectron/experiments_docker/data/float_small/seqy.txt", "r") as file:
         seqy_data = file.readlines()
 
-    with open("/vectron/experiments_docker/data/cuda_small/seqx_256.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cuda_small/seqx.txt", "w") as file:
         for j in range(len(seqx_data)):
             for i in range(var):
                 file.writelines(seqx_data[j])
 
-    with open("/vectron/experiments_docker/data/cuda_small/seqy_256.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cuda_small/seqy.txt", "w") as file:
         for i in range(var):
             file.writelines(seqy_data)
 
@@ -28,12 +28,12 @@ elif var == 32:
     with open("/vectron/experiments_docker/data/float_medium/seqy.txt", "r") as file:
         seqy_data = file.readlines()
 
-    with open("/vectron/experiments_docker/data/cuda_medium/seqx_1024.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cuda_medium/seqx.txt", "w") as file:
         for j in range(len(seqx_data)):
             for i in range(var):
                 file.writelines(seqx_data[j])
 
-    with open("/vectron/experiments_docker/data/cuda_medium/seqy_1024.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cuda_medium/seqy.txt", "w") as file:
         for i in range(var):
             file.writelines(seqy_data)
 
@@ -46,22 +46,22 @@ elif var == 64:
     with open("/vectron/experiments_docker/data/int_small/seqy.txt", "r") as file:
         seqy_data = file.readlines()
 
-    with open("/vectron/experiments_docker/data/cpp_small/seqx_4096.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cpp_small/seqx.txt", "w") as file:
         for j in range(len(seqx_data)):
             for i in range(var):
                 file.writelines(seqx_data[j])
 
-    with open("/vectron/experiments_docker/data/cpp_small/seqy_4096.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cpp_small/seqy.txt", "w") as file:
         for i in range(var):
             file.writelines(seqy_data)
 
 
-    with open("/vectron/experiments_docker/data/cuda_large/seqx_4096.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cuda_large/seqx.txt", "w") as file:
         for j in range(len(seqx_data)):
             for i in range(var):
                 file.writelines(seqx_data[j])
 
-    with open("/vectron/experiments_docker/data/cuda_large/seqy_4096.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cuda_large/seqy.txt", "w") as file:
         for i in range(var):
             file.writelines(seqy_data)
 
@@ -74,12 +74,12 @@ elif var == 512:
     with open("/vectron/experiments_docker/data/int_medium/seqy.txt", "r") as file:
         seqy_data = file.readlines()
 
-    with open("/vectron/experiments_docker/data/cpp_medium/seqx_262144.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cpp_medium/seqx.txt", "w") as file:
         for j in range(len(seqx_data)):
             for i in range(var):
                 file.writelines(seqx_data[j])
 
-    with open("/vectron/experiments_docker/data/cpp_medium/seqy_262144.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cpp_medium/seqy.txt", "w") as file:
         for i in range(var):
             file.writelines(seqy_data)
 
@@ -92,12 +92,12 @@ elif var == 2048:
     with open("/vectron/experiments_docker/data/int_large/seqy.txt", "r") as file:
         seqy_data = file.readlines()
 
-    with open("/vectron/experiments_docker/data/cpp_large/seqx_4194304.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cpp_large/seqx.txt", "w") as file:
         for j in range(len(seqx_data)):
             for i in range(var):
                 file.writelines(seqx_data[j])
 
-    with open("/vectron/experiments_docker/data/cpp_large/seqy_4194304.txt", "w") as file:
+    with open("/vectron/experiments_docker/data/cpp_large/seqy.txt", "w") as file:
         for i in range(var):
             file.writelines(seqy_data)
 
