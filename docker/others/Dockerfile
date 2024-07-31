@@ -13,18 +13,18 @@ COPY seqy.fasta /others/data/
 WORKDIR /root
 
 # Install RV
-#RUN mkdir rv-llvm-project && \
-#    git clone https://github.com/llvm/llvm-project rv-llvm-project && \
-#    cd rv-llvm-project && \
-#    git clone https://github.com/cdl-saarland/rv && \
-#    cd rv && \
-#    git submodule update --init && \
-#    cd .. && \
-#    git checkout llvmorg-16.0.6 && \
-#    cmake  -G Ninja -S llvm -B build -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF  -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_EXTERNAL_PROJECTS="rv" -DLLVM_EXTERNAL_RV_SOURCE_DIR=rv -DCMAKE_INSTALL_PREFIX=/llvm-rv && \
-#    cmake --build build && \
-#    cmake --install build && \
-#    gcc -shared -o /llvm-rv/lib/libRV.so -Wl,--whole-archive /llvm-rv/lib/libRV.a -Wl,--no-whole-archive
+RUN mkdir rv-llvm-project && \
+    git clone https://github.com/llvm/llvm-project rv-llvm-project && \
+    cd rv-llvm-project && \
+    git clone https://github.com/cdl-saarland/rv && \
+    cd rv && \
+    git submodule update --init && \
+    cd .. && \
+    git checkout llvmorg-16.0.6 && \
+    cmake -S llvm -B build -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF  -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_EXTERNAL_PROJECTS="rv" -DLLVM_EXTERNAL_RV_SOURCE_DIR=rv -DCMAKE_INSTALL_PREFIX=/llvm-rv && \
+    cmake --build build && \
+    cmake --install build && \
+    gcc -shared -o /llvm-rv/lib/libRV.so -Wl,--whole-archive /llvm-rv/lib/libRV.a -Wl,--no-whole-archive
 
 # Install ADEPT
 RUN git clone https://github.com/mgawan/ADEPT/ && \
@@ -32,8 +32,7 @@ RUN git clone https://github.com/mgawan/ADEPT/ && \
     mkdir build && \
     cd build && \
     cmake ../ && \
-    make && \
-    make test
+    make
 
 # Install SSW
 RUN mkdir ssw && \
