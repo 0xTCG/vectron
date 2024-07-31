@@ -1,6 +1,10 @@
 FROM llvm
 
 # Build Codon
+# Remove the -DCODON_GPU=ON flag if the device the container is being built on does not have an NVIDIA GPU and/or
+# does not support cuda. Also please note that if there are no NVIDIA GPUs present on the system, Vectron's GPU
+# benchmarks as well as other GPU implementations (like ADEPT) will not be able to run on the resulting container.
+
 RUN git clone https://github.com/exaloop/codon.git ${VECTRON_CODON_PATH} && \
     cd $VECTRON_CODON_PATH && \
     cmake -S . -B build_release -G Ninja \
@@ -35,7 +39,7 @@ RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
     LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build && \
     cmake --install build
 
-ENV VEC_NMR=1
+ENV VEC_NMR=7
 
 # Build Vectron
 RUN git clone https://Sourenm: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@github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
