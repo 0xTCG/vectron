@@ -9,11 +9,12 @@
 
 constexpr int SIZE = 512;
 int QUANTITY = 0;
+constexpr int BATCH_SIZE = 262144;
  
 using dp_mat = std::vector<std::vector<int16_t>>;
 
-void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,           
-        const std::vector<std::pair<std::string, std::string>> &sequences, int QUANTITY) {
+void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices, 
+           const std::vector<std::pair<std::string, std::string>> &sequences, int start, int end) {
     auto const gap_o = 1;
     auto const mismatch = 4;
     auto const match = 2;
@@ -21,11 +22,11 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
     auto const gap_e_c = 3;
     auto const ambig = 3;
 
-    for (int t = 0; t < QUANTITY; ++t) {
-        matrices[t][0][0] = 0;
+    for (int t = start; t < end; ++t) {
+        matrices[t - start][0][0] = 0;
         for (int16_t i = 1; i < SIZE + 1; ++i) {
-            matrices[t][0][i] = gap_o + gap_e_c * i;
-            matrices[t][i][0] = gap_o + gap_e_r * i;
+            matrices[t - start][0][i] = gap_o + gap_e_c * i;
+            matrices[t - start][i][0] = gap_o + gap_e_r * i;
         }
         int16_t target_value;
         int16_t max_value = 0;
@@ -34,17 +35,17 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
 
                 int16_t value = 0;
                 if (sequences[t].first[i - 1] == 'N' || sequences[t].second[j - 1] == 'N') {
-                    value += 1;
+                    value += ambig;
                 } else {
-                    value += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? 0 : 3);
+                    value += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? match : mismatch);
                 }
-                int16_t diagonal_value = matrices[t][i - 1][j - 1] + value;
-                int16_t top_value = matrices[t][i - 1][j] + value;
-                int16_t left_value = matrices[t][i][j - 1] + value;           
+
+                int16_t diagonal_value = matrices[t - start][i - 1][j - 1] + value;
+                int16_t top_value = matrices[t - start][i - 1][j] + value;
+                int16_t left_value = matrices[t - start][i][j - 1] + value;
                 int16_t temp = top_value - ((top_value - left_value) & ((top_value - left_value) >> (sizeof(int16_t) * 8 - 1)));
                 target_value = diagonal_value - ((diagonal_value - temp) & ((diagonal_value - temp) >> (sizeof(int16_t) * 8 - 1)));
-                matrices[t][i][j] = target_value;
-
+                matrices[t - start][i][j] = target_value;
             }
         }
         scores[t] = target_value;
@@ -53,18 +54,23 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
 
 void sw_cpu(const std::vector<std::pair<std::string, std::string>> &sequences, int QUANTITY) {
     std::vector<int16_t> scores(QUANTITY);
-    std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int16_t>(SIZE + 1)));
 
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, sequences, QUANTITY);
+
+    for (int start = 0; start < QUANTITY; start += BATCH_SIZE) {
+        int end = std::min(start + BATCH_SIZE, QUANTITY);
+        std::vector<dp_mat> matrices(end - start, dp_mat(SIZE + 1, std::vector<int16_t>(SIZE + 1)));
+        align(scores, matrices, sequences, start, end);
+    }
+
     for (auto e : scores) {
         std::cout << e << "\n";
     }
 
     auto const end_time = std::chrono::steady_clock::now();
-    std::cout << std::fixed << std::setprecision(2) 
-          << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
-          << std::endl;
+    std::cout << std::fixed << std::setprecision(2)
+              << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6
+              << std::endl;
 }
 
 std::vector<std::string> read_sequences_from_file(const std::string &filename) {
