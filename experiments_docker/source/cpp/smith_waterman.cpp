@@ -8,60 +8,63 @@
 
 constexpr int SIZE = 512;
 int QUANTITY = 0;
+constexpr int BATCH_SIZE = 262144;
  
 using dp_mat = std::vector<std::vector<int>>;
 
-void init(std::vector<dp_mat> &matrices, std::vector<dp_mat> &matrices_left, std::vector<dp_mat>             
-&matrices_top, int QUANTITY) {                                                                                             
-    auto const gap_o = -4;                                                                                 
-    auto const gap_e = -2;                                                                                 
-                                                                                                            
-    for (int t = 0; t < QUANTITY; ++t) {                                                                     
-        matrices[t][0][0] = 0;                                                                             
-        matrices_left[t][0][0] = -10000;                                                                   
-        matrices_top[t][0][0] = -10000;                                                                    
-        for (int i = 1; i < SIZE + 1; ++i) {                                                                 
-            matrices[t][0][i] = gap_o + gap_e * i;                                                           
-            matrices[t][i][0] = gap_o + gap_e * i;                                                           
-            matrices_left[t][0][i] = gap_o + gap_e * i;                                                      
-            matrices_left[t][i][0] = -10000;                                                               
-            matrices_top[t][0][i] = -10000;                                                                
-            matrices_top[t][i][0] = gap_o + gap_e * i;                                                       
-        }                                                                                                    
-    }                                                                                                        
-}                                                                                                            
-                                                                                                         
-void align(std::vector<int> &scores, std::vector<dp_mat> &matrices,                                          
-        std::vector<dp_mat> &matrices_left, std::vector<dp_mat> &matrices_top,                            
-        const std::vector<std::pair<std::string, std::string>> &sequences, int QUANTITY) {                              
-    auto const mismatch = -4;                                                                              
-    auto const match = 2;                                                                                  
-    auto const ambig = -3;                                                                                 
-    auto const gap_o = -4;                                                                                 
-    auto const gap_e = -2;                                                                                                                 
-    init(matrices, matrices_left, matrices_top, QUANTITY);   
-    for (int t = 0; t < QUANTITY; ++t) {                                                                     
+void init(std::vector<dp_mat> &matrices, std::vector<dp_mat> &matrices_left, std::vector<dp_mat> &matrices_top, int batch_size) {
+    auto const gap_o = -4;
+    auto const gap_e = -2;
+    
+    for (int t = 0; t < batch_size; ++t) {
+        matrices[t][0][0] = 0;
+        matrices_left[t][0][0] = -10000;
+        matrices_top[t][0][0] = -10000;
+        for (int i = 1; i < SIZE + 1; ++i) {
+            matrices[t][0][i] = gap_o + gap_e * i;
+            matrices[t][i][0] = gap_o + gap_e * i;
+            matrices_left[t][0][i] = gap_o + gap_e * i;
+            matrices_left[t][i][0] = -10000;
+            matrices_top[t][0][i] = -10000;
+            matrices_top[t][i][0] = gap_o + gap_e * i;
+        }
+    }
+}
+
+void align(std::vector<int> &scores, std::vector<dp_mat> &matrices,
+           std::vector<dp_mat> &matrices_left, std::vector<dp_mat> &matrices_top,
+           const std::vector<std::pair<std::string, std::string>> &sequences, int start, int end) {
+    auto const mismatch = -4;
+    auto const match = 2;
+    auto const ambig = -3;
+    auto const gap_o = -4;
+    auto const gap_e = -2;
+    
+    int batch_size = end - start;
+    init(matrices, matrices_left, matrices_top, batch_size);
+
+    for (int t = start; t < end; ++t) {
         int target_value;
         int max_value = 0;
         for (int i = 1; i < SIZE + 1; ++i) {
             for (int j = 1; j < SIZE + 1; ++j) {
                 if (j - i <= -105 || j - i >= 105) {
-                    matrices[t][i][j] = -10000;
-                    matrices_left[t][i][j] = -10000;
-                    matrices_top[t][i][j] = -10000;
+                    matrices[t - start][i][j] = -10000;
+                    matrices_left[t - start][i][j] = -10000;
+                    matrices_top[t - start][i][j] = -10000;
                 } else {
-                    int diagonal_value = matrices[t][i - 1][j - 1];
+                    int diagonal_value = matrices[t - start][i - 1][j - 1];
                     if (sequences[t].first[i - 1] == 'N' || sequences[t].second[j - 1] == 'N') {
                         diagonal_value += ambig;
                     } else {
                         diagonal_value += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? match : mismatch);
                     }
-                    int top_value = (matrices[t][i - 1][j] + gap_o + gap_e > matrices_top[t][i - 1][j] + gap_e ? matrices[t][i - 1][j] + gap_o + gap_e : matrices_top[t][i - 1][j] + gap_e);
-                    int left_value = (matrices[t][i][j - 1] + gap_o + gap_e > matrices_left[t][i][j - 1] + gap_e ? matrices[t][i][j - 1] + gap_o + gap_e : matrices_left[t][i][j - 1] + gap_e);
+                    int top_value = (matrices[t - start][i - 1][j] + gap_o + gap_e > matrices_top[t - start][i - 1][j] + gap_e ? matrices[t - start][i - 1][j] + gap_o + gap_e : matrices_top[t - start][i - 1][j] + gap_e);
+                    int left_value = (matrices[t - start][i][j - 1] + gap_o + gap_e > matrices_left[t - start][i][j - 1] + gap_e ? matrices[t - start][i][j - 1] + gap_o + gap_e : matrices_left[t - start][i][j - 1] + gap_e);
                     target_value = std::max(std::max(diagonal_value, top_value), left_value);
-                    matrices[t][i][j] = target_value;
-                    matrices_left[t][i][j] = left_value;
-                    matrices_top[t][i][j] = top_value;
+                    matrices[t - start][i][j] = target_value;
+                    matrices_left[t - start][i][j] = left_value;
+                    matrices_top[t - start][i][j] = top_value;
                     if (target_value > max_value)
                         max_value = target_value;
                 }
@@ -73,21 +76,26 @@ void align(std::vector<int> &scores, std::vector<dp_mat> &matrices,
 
 void sw_cpu(const std::vector<std::pair<std::string, std::string>> &sequences, int QUANTITY) {
     std::vector<int> scores(QUANTITY);
-    std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
-    std::vector<dp_mat> matrices_left(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
-    std::vector<dp_mat> matrices_top(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
+    
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, matrices_left, matrices_top, sequences, QUANTITY);
+
+    for (int start = 0; start < QUANTITY; start += BATCH_SIZE) {
+        int end = std::min(start + BATCH_SIZE, QUANTITY);
+        int batch_size = end - start;
+        std::vector<dp_mat> matrices(batch_size, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
+        std::vector<dp_mat> matrices_left(batch_size, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
+        std::vector<dp_mat> matrices_top(batch_size, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
+        align(scores, matrices, matrices_left, matrices_top, sequences, start, end);
+    }
+
     for (auto e : scores) {
         std::cout << e << "\n";
     }
 
-
     auto const end_time = std::chrono::steady_clock::now();
     std::cout << std::fixed << std::setprecision(2) 
-          << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
-          << std::endl;
-
+              << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6 
+              << std::endl;
 }
 
 std::vector<std::string> read_sequences_from_file(const std::string &filename) {
