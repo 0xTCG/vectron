@@ -39,7 +39,7 @@ RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
     LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build && \
     cmake --install build
 
-ENV VEC_NMR=7
+ENV VEC_NMR=10
 
 # Build Vectron
 RUN git clone https://Sourenm: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@github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
