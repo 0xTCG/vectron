@@ -8,7 +8,7 @@ RUN mkdir -p /others/data
 # Copy files from the host to the container
 COPY seqx.fasta /others/data/
 COPY seqy.fasta /others/data/
-#COPY /RV/* /RV/
+COPY /RV/* /RV/
 
 WORKDIR /root
 
