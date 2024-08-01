@@ -70,6 +70,16 @@ void sw_cpu(const std::vector<std::pair<std::string, std::string>> &sequences, i
               << std::endl;
 }
 
+std::vector<std::string> read_sequences_from_file(const std::string &filename) {
+    std::ifstream file(filename);
+    std::vector<std::string> sequences;
+    std::string line;
+    while (std::getline(file, line)) {
+        sequences.push_back(line);
+    }
+    return sequences;
+}
+
 std::vector<std::pair<std::string, std::string>> pair_sequences(const std::vector<std::string> &targets,
                                                                const std::vector<std::string> &queries) {
     std::vector<std::pair<std::string, std::string>> pairs;
