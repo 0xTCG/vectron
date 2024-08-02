@@ -20,11 +20,11 @@ RUN mkdir rv-llvm-project && \
     cd rv && \
     git submodule update --init && \
     cd .. && \
-    git checkout llvmorg-16.0.6 && \
-    cmake -S llvm -B build -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF  -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_EXTERNAL_PROJECTS="rv" -DLLVM_EXTERNAL_RV_SOURCE_DIR=rv -DCMAKE_INSTALL_PREFIX=/llvm-rv && \
-    cmake --build build && \
-    cmake --install build && \
-    gcc -shared -o /llvm-rv/lib/libRV.so -Wl,--whole-archive /llvm-rv/lib/libRV.a -Wl,--no-whole-archive
+    git checkout llvmorg-16.0.6
+RUN cmake -S /root/rv-llvm-project/llvm -B /root/rv-llvm-project/build -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF  -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_EXTERNAL_PROJECTS="rv" -DLLVM_EXTERNAL_RV_SOURCE_DIR=/root/rv-llvm-project/rv -DCMAKE_INSTALL_PREFIX=/llvm-rv 
+RUN cmake --build /root/rv-llvm-project/build && \
+    cmake --install /root/rv-llvm-project/build 
+RUN gcc -shared -o /llvm-rv/lib/libRV.so -Wl,--whole-archive /llvm-rv/lib/libRV.a -Wl,--no-whole-archive
 
 # Install ADEPT
 RUN git clone https://github.com/mgawan/ADEPT/ && \
