@@ -98,7 +98,7 @@ RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
 ENV VEC_NMR=10
 
 # Build Vectron
-RUN git clone https://Sourenm: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@github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
+RUN git clone https://github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
     cd $VECTRON_PATH && \
     cmake -S . -B build -G Ninja \
          -DCMAKE_BUILD_TYPE=Release \
