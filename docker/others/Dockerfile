@@ -3,28 +3,12 @@ FROM vectron
 # Create directories in the container
 RUN mkdir -p /others/data
 
-# RUN mkdir -p RV
-
 # Copy files from the host to the container
 COPY seqx.fasta /others/data/
 COPY seqy.fasta /others/data/
 COPY /RV/* /RV/
 
 WORKDIR /root
-
-# Install RV
-RUN mkdir rv-llvm-project && \
-    git clone https://github.com/llvm/llvm-project rv-llvm-project && \
-    cd rv-llvm-project && \
-    git clone https://github.com/cdl-saarland/rv && \
-    cd rv && \
-    git submodule update --init && \
-    cd .. && \
-    git checkout llvmorg-16.0.6
-RUN cmake -S /root/rv-llvm-project/llvm -B /root/rv-llvm-project/build -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF  -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_EXTERNAL_PROJECTS="rv" -DLLVM_EXTERNAL_RV_SOURCE_DIR=/root/rv-llvm-project/rv -DCMAKE_INSTALL_PREFIX=/llvm-rv 
-RUN cmake --build /root/rv-llvm-project/build && \
-    cmake --install /root/rv-llvm-project/build 
-RUN gcc -shared -o /llvm-rv/lib/libRV.so -Wl,--whole-archive /llvm-rv/lib/libRV.a -Wl,--no-whole-archive
 
 # Install ADEPT
 RUN git clone https://github.com/mgawan/ADEPT/ && \
@@ -53,6 +37,13 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
 
 # Update the package list and install Clang 17
 RUN apt-get update && apt-get install -y clang-17
+
+# Add the LLVM APT key and repository for Clang 16
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
+    add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
+
+# Update the package list and install Clang 16
+RUN apt-get update && apt-get install -y clang-16
 
 # Install SeqAn [done] -> needs clang 17
 RUN git clone https://github.com/seqan/seqan && \
@@ -86,3 +77,5 @@ RUN git clone https://github.com/torognes/swipe/ && \
 COPY /swipe_data/* /swipe/swipe_data/
 
 COPY others_benchmarks.ipynb /root/
+
+COPY libRV.so /root/
