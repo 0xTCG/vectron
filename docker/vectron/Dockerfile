@@ -77,8 +77,6 @@ RUN git clone https://github.com/exaloop/codon.git ${VECTRON_CODON_PATH} && \
 # Update PATH environment variable
 ENV PATH=/codon/install_release/bin/:$PATH
 
-ENV CPY_NMR=3
-
 RUN mkdir -p /codon/install_release/lib/codon/plugins/seq
 
 # Build Seq
@@ -94,8 +92,6 @@ RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
          -DCMAKE_INSTALL_PREFIX=/codon/install_release/lib/codon/plugins/seq && \
     LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build && \
     cmake --install build
-
-ENV VEC_NMR=10
 
 # Build Vectron
 RUN git clone https://github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
