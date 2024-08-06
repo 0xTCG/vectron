@@ -110,13 +110,13 @@ RUN git clone https://github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
 RUN mv ${VECTRON_PATH}/stdlib/experimental/simd.codon /codon/install_release/lib/codon/stdlib/experimental && \
     mv ${VECTRON_PATH}/stdlib/vectron /codon/install_release/lib/codon/stdlib/
 
-RUN mkdir /vectron/experiments_docker/data/cpp_medium && \
-    mkdir /vectron/experiments_docker/data/cpp_large && \
-    mkdir /vectron/experiments_docker/data/cuda_small && \
-    mkdir /vectron/experiments_docker/data/cuda_medium
+RUN mkdir /vectron/docker/experiments_docker/data/cpp_medium && \
+    mkdir /vectron/docker/experiments_docker/data/cpp_large && \
+    mkdir /vectron/docker/experiments_docker/data/cuda_small && \
+    mkdir /vectron/docker/experiments_docker/data/cuda_medium
 
 # Run experiments
-RUN cd ${VECTRON_PATH}/experiments_docker && \
+RUN cd ${VECTRON_PATH}/docker/experiments_docker && \
     python3 seq_modifier.py 16 && \
     python3 seq_modifier.py 32 && \
     python3 seq_modifier.py 64 && \
