@@ -16,13 +16,13 @@ SEQ_NO_T = 4096
 SEQ_NO_Q = 4096
 params = {"a": 2, "b": 4, "ambig": 3, "gapo": 4, "gape": 2, "zdrop": 800, "bandwidth": 105, "end_bonus": 0}
 seqs_x = [s"" for _ in range(SEQ_NO_T)]
-f = open("/vectron/experiments_docker/data/cpp_small/seqx.txt", "r")
+f = open("/vectron/docker/experiments_docker/data/cpp_small/seqx.txt", "r")
 count = 0
 for i in f:
     seqs_x[count] = seq(i[:-1])
     count += 1
 f.close()
-f = open("/vectron/experiments_docker/data/cpp_small/seqy.txt", "r")
+f = open("/vectron/docker/experiments_docker/data/cpp_small/seqy.txt", "r")
 count = 0
 seqs_y = [s"" for _ in range(SEQ_NO_Q)]    
 for j in f:
