@@ -28,8 +28,8 @@ void byPass::transform(ReturnInstr *v) {
     if(!att_bypass){
         // Open the file containing the path to Python script
         std::ifstream infile("/vectron/docker/experiments_docker/source/script_name.txt");
-        if (!infile) {
-            std::cerr << "Error: Unable to open /vectron/experiments_docker/source/script_name.txt\n";
+        if (!infile) z
+            std::cerr << "Error: Unable to open /vectron/docker/experiments_docker/source/script_name.txt\n";
             return;
         }
 
