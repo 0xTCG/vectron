@@ -83,3 +83,7 @@ COPY libRV.so /root/
 COPY smith_waterman_seqan.cpp /root/seqan/
 
 RUN clang++-17 -O3 -msse4.2 -funroll-loops -mfpmath=sse -march=native -I/root/seqan/include /root/seqan/smith_waterman_seqan.cpp -o /root/seqan/smith_waterman_seqan
+
+COPY simple_sw.cpp /root/ADEPT/examples/simple_sw
+
+COPY asynch_sw.cpp /root/ADEPT/examples/asynch_sw
