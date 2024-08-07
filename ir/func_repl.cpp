@@ -1424,7 +1424,7 @@ namespace vectron {
                 fileOut << l << "\n";
             }                
             fileOut.close();
-            std::remove("/vectron/experiments_docker/source/script_name.txt");
+            std::remove("/vectron/docker/experiments_docker/source/script_name.txt");
             if (var_type == "\"i16\""){             
                 auto *sumOne = M->getOrRealizeFunc("vectron_cpu", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8}, {bw_param_stat, bw_stat, mx_i, min_check_int}, "std.vectron.dispatcher");
                 auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});                        
