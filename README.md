@@ -36,7 +36,7 @@ git clone https://github.com/exaloop/codon && \
 ```
 
 ## Copying the Libraries
-After Codon is built move the contents of the ```stdlib``` (```stdlib/experimental``` and ```stdlin/vectron```) folder to ```{Codon_INSTALL_PATH}/codon/install_release/lib/codon/stdlib/```
+After Codon is built move the contents of the ```stdlib``` (```stdlib/experimental``` and ```stdlib/vectron```) folder to ```{Codon_INSTALL_PATH}/codon/install_release/lib/codon/stdlib/```
 
 ## Building Vectron
 Follow these steps to clone and build Vectron:
