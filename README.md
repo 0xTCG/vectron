@@ -42,8 +42,7 @@ After Codon is built move the contents of the ```stdlib``` (```stdlib/experiment
 Follow these steps to clone and build Vectron:
 ```
 git clone https://github.com/0xTCG/vectron && \
-cd vectron && \
-mv simd.codon <codon_folder_path>/install_release/lib/codon/stdlib/experimental/
+cd vectron
 ```
 Edit `CMakeLists.txt` and change the following lines to point to the correct paths:
 ```cmake
@@ -67,7 +66,7 @@ Then run the Vectron providing the required paths:
 ```
 Afterwards you can run the built file using:
 ```
-./<file_path>
+./<file_path> <target_seq_path> <query_seq_path>
 ```
 
 ## Experiments
