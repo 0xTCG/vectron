@@ -21,10 +21,6 @@ RUN git clone https://github.com/mkorpar/swsharp /swsharp
 
 RUN cd /swsharp && sed -i 's/_30/_50/g' swsharp/Makefile && make -j
 
-COPY seqx_adept.fasta /others/data/
-
-COPY seqy_adept.fasta /others/data/
-
 COPY seqx.fasta /others/data/
 
 COPY seqy.fasta /others/data/
