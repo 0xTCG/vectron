@@ -25,8 +25,8 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
     int arg3_flag = 0;
     int flag = 0;
     auto *pf = getParentFunc();;
-    auto att_att = util::hasAttribute(pf, "vectron_init");
-    auto att_calc = util::hasAttribute(pf, "vectron_calc");
+    auto att_att = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_init");
+    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_calc");
     if (att_att){   
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
@@ -894,7 +894,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             else{
                 auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();
                 auto *max_st_1 = util::getFunc(arg1_inst->getCallee());
-                auto max_att_1 = util::hasAttribute(max_st_1, "vectron_max");                                
+                auto max_att_1 = util::hasAttribute(max_st_1, "std.vectron.dispatcher.vectron_max");                                
                 if (arg1_func_name == "__add__" || arg1_func_name == "__sub__" || arg1_func_name == "__mul__" || arg1_func_name == "__div__" ){
                     params_09 = "1";
                 }
@@ -913,7 +913,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             else{
                 auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();
                 auto *max_st_2 = util::getFunc(arg2_inst->getCallee());
-                auto max_att_2 = util::hasAttribute(max_st_2, "vectron_max");                                
+                auto max_att_2 = util::hasAttribute(max_st_2, "std.vectron.dispatcher.vectron_max");                                
                 if (arg2_func_name == "__add__" || arg2_func_name == "__sub__" || arg2_func_name == "__mul__" || arg2_func_name == "__div__"){
                     params_10 = "1";
                 }
@@ -938,7 +938,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 else{
                     auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();   
                     auto *max_st_3 = util::getFunc(arg3_inst->getCallee());
-                    auto max_att_3 = util::hasAttribute(max_st_3, "vectron_max");                                    
+                    auto max_att_3 = util::hasAttribute(max_st_3, "std.vectron.dispatcher.vectron_max");                                    
                     if (arg3_func_name == "__add__" || arg3_func_name == "__sub__" || arg3_func_name == "__mul__" || arg3_func_name == "__div__"){
                         params_11 = "1";
                     }
@@ -967,7 +967,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             else{
                 auto arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();
                 auto *max_st_4 = util::getFunc(arg1_inst->getCallee());
-                auto max_att_4 = util::hasAttribute(max_st_4, "vectron_max");                
+                auto max_att_4 = util::hasAttribute(max_st_4, "std.vectron.dispatcher.vectron_max");                
                 if(max_att_4){
                     params_12 = "0";
                     params_13 = "0";
@@ -1367,7 +1367,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 auto *m_call_1 = cast<CallInstr>(arg1_const);
                                 auto *m_call_1_func = util::getFunc(m_call_1->getCallee());
                                 auto m_call_1_name = m_call_1_func->getUnmangledName();  
-                                auto match_att_1 = util::hasAttribute(m_call_1_func, "vectron_match");                                                      
+                                auto match_att_1 = util::hasAttribute(m_call_1_func, "std.vectron.dispatcher.vectron_match");                                                      
                                 if (match_att_1){                          
                                     std::vector<codon::ir::Value *> body_1 = m_call_1_func->getUsedValues();
                                     auto match_arg_1 = m_call_1_func->arg_front()->getName();
@@ -1694,7 +1694,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             else{
                 auto arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();
                 auto max_st_5 = util::getFunc(arg2_inst->getCallee());
-                auto max_att_5 = util::hasAttribute(max_st_5, "vectron_max");                                                                      
+                auto max_att_5 = util::hasAttribute(max_st_5, "std.vectron.dispatcher.vectron_max");                                                                      
                 if(max_att_5){
                     params_18 = "0";
                     params_19 = "0";
@@ -2093,7 +2093,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 auto *m_call_2 = cast<CallInstr>(arg2_const);
                                 auto *m_call_2_func = util::getFunc(m_call_2->getCallee());
                                 auto m_call_2_name = m_call_2_func->getUnmangledName();    
-                                auto match_att_2 = util::hasAttribute(m_call_2_func, "vectron_match");                                                        
+                                auto match_att_2 = util::hasAttribute(m_call_2_func, "std.vectron.dispatcher.vectron_match");                                                        
                                 if (match_att_2){
                                     std::vector<codon::ir::Value *> body_2 = m_call_2_func->getUsedValues();
                                     auto match_arg_1 = m_call_2_func->arg_front()->getName();
@@ -2424,7 +2424,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                 else{
                     auto arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();
                     auto *max_st_6 = util::getFunc(arg3_inst->getCallee());
-                    auto max_att_6 = util::hasAttribute(max_st_6, "vectron_max");                    
+                    auto max_att_6 = util::hasAttribute(max_st_6, "std.vectron.dispatcher.vectron_max");                    
                     if(max_att_6){
                         params_24 = "0";
                         params_25 = "0";
@@ -2823,7 +2823,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     auto *m_call_3 = cast<CallInstr>(arg3_const);
                                     auto *m_call_3_func = util::getFunc(m_call_3->getCallee());
                                     auto m_call_3_name = m_call_3_func->getUnmangledName();  
-                                    auto match_att_3 = util::hasAttribute(m_call_3_func, "vectron_match");                                                              
+                                    auto match_att_3 = util::hasAttribute(m_call_3_func, "std.vectron.dispatcher.vectron_match");                                                              
                                     if (match_att_3){
                                         std::vector<codon::ir::Value *> body_3 = m_call_3_func->getUsedValues();
                                         auto match_arg_1 = m_call_3_func->arg_front()->getName();
@@ -3149,7 +3149,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         if(arg1_inst != NULL){
             arg1_func_name = util::getFunc(arg1_inst->getCallee())->getUnmangledName();  
             auto *max_st_7 = util::getFunc(arg1_inst->getCallee());
-            max_att_7 = util::hasAttribute(max_st_7, "vectron_max");             
+            max_att_7 = util::hasAttribute(max_st_7, "std.vectron.dispatcher.vectron_max");             
         }
         if (arg1_inst != NULL && !max_att_7){      
             auto *arg1_op = cast<CallInstr>(arg1_inst->front()); // the left side operand        
@@ -3177,7 +3177,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
         if (arg2_inst != NULL){
             arg2_func_name = util::getFunc(arg2_inst->getCallee())->getUnmangledName();             
             auto *max_st_8 = util::getFunc(arg2_inst->getCallee());
-            max_att_8 = util::hasAttribute(max_st_8, "vectron_max");             
+            max_att_8 = util::hasAttribute(max_st_8, "std.vectron.dispatcher.vectron_max");             
         }          
         if (arg2_inst != NULL && !max_att_8){
             auto *arg2_op = cast<CallInstr>(arg2_inst->front()); // the left side operand
@@ -3206,7 +3206,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
             if(arg3_inst != NULL){
                 arg3_func_name = util::getFunc(arg3_inst->getCallee())->getUnmangledName();   
                 auto *max_st_9 = util::getFunc(arg3_inst->getCallee());
-                max_att_9 = util::hasAttribute(max_st_9, "vectron_max");                  
+                max_att_9 = util::hasAttribute(max_st_9, "std.vectron.dispatcher.vectron_max");                  
             }       
             if (arg3_inst != NULL && !max_att_9){
                 auto *arg3_op = cast<CallInstr>(arg3_inst->front()); // the left side operand
