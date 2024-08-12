@@ -16,7 +16,7 @@ def match_func_foo(x, a, b, am, y):
         return a
     else:
         return b
-        
+
 @std.vectron.dispatcher.vectron_calc
 def orig_foo(h, m):
     q = [[0 if (_ == 0 and __ == 0) else (_ * (1)) if (__ == 0 and _ > 0) else (__ * (1)) if (_ == 0 and __ > 0) else 0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]   
