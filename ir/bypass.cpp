@@ -17,14 +17,14 @@ using namespace codon::ir;
 void byPass::transform(ReturnInstr *v) {  
     auto *pf = getParentFunc();
     auto pf_name = pf->getUnmangledName();
-    auto att_calc = util::hasAttribute(pf, "vectron_calc");   
+    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_calc");   
     if(!att_calc)
         return;
     std::vector<codon::ir::Value *> func = v->getUsedValues();
     auto *func_log = cast<CallInstr>(func[0]);
     auto func_name = util::getFunc(func_log->getCallee())->getUnmangledName();     
     auto *by_pass_func = util::getFunc(func_log->getCallee());
-    auto att_bypass = util::hasAttribute(by_pass_func, "vectron_bypass");    
+    auto att_bypass = util::hasAttribute(by_pass_func, "std.vectron.dispatcher.vectron_bypass");    
     if(!att_bypass){
         // Open the file containing the path to Python script
         std::ifstream infile("/vectron/docker/experiments_docker/source/script_name.txt");
@@ -57,7 +57,7 @@ void byPass::transform(ReturnInstr *v) {
                 std::string trimmed_line = line.substr(first_non_space_index);        
 
                 // Check for function decorator
-                if (trimmed_line.find("@vectron_calc") != std::string::npos) {
+                if (trimmed_line.find("@std.vectron.dispatcher.vectron_calc") != std::string::npos) {
                     in_function = true;
                     in_vectron_calc = true;
                     continue;
