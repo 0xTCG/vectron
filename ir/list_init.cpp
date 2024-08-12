@@ -56,7 +56,7 @@ void ListInitializer::transform(CallInstr *v) {
 
     auto *M = v->getModule(); 
     auto *orig = util::getFunc(v->getCallee());
-    auto att_att = util::hasAttribute(orig, "vectron_calc");
+    auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.vectron_calc");
     if (!att_att)
         return;       
     
@@ -90,7 +90,7 @@ void ListInitializer::transform(CallInstr *v) {
             // Extract the substring starting from the first non-space character
             std::string trimmed_line = line.substr(first_non_space_index);        
             // Check for function decorator
-            if (trimmed_line.find("@vectron_calc") != std::string::npos) {
+            if (trimmed_line.find("@std.vectron.dispatcher.vectron_calc") != std::string::npos) {
                 in_function = true;
                 in_vectron_calc = true;
                 continue;
