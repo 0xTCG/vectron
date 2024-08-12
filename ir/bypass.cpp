@@ -26,18 +26,8 @@ void byPass::transform(ReturnInstr *v) {
     auto *by_pass_func = util::getFunc(func_log->getCallee());
     auto att_bypass = util::hasAttribute(by_pass_func, "std.vectron.dispatcher.vectron_bypass");    
     if(!att_bypass){
-        // Open the file containing the path to Python script
-        std::ifstream infile("/vectron/docker/experiments_docker/source/script_name.txt");
-        if (!infile) {
-            std::cerr << "Error: Unable to open /vectron/docker/experiments_docker/source/script_name.txt\n";
-            return;
-        }
-
-        std::string python_script_path;
-        std::getline(infile, python_script_path);
-
         // Open the Python script file
-        std::ifstream python_script(python_script_path);
+        std::ifstream python_script(v->getSrcInfo().file);
         if (!python_script) {
             std::cerr << "Error: Unable to open the Python script\n";
             return;
