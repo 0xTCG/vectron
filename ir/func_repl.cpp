@@ -18,7 +18,7 @@ namespace vectron {
     void FuncReplacement::transform(CallInstr *v) {      
         auto *M = v->getModule(); 
         auto *orig = util::getFunc(v->getCallee());
-        auto att_att = util::hasAttribute(orig, "vectron_init");
+        auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.vectron_init");
         if (!att_att)
             return;   
         else{
