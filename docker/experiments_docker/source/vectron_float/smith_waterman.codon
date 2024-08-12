@@ -21,7 +21,7 @@ def match_func_foo(x, a, b, am, y):
 def max_store_foo(lst, ind_row, ind_col, val_1, val_2):
     lst[ind_row][ind_col] = max(val_1, val_2)
     return lst[ind_row][ind_col]
-           
+
 @std.vectron.dispatcher.vectron_calc
 def orig_foo(h, m):
     q = [[0 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else 0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]
