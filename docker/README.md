@@ -22,7 +22,6 @@ The Vectron artifact and the exact steps for reproducing the above-mentioned exp
 - **How much time is needed to complete experiments (approximately)?** The experiments will take around 150 minutes for everything except `Codon` and `C++` experiments on the large dataset. The large experiments take between 12 hours (C++) and 30 hours (Codon).
 - **Publicly available?** Yes.
 - **Code licenses (if publicly available)?** Apache 2.0 License.
-- **Archived (provide DOI)?** Yes. Zenodo DOI.
 
 ### Description
 
