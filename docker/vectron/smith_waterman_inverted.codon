@@ -1,0 +1,162 @@
+from experimental.simd import *
+from bio import *
+import time
+import os
+import gpu
+import sys
+
+@staticmethod
+@inline
+def match_vec(checker, x_vec, y_vec, a, b, am, params_const, n):
+    if checker == 0:
+        return Vec(i16(params_const), i16, 16)
+    return Vec.cmp_vec(x_vec, y_vec, a, b, am, n)
+@staticmethod
+@inline
+def y_gen(seqs):
+    num = 0
+    for row in range(num + 1, len(seqs)):
+        if len(seqs[row]) != len(seqs[num]):
+            yield seqs[num: row]
+            num = row
+    yield seqs[num:]
+@staticmethod
+@inline
+def calculate(starget, squery, x, seqs_t, matrices, H, V, check, scores, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, z_value, max_score, matrices_nv, H_nv, V_nv):
+    count = 2
+    a_1 = Vec(i16(2), i16, 16)
+    b_1 = Vec(i16(-4), i16, 16)
+    am_1 = Vec(i16(-3), i16, 16)
+    x_ind_1 = -1
+    y_ind_1 = -1
+    SEQ_NO_Q = len(squery)
+    REG_SIZE = 16
+    c0 = 0
+    c1 = 1
+    m_c0_x = matrices[c0].arr.ptr
+    m_c1_x = matrices[c1].arr.ptr
+    v_c0_x = V[c0].arr.ptr
+    v_c1_x = V[c1].arr.ptr
+    h_c0_x = H[c0].arr.ptr
+    h_c1_x = H[c1].arr.ptr
+    mx2_arg2_vec = Vec(i16(-2), i16, 16)
+    mx2_arg3_vec = Vec(i16(-6), i16, 16)
+    mx2_arg1_c0 = h_c1_x
+    mx2_arg1_c1 = h_c0_x
+    mx2_arg2_c0 = h_c1_x
+    mx2_arg2_c1 = h_c0_x
+    mx2_arg3_c0 = m_c1_x
+    mx2_arg3_c1 = m_c0_x
+    mx3_arg2_vec = Vec(i16(-2), i16, 16)
+    mx3_arg3_vec = Vec(i16(-6), i16, 16)
+    mx3_arg1_c0 = v_c1_x
+    mx3_arg1_c1 = v_c0_x
+    mx3_arg2_c0 = v_c0_x
+    mx3_arg2_c1 = v_c1_x
+    mx3_arg3_c0 = m_c0_x
+    mx3_arg3_c1 = m_c1_x
+    arg_1_c0 = m_c0_x
+    arg_1_c1 = m_c1_x
+    x_vec = x.arr.ptr
+    n = Vec(u8(ord("N")), u8, 16)
+    infinitizer = Vec(i16(-10000), i16, 16)
+    L = -105
+    U = 105
+    for current_x in range(outer_start, outer_stop, outer_step):
+        x_1_arg = current_x * -1
+        x_2_arg = current_x * -1
+        x_vec_ind_1 = current_x + x_ind_1
+        for current_y in range(inner_start, inner_stop, inner_step):
+            y_1_arg = current_y
+            y_2_arg = current_y
+            if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:
+                if (x_1_arg + y_1_arg) == L or (x_2_arg + y_2_arg) == U:
+                    for i_y in range(check):
+                        m_c1_x[current_y][i_y] = infinitizer
+                        h_c1_x[current_y][i_y] = infinitizer
+                        v_c1_x[current_y][i_y] = infinitizer
+            else:
+                s_1 = seqs_t[1][current_y + y_ind_1]
+                arg_1_ind = current_y - 1
+                mx_2_ind_1 = current_y
+                mx_2_ind_2 = current_y - 1
+                mx_2_ind_3 = current_y - 1
+                mx_3_ind_1 = current_y
+                mx_3_ind_2 = current_y
+                mx_3_ind_3 = current_y
+                for ind_y in range(0, check, 2):
+                    Vec.max_2(((arg_1_c0[arg_1_ind][ind_y] * i16(1)) + match_vec(1, x_vec[x_vec_ind_1], s_1[ind_y], a_1, b_1, am_1, 0, n)) * i16(1), (Vec.max_store_vec(mx2_arg1_c0[mx_2_ind_1], ind_y, mx2_arg2_c0[mx_2_ind_2], mx2_arg2_vec, mx2_arg3_c0[mx_2_ind_3], mx2_arg3_vec)), (Vec.max_store_vec(mx3_arg1_c0[mx_3_ind_1], ind_y, mx3_arg2_c0[mx_3_ind_2], mx3_arg2_vec, mx3_arg3_c0[mx_3_ind_3], mx3_arg3_vec)), max_score, ind_y, m_c1_x[current_y], ((arg_1_c0[arg_1_ind][ind_y + 1] * i16(1)) + match_vec(1, x_vec[x_vec_ind_1], s_1[ind_y + 1], a_1, b_1, am_1, 0, n)) * i16(1), (Vec.max_store_vec(mx2_arg1_c0[mx_2_ind_1], ind_y + 1, mx2_arg2_c0[mx_2_ind_2], mx2_arg2_vec, mx2_arg3_c0[mx_2_ind_3], mx2_arg3_vec)), (Vec.max_store_vec(mx3_arg1_c0[mx_3_ind_1], ind_y + 1, mx3_arg2_c0[mx_3_ind_2], mx3_arg2_vec, mx3_arg3_c0[mx_3_ind_3], mx3_arg3_vec)))
+        for i in range(check):
+            if count >= outer_stop:
+               break
+            m_c0_x[0][i] = Vec(i16(matrices_nv[0][count]), i16, 16)
+            h_c0_x[0][i] = Vec(i16(H_nv[0][count]), i16, 16)
+            v_c0_x[0][i] = Vec(i16(V_nv[0][count]), i16, 16)
+        count += 1
+        c1, c0, m_c1_x, m_c0_x, arg_1_c0, arg_1_c1, mx2_arg1_c0, mx2_arg1_c1, mx2_arg2_c0, mx2_arg2_c1, mx2_arg3_c0, mx2_arg3_c1, mx3_arg1_c0, mx3_arg1_c1, mx3_arg2_c0, mx3_arg2_c1, mx3_arg3_c0, mx3_arg3_c1, h_c0_x, h_c1_x, v_c0_x, v_c1_x  = c0, c1, m_c0_x, m_c1_x, arg_1_c1, arg_1_c0, mx2_arg1_c1, mx2_arg1_c0, mx2_arg2_c1, mx2_arg2_c0, mx2_arg3_c1, mx2_arg3_c0, mx3_arg1_c1, mx3_arg1_c0, mx3_arg2_c1, mx3_arg2_c0, mx3_arg3_c1, mx3_arg3_c0, h_c1_x, h_c0_x, v_c1_x, v_c0_x
+    if z_value != i16(-1):
+        for i in range(SEQ_NO_Q):
+            ind = i // REG_SIZE
+            remain = i - (ind * REG_SIZE)
+            Vec.assign_am(matrices[c0][-1], ind, remain, scores, i, max_score, z_value)
+            scores[i] = scores[i]
+            print(scores[i])
+    else:
+        for i in range(SEQ_NO_Q):
+            ind = i // REG_SIZE
+            remain = i - (ind * REG_SIZE)   
+            Vec.assign(matrices[c0][-1], ind, remain, scores, i)
+            scores[i] = scores[i]
+            print(scores[i])
+    return scores
+
+def sumOne(s_x, s_y):
+    SIZE = len(s_x[0])
+    z_value = i16(-1)
+    REG_SIZE = 16
+    outer_start = 1
+    outer_step = 1
+    outer_stop = len(s_x[0]) + 1
+    inner_start = 1
+    inner_step = 1
+    inner_stop = len(s_y[0]) + 1
+
+    lens = [len(s_x[0]), len(s_y[0])]
+    major_outer_start = 0
+    major_outer_step = 1
+    major_outer_inst = 0
+    major_inner_start = 0
+    major_inner_step = 1
+    major_inner_inst = 0
+    major_params_1 = s_x[major_outer_start: len(s_x) + major_outer_inst: major_outer_step]
+    major_params_2 = s_y[major_inner_start: len(s_y) + major_inner_inst: major_inner_step]
+    matrices_nv = [[0 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else 0 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    H_nv = [[-10000 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else -10000 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    V_nv = [[-10000 if (_ == 0 and __ == 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else -10000 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    SEQ_NO_Q = len(major_params_2)
+    for row in y_gen(major_params_2):
+        for x in major_params_1:
+            score = [i16(0) for _ in range(len(major_params_2))]
+            x_vec = [Vec(u8(ord(str(x[_]))), u8, 16) for _ in range(len(x))]
+            MAX_LENGTH_Q = len(row[0])
+            check = ((len(row)) // REG_SIZE) if len(row) % 16 == 0 else ((len(row)) // REG_SIZE) + 1
+            max_score = [Vec(i16(0), i16, 16) for _ in range(check)]
+            matrices = [[[Vec(i16(matrices_nv[___][__]), i16, 16) for _ in range(check)] for __ in range(SIZE + 1)] for ___ in range(2)]
+            H = [[[Vec(i16(H_nv[___][__]), i16, 16) for _ in range(check)] for __ in range(SIZE + 1)] for ___ in range(2)]
+            V = [[[Vec(i16(V_nv[___][__]), i16, 16) for _ in range(check)] for __ in range(SIZE + 1)] for ___ in range(2)]
+            t = [[u8(ord(str(row[_][__]))) if _ < SEQ_NO_Q else u8(0) for _ in range(SEQ_NO_Q + REG_SIZE)] for __ in range(MAX_LENGTH_Q)]
+            seqs_t = tuple(list([[Vec(t[__][(_ * REG_SIZE): (_ + 1) * REG_SIZE], u8, 16) for _ in range(check)] for __ in range(MAX_LENGTH_Q)]))
+            score = calculate(x, row, x_vec, seqs_t, matrices, H, V, check, score, outer_start, outer_stop, outer_step, inner_start, inner_stop, inner_step, z_value, max_score, matrices_nv, H_nv, V_nv)
+    return score
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = sumOne(seqs_x, seqs_y)
