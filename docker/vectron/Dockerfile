@@ -128,5 +128,11 @@ RUN pip3 install tabulate
 # Copy the local Jupyter notebook file into the container
 COPY benchmarks.ipynb /root/
 
+COPY smith_waterman_inverted.codon /root/
+
+COPY smith_waterman_inverted.cpp /root/
+
+COPY utils.h /root/
+
 # Default command to run JupyterLab and generate a token
 CMD ["bash", "-c", "cd /root && jupyter lab --ip=0.0.0.0 --no-browser --allow-root"]
