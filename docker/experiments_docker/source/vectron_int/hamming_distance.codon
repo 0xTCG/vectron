@@ -8,16 +8,6 @@ from vectron.dispatcher import *
 
 var_type = "i16"
 
-
-@std.vectron.dispatcher.vectron_match
-def match(x, a, b, am, y):
-    if str(x) == "N" or str(y) == "N":
-        return am
-    elif x == y:
-        return a
-    else:
-        return b
-
 @std.vectron.dispatcher.vectron_calc
 def hamming(t, q):
     M = [[0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
