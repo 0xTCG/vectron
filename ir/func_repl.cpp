@@ -96,7 +96,13 @@ namespace vectron {
                 auto lst_3 = globalAttributes["lst_3"]; 
                 lst3_name = lst_3["part_0"];
                 lst3_eq = lst_3["part_1"]; 
-            }                                   
+            }   
+            auto _init = globalAttributes.find("merged");
+            std::string rest_init = "";
+            if(_init != globalAttributes.end()){
+                auto rest = globalAttributes["merged"];
+                rest_init = rest["rest"];
+            }                                
             auto var_value = globalAttributes["var"];                                                       
                                                    
             auto lst_2 = globalAttributes["lst_2"];                                                       
@@ -1383,7 +1389,7 @@ namespace vectron {
             std::cout << name << std::endl;
 
             std::ifstream fileIn(name);
-            std::vector<std::string> lines;
+            std::vector<std::string> init_lines;
             std::string line;
             bool found_mat = false;
             bool found_h = false;
@@ -1391,25 +1397,25 @@ namespace vectron {
 
             while (std::getline(fileIn, line)) {
                 if (line.find("    matrices_nv = ") == 0 && !found_mat) {
-                    lines.push_back("    matrices_nv = " + lst1_eq);
+                    init_lines.push_back("    matrices_nv = " + lst1_eq);
                     found_mat = true;
                 } else {
                     if (line.find("    H_nv = ") == 0 && !found_h) {
-                        lines.push_back("    H_nv = " + lst2_eq);
+                        init_lines.push_back("    H_nv = " + lst2_eq);
                         found_h = true;
                     } 
                     else{   
                         if (line.find("    V_nv = ") == 0 && !found_v) {
-                            lines.push_back("    V_nv = " + lst3_eq);
+                            init_lines.push_back("    V_nv = " + lst3_eq);
                             found_v = true;
                         } 
                         else{  
                             if (line.find("            scores[i] = ") == 0) {
-                                lines.push_back("            scores[i] = " + byPass_mat);
+                                init_lines.push_back("            scores[i] = " + byPass_mat);
                             }                                 
                             else{                                                                               
         
-                                lines.push_back(line);
+                                init_lines.push_back(line);
                             }
                         }
                     }
@@ -1417,13 +1423,40 @@ namespace vectron {
             }
             fileIn.close();
 
+            bool foundStart = false;
+            bool foundEnd = false;
+            bool replace = false;
+            std::vector<std::string> lines;
+            // Read the file line by line
+            for(const auto& line : init_lines){
+                if (line.find("V_nv =") != std::string::npos) {
+                    lines.push_back(line);
+                    foundStart = true;
+                    replace = true;
+                }
+                if (line.find("if hyper_params[2] == -2:") != std::string::npos) {
+                    foundEnd = true;
+                    replace = false;
+                    lines.push_back(rest_init);
+
+                }
+                if (replace) {
+                    continue;
+                }
+                else{
+                    lines.push_back(line);
+                }
+            }
+            
+
             std::ofstream fileOut(name);
 
 
             for (const auto& l : lines) {
                 fileOut << l << "\n";
             }                
-            fileOut.close();
+            fileOut.close();  
+
             if (var_type == "\"i16\""){             
                 auto *sumOne = M->getOrRealizeFunc("vectron_cpu", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8}, {bw_param_stat, bw_stat, mx_i, min_check_int}, "std.vectron.dispatcher");
                 auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});                        
