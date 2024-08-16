@@ -1598,8 +1598,7 @@ class Vec[T, N: Static[int]]:
     @staticmethod    
     @inline
     def cmp_vec(other2: Vec[u8, 16], other3: Vec[u8, 16], other4: Vec[i16, 16], other5: Vec[i16, 16], other6: Vec[i16, 16], other7: Vec[u8, 16]) -> Vec[i16, 16]:
-        zeros = Vec(i16(0), i16, 16)
-        if other6 != zeros:
+        if other6[0] != i16(0):
             return Vec._mm256_cmpgt_vec(other2, other3, other4, other5, other6, other7)   
         else:
             return Vec._mm256_cmpgt_vec_non(other2, other3, other4, other5)   
