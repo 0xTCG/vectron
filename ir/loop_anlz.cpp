@@ -1356,13 +1356,93 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             params_17 += oss_arg1_const_str;  
                         }
                         else if (arg1_func_name == "__add__"){
-                            if (cast<CallInstr>(arg1_const) == NULL){    
-                                std::ostringstream oss_arg1_const;  
-                                oss_arg1_const << *arg1_const;
-                                std::string oss_arg1_const_str = oss_arg1_const.str();                             
-                                params_17 += oss_arg1_const_str;                                                          
+                            if (cast<CallInstr>(arg1_const) == NULL){  
+                                if(cast<TernaryInstr>(arg1_const) == NULL){
+                                    std::ostringstream oss_arg1_const;  
+                                    oss_arg1_const << *arg1_const;
+                                    std::string oss_arg1_const_str = oss_arg1_const.str();                             
+                                    params_17 += oss_arg1_const_str;  
+                                }
+                                else{
+                                    params_17 = "0";
+                                    auto *tmp_if_1 = cast<TernaryInstr>(arg1_const);                                    
+                                    auto *m_call_1 = cast<CallInstr>(tmp_if_1->getCond());
+                                    auto *op_1_call = util::getFunc(m_call_1->getCallee());
+                                    auto op_1_call_name = op_1_call->getUnmangledName();  
+                                    //auto *match_arg_1 = (cast<CallInstr>(m_call_1->front())->front());
+                                    //auto *match_arg_2 = cast<CallInstr>(m_call_1->back())->front();
+                                    auto *true_return_1 = tmp_if_1->getTrueValue();
+                                    auto *false_return_1 = tmp_if_1->getFalseValue();                                                      
+                                    std::string arg1_00 = "";
+                                    std::string arg1_01 = "";
+                                    std::string arg1_02 = "0";
+                                    std::string arg1_03 = "";
+                                    std::string arg1_04 = "";
+                                    std::string arg1_05 = "";
+                                    arg1_00 = "0";  
+                                                             
+                                    if(op_1_call_name == "__eq__"){
+                                        std::ostringstream oss_a_arg;  
+                                        oss_a_arg << *true_return_1;
+                                        std::string oss_a_arg_str = oss_a_arg.str();                             
+                                        arg1_01 += oss_a_arg_str;   
+
+                                        std::ostringstream oss_b_arg;  
+                                        oss_b_arg << *false_return_1;
+                                        std::string oss_b_arg_str = oss_b_arg.str();                             
+                                        arg1_03 += oss_b_arg_str;                                                                                                                 
+                                    
+                                    }                                
+                                    else{
+                                        std::ostringstream oss_a_arg;  
+                                        oss_a_arg << *true_return_1;
+                                        std::string oss_a_arg_str = oss_a_arg.str();                             
+                                        arg1_03 += oss_a_arg_str;   
+
+                                        std::ostringstream oss_b_arg;  
+                                        oss_b_arg << *false_return_1;
+                                        std::string oss_b_arg_str = oss_b_arg.str();                             
+                                        arg1_01 += oss_b_arg_str;                               
+                                    }  
+                                    auto *arg_1_1_index = cast<CallInstr>(m_call_1->front())->back();
+                                    if(cast<CallInstr>(arg_1_1_index) != NULL){
+                                        auto *arg_1_1_f = cast<CallInstr>(arg_1_1_index);
+                                        auto *arg_1_1_index_func = util::getFunc(arg_1_1_f->getCallee());
+                                        auto arg_1_1_index_func_name = arg_1_1_index_func->getUnmangledName();                                    
+                                        if(arg_1_1_index_func_name == "__sub__"){
+                                            arg1_04 += "-";
+                                        }
+                                        auto *tst_1 = arg_1_1_f->back(); 
+                                        std::ostringstream oss_tst_1;  
+                                        oss_tst_1 << *tst_1;
+                                        std::string oss_tst_1_str = oss_tst_1.str();                             
+                                        arg1_04 += oss_tst_1_str;                                         
+                                    }
+                                    else{
+                                        arg1_04 = "0";
+                                    }
+                                    auto *arg_1_2_index = cast<CallInstr>(m_call_1->back())->back();
+                                    if(cast<CallInstr>(arg_1_2_index) != NULL){
+                                        auto *arg_1_2_f = cast<CallInstr>(arg_1_2_index);
+                                        auto *arg_1_2_index_func = util::getFunc(arg_1_2_f->getCallee());
+                                        auto arg_1_2_index_func_name = arg_1_2_index_func->getUnmangledName();                                    
+                                        if(arg_1_2_index_func_name == "__sub__"){
+                                            arg1_05 += "-";
+                                        }
+                                        auto *tst_1 = arg_1_2_f->back(); 
+                                        std::ostringstream oss_tst_1;  
+                                        oss_tst_1 << *tst_1;
+                                        std::string oss_tst_1_str = oss_tst_1.str();                             
+                                        arg1_05 += oss_tst_1_str;                                        
+                                    }
+                                    else{
+                                        arg1_05 = "0";
+                                    }                                       
+                                    std::map<std::string, std::string> arg1_attributes{{"arg1_00", arg1_00}, {"arg1_01", arg1_01}, {"arg1_02", arg1_02}, {"arg1_03", arg1_03}, {"arg1_04", arg1_04}, {"arg1_05", arg1_05}}; 
+                                    globalAttributes["arg1"] = arg1_attributes;                             
+                                }
                             }
-                            else{           \
+                            else{
                                 params_17 = "0";                     
                                 auto *m_call_1 = cast<CallInstr>(arg1_const);
                                 auto *m_call_1_func = util::getFunc(m_call_1->getCallee());
@@ -1589,7 +1669,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     }
                                     else{
                                         arg1_05 = "0";
-                                    }     
+                                    }
                                     std::map<std::string, std::string> arg1_attributes{{"arg1_00", arg1_00}, {"arg1_01", arg1_01}, {"arg1_02", arg1_02}, {"arg1_03", arg1_03}, {"arg1_04", arg1_04}, {"arg1_05", arg1_05}}; 
                                     globalAttributes["arg1"] = arg1_attributes;    
                          
@@ -2083,10 +2163,90 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                         }
                         else if (arg2_func_name == "__add__"){
                             if (cast<CallInstr>(arg2_const) == NULL){
-                                std::ostringstream oss_arg2_const;  
-                                oss_arg2_const << *arg2_const;
-                                std::string oss_arg2_const_str = oss_arg2_const.str();                             
-                                params_23 += oss_arg2_const_str;                                       
+                                if(cast<TernaryInstr>(arg2_const) == NULL){
+                                    std::ostringstream oss_arg2_const;  
+                                    oss_arg2_const << *arg2_const;
+                                    std::string oss_arg2_const_str = oss_arg2_const.str();                             
+                                    params_23 += oss_arg2_const_str;           
+                                }
+                                else{
+                                    params_23 = "0";
+                                    auto *tmp_if_2 = cast<TernaryInstr>(arg2_const); 
+                                    auto *m_call_2 = cast<CallInstr>(tmp_if_2->getCond());
+                                    auto *op_2_call = util::getFunc(m_call_2->getCallee());
+                                    auto op_2_call_name = op_2_call->getUnmangledName();  
+                                    //auto *match_arg_1 = (cast<CallInstr>(m_call_2->front())->front());
+                                    //auto *match_arg_2 = cast<CallInstr>(m_call_2->back())->front();
+                                    auto *true_return_2 = tmp_if_2->getTrueValue();
+                                    auto *false_return_2 = tmp_if_2->getFalseValue();                                                      
+                                    std::string arg2_00 = "";
+                                    std::string arg2_01 = "";
+                                    std::string arg2_02 = "0";
+                                    std::string arg2_03 = "";
+                                    std::string arg2_04 = "";
+                                    std::string arg2_05 = "";
+                                    arg2_00 = "0";  
+                                                             
+                                    if(op_2_call_name == "__eq__"){
+                                        std::ostringstream oss_a_arg;  
+                                        oss_a_arg << *true_return_2;
+                                        std::string oss_a_arg_str = oss_a_arg.str();                             
+                                        arg2_01 += oss_a_arg_str;   
+
+                                        std::ostringstream oss_b_arg;  
+                                        oss_b_arg << *false_return_2;
+                                        std::string oss_b_arg_str = oss_b_arg.str();                             
+                                        arg2_03 += oss_b_arg_str;                                                                                                                 
+                                    
+                                    }                                
+                                    else{
+                                        std::ostringstream oss_a_arg;  
+                                        oss_a_arg << *true_return_2;
+                                        std::string oss_a_arg_str = oss_a_arg.str();                             
+                                        arg2_03 += oss_a_arg_str;   
+
+                                        std::ostringstream oss_b_arg;  
+                                        oss_b_arg << *false_return_2;
+                                        std::string oss_b_arg_str = oss_b_arg.str();                             
+                                        arg2_01 += oss_b_arg_str;                               
+                                    }  
+                                    auto *arg_2_1_index = cast<CallInstr>(m_call_2->front())->back();
+                                    if(cast<CallInstr>(arg_2_1_index) != NULL){
+                                        auto *arg_2_1_f = cast<CallInstr>(arg_2_1_index);
+                                        auto *arg_2_1_index_func = util::getFunc(arg_2_1_f->getCallee());
+                                        auto arg_2_1_index_func_name = arg_2_1_index_func->getUnmangledName();                                    
+                                        if(arg_2_1_index_func_name == "__sub__"){
+                                            arg2_04 += "-";
+                                        }
+                                        auto *tst_2 = arg_2_1_f->back(); 
+                                        std::ostringstream oss_tst_2;  
+                                        oss_tst_2 << *tst_2;
+                                        std::string oss_tst_2_str = oss_tst_2.str();                             
+                                        arg2_04 += oss_tst_2_str;                                         
+                                    }
+                                    else{
+                                        arg2_04 = "0";
+                                    }
+                                    auto *arg_2_2_index = cast<CallInstr>(m_call_2->back())->back();
+                                    if(cast<CallInstr>(arg_2_2_index) != NULL){
+                                        auto *arg_2_2_f = cast<CallInstr>(arg_2_2_index);
+                                        auto *arg_2_2_index_func = util::getFunc(arg_2_2_f->getCallee());
+                                        auto arg_2_2_index_func_name = arg_2_2_index_func->getUnmangledName();                                    
+                                        if(arg_2_2_index_func_name == "__sub__"){
+                                            arg2_05 += "-";
+                                        }
+                                        auto *tst_2 = arg_2_2_f->back(); 
+                                        std::ostringstream oss_tst_2;  
+                                        oss_tst_2 << *tst_2;
+                                        std::string oss_tst_2_str = oss_tst_2.str();                             
+                                        arg2_05 += oss_tst_2_str;                                        
+                                    }
+                                    else{
+                                        arg2_05 = "0";
+                                    }                                       
+                                    std::map<std::string, std::string> arg2_attributes{{"arg2_00", arg2_00}, {"arg2_01", arg2_01}, {"arg2_02", arg2_02}, {"arg2_03", arg2_03}, {"arg2_04", arg2_04}, {"arg2_05", arg2_05}}; 
+                                    globalAttributes["arg2"] = arg2_attributes;    
+                                }                                                                
                             }
                             else{
                                 params_23 = "0";                               
@@ -2813,10 +2973,90 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                             }
                             else if (arg3_func_name == "__add__"){
                                 if (cast<CallInstr>(arg3_const) == NULL){
-                                    std::ostringstream oss_arg3_const;  
-                                    oss_arg3_const << *arg3_const;
-                                    std::string oss_arg3_const_str = oss_arg3_const.str();                             
-                                    params_29 += oss_arg3_const_str;                                                                        
+                                    if(cast<TernaryInstr>(arg3_const) == NULL){
+                                        std::ostringstream oss_arg3_const;  
+                                        oss_arg3_const << *arg3_const;
+                                        std::string oss_arg3_const_str = oss_arg3_const.str();                             
+                                        params_29 += oss_arg3_const_str;  
+                                    }
+                                    else{
+                                        params_29 = "0";
+                                        auto *tmp_if_3 = cast<TernaryInstr>(arg3_const); 
+                                        auto *m_call_3 = cast<CallInstr>(tmp_if_3->getCond());
+                                        auto *op_3_call = util::getFunc(m_call_3->getCallee());
+                                        auto op_3_call_name = op_3_call->getUnmangledName();  
+                                        //auto *match_arg_1 = (cast<CallInstr>(m_call_3->front())->front());
+                                        //auto *match_arg_2 = cast<CallInstr>(m_call_3->back())->front();
+                                        auto *true_return_3 = tmp_if_3->getTrueValue();
+                                        auto *false_return_3 = tmp_if_3->getFalseValue();                                                      
+                                        std::string arg3_00 = "";
+                                        std::string arg3_01 = "";
+                                        std::string arg3_02 = "0";
+                                        std::string arg3_03 = "";
+                                        std::string arg3_04 = "";
+                                        std::string arg3_05 = "";
+                                        arg3_00 = "0";  
+                                                                
+                                        if(op_3_call_name == "__eq__"){
+                                            std::ostringstream oss_a_arg;  
+                                            oss_a_arg << *true_return_3;
+                                            std::string oss_a_arg_str = oss_a_arg.str();                             
+                                            arg3_01 += oss_a_arg_str;   
+
+                                            std::ostringstream oss_b_arg;  
+                                            oss_b_arg << *false_return_3;
+                                            std::string oss_b_arg_str = oss_b_arg.str();                             
+                                            arg3_03 += oss_b_arg_str;                                                                                                                 
+                                        
+                                        }                                
+                                        else{
+                                            std::ostringstream oss_a_arg;  
+                                            oss_a_arg << *true_return_3;
+                                            std::string oss_a_arg_str = oss_a_arg.str();                             
+                                            arg3_03 += oss_a_arg_str;   
+
+                                            std::ostringstream oss_b_arg;  
+                                            oss_b_arg << *false_return_3;
+                                            std::string oss_b_arg_str = oss_b_arg.str();                             
+                                            arg3_01 += oss_b_arg_str;                               
+                                        }  
+                                        auto *arg_3_1_index = cast<CallInstr>(m_call_3->front())->back();
+                                        if(cast<CallInstr>(arg_3_1_index) != NULL){
+                                            auto *arg_3_1_f = cast<CallInstr>(arg_3_1_index);
+                                            auto *arg_3_1_index_func = util::getFunc(arg_3_1_f->getCallee());
+                                            auto arg_3_1_index_func_name = arg_3_1_index_func->getUnmangledName();                                    
+                                            if(arg_3_1_index_func_name == "__sub__"){
+                                                arg3_04 += "-";
+                                            }
+                                            auto *tst_3 = arg_3_1_f->back(); 
+                                            std::ostringstream oss_tst_3;  
+                                            oss_tst_3 << *tst_3;
+                                            std::string oss_tst_3_str = oss_tst_3.str();
+                                            arg3_04 += oss_tst_3_str; 
+                                        }
+                                        else{
+                                            arg3_04 = "0";
+                                        }
+                                        auto *arg_3_2_index = cast<CallInstr>(m_call_3->back())->back();
+                                        if(cast<CallInstr>(arg_3_2_index) != NULL){
+                                            auto *arg_3_2_f = cast<CallInstr>(arg_3_2_index);
+                                            auto *arg_3_2_index_func = util::getFunc(arg_3_2_f->getCallee());
+                                            auto arg_3_2_index_func_name = arg_3_2_index_func->getUnmangledName();                                    
+                                            if(arg_3_2_index_func_name == "__sub__"){
+                                                arg3_05 += "-";
+                                            }
+                                            auto *tst_3 = arg_3_2_f->back(); 
+                                            std::ostringstream oss_tst_3;  
+                                            oss_tst_3 << *tst_3;
+                                            std::string oss_tst_3_str = oss_tst_3.str(); 
+                                            arg3_05 += oss_tst_3_str;                                        
+                                        }
+                                        else{
+                                            arg3_05 = "0";
+                                        }                                       
+                                        std::map<std::string, std::string> arg3_attributes{{"arg3_00", arg3_00}, {"arg3_01", arg3_01}, {"arg3_02", arg3_02}, {"arg3_03", arg3_03}, {"arg3_04", arg3_04}, {"arg3_05", arg3_05}}; 
+                                        globalAttributes["arg3"] = arg3_attributes;                                                                                                                                             
+                                    }                                                                                                              
                                 }
                                 else{
                                     params_29 = "0";
