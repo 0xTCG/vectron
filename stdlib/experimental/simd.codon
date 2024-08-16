@@ -1581,10 +1581,28 @@ class Vec[T, N: Static[int]]:
         %13 = add <16 x i16> %12, %5
         ret <16 x i16> %13
 
+    @pure
+    @derives
+    @staticmethod
+    @inline
+    @llvm
+    def _mm256_cmpgt_vec_non(x: Vec[u8, 16], y: Vec[u8, 16], a: Vec[i16, 16], b: Vec[i16, 16]) -> Vec[i16, 16]:
+        %0 = icmp eq <16 x i8> %x, %y
+        %1 = zext <16 x i1> %0 to <16 x i16>
+        %2 = mul <16 x i16> %1, %a
+        %3 = xor <16 x i16> %1, <i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1, i16 1>
+        %4 = mul <16 x i16> %3, %b
+        %5 = add <16 x i16> %2, %4
+        ret <16 x i16> %5
+
     @staticmethod    
     @inline
     def cmp_vec(other2: Vec[u8, 16], other3: Vec[u8, 16], other4: Vec[i16, 16], other5: Vec[i16, 16], other6: Vec[i16, 16], other7: Vec[u8, 16]) -> Vec[i16, 16]:
-        return Vec._mm256_cmpgt_vec(other2, other3, other4, other5, other6, other7)   
+        zeros = Vec(i16(0), i16, 16)
+        if other6 != zeros:
+            return Vec._mm256_cmpgt_vec(other2, other3, other4, other5, other6, other7)   
+        else:
+            return Vec._mm256_cmpgt_vec_non(other2, other3, other4, other5)   
 
     @pure
     @derives
