@@ -72,7 +72,7 @@ def gotoh(t, q):
                 M[i][j] = max(M[i - 1][j - 1] + S(q[i - 1], 2, -4, -3, t[j - 1]), max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6), max_s(F, i, j, F[i][j - 1] - 2, M[i][j - 1] - 6))
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_init
+@std.vectron.dispatcher.vectron_scheduler
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
