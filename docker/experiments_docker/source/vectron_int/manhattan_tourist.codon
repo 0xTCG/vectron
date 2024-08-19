@@ -20,7 +20,7 @@ def S(x, a, b, am, y):
     else:
         return b
 
-@std.vectron.dispatcher._vectron
+@std.vectron.dispatcher.vectron_kernel
 def manhattan(t, q):
     M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]   
     for i in range(1, len(q) + 1):
