@@ -11,7 +11,7 @@ Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time 
 Before building and using Vectron, please ensure that you have the following prerequisites:
 
 - Codon and its LLVM distribution (ideally built from source; see [here](https://docs.exaloop.io/codon/advanced/build) for details)
-     - Codon GPU support (with LLVM NVTPX) is required for GPU support
+     - Codon GPU support (with LLVM NVPTX) is required for GPU support
 - Clang++
 - (optional) [Seq library](https://github.com/exaloop/seq) for experimental section
 
