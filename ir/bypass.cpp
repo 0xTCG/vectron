@@ -17,7 +17,7 @@ using namespace codon::ir;
 void byPass::transform(ReturnInstr *v) {  
     auto *pf = getParentFunc();
     auto pf_name = pf->getUnmangledName();
-    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher._vectron");   
+    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_kernel");   
     if(!att_calc)
         return;
     std::vector<codon::ir::Value *> func = v->getUsedValues();
@@ -43,7 +43,7 @@ void byPass::transform(ReturnInstr *v) {
                 // Extract the substring starting from the first non-space character
                 std::string trimmed_line = line.substr(first_non_space_index);        
                 // Check for function decorator
-                if (trimmed_line.find("@std.vectron.dispatcher._vectron") != std::string::npos) {
+                if (trimmed_line.find("@std.vectron.dispatcher.vectron_kernel") != std::string::npos) {
                     in_function = true;
                     in_vectron_calc = true;
                     continue;
