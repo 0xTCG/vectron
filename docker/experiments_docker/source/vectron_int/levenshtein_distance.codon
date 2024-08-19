@@ -9,17 +9,16 @@ from vectron.dispatcher import *
 var_type = "i16"
 
 
-# The list initialization part inside the main kernel uses list comprehension due to their faster 
-# performance compared to list comprehensions + explicit loops. However, this approach is put here
-# as well for the evaluators to benchmark reproducibility. Simply comment the list comprehensions
-# existing in the function and paste the following matrix initialization procedure below:
-
+# Although any list initialization method would technically work for the initialization of the matrices
+# we found that list comprehensions are the fastest method available out there. Therefore this approach
+# has been chosen as our method of choice. However the conventional method is also available in the following
+# string which can be used by commenting the existing list comprehension and pasting the following in its stead:
 '''
-    M = [[0] * (m + 1) for _ in range(n + 1)]
-    for i in range(n + 1):
-        M[i][0] = gap_o + i * gap_e
-    for j in range(m + 1):
-        M[0][j] = gap_o + j * gap_e
+    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    for i in range(len(t) + 1):
+        M[i][0] = i * 1
+    for j in range(len(q) + 1):
+        M[0][j] = j * 1    
 '''
 
 @std.vectron.dispatcher.vectron_match
