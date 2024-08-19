@@ -22,7 +22,7 @@ def orig_foo(h, m):
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):       
             q[i][j] = max(q[i - 1][j - 1] + match_func_foo(m[i - 1], 2, -4, -3, h[j - 1]), q[i - 1][j] - 4, q[i][j - 1] - 4)
-    #print(q[-1][-1])
+    print(q[-1][-1])
     return q[-1][-1]
 
 def prep_foo(x, y):
