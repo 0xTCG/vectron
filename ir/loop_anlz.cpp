@@ -26,7 +26,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
     int flag = 0;
     auto *pf = getParentFunc();;
     auto att_att = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_scheduler");
-    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_calc");
+    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher.vectron");
     if (att_att){   
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
@@ -1447,7 +1447,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 auto *m_call_1 = cast<CallInstr>(arg1_const);
                                 auto *m_call_1_func = util::getFunc(m_call_1->getCallee());
                                 auto m_call_1_name = m_call_1_func->getUnmangledName();  
-                                auto match_att_1 = util::hasAttribute(m_call_1_func, "std.vectron.dispatcher.vectron_match");                                                      
+                                auto match_att_1 = util::hasAttribute(m_call_1_func, "std.vectron.dispatcher.vectron_cmp");                                                      
                                 if (match_att_1){                          
                                     std::vector<codon::ir::Value *> body_1 = m_call_1_func->getUsedValues();
                                     auto match_arg_1 = m_call_1_func->arg_front()->getName();
@@ -2253,7 +2253,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                 auto *m_call_2 = cast<CallInstr>(arg2_const);
                                 auto *m_call_2_func = util::getFunc(m_call_2->getCallee());
                                 auto m_call_2_name = m_call_2_func->getUnmangledName();    
-                                auto match_att_2 = util::hasAttribute(m_call_2_func, "std.vectron.dispatcher.vectron_match");                                                        
+                                auto match_att_2 = util::hasAttribute(m_call_2_func, "std.vectron.dispatcher.vectron_cmp");                                                        
                                 if (match_att_2){
                                     std::vector<codon::ir::Value *> body_2 = m_call_2_func->getUsedValues();
                                     auto match_arg_1 = m_call_2_func->arg_front()->getName();
@@ -3063,7 +3063,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
                                     auto *m_call_3 = cast<CallInstr>(arg3_const);
                                     auto *m_call_3_func = util::getFunc(m_call_3->getCallee());
                                     auto m_call_3_name = m_call_3_func->getUnmangledName();  
-                                    auto match_att_3 = util::hasAttribute(m_call_3_func, "std.vectron.dispatcher.vectron_match");                                                              
+                                    auto match_att_3 = util::hasAttribute(m_call_3_func, "std.vectron.dispatcher.vectron_cmp");                                                              
                                     if (match_att_3){
                                         std::vector<codon::ir::Value *> body_3 = m_call_3_func->getUsedValues();
                                         auto match_arg_1 = m_call_3_func->arg_front()->getName();
