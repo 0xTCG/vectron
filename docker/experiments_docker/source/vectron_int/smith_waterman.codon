@@ -13,9 +13,9 @@ var_type = "i16"
 # has been chosen as our method of choice. However the conventional method is also available in the following
 # string which can be used by commenting the existing list comprehension and pasting the following in its stead:
 '''
-    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
-    E = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
-    F = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
+    M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
+    E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
+    F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
     for i in range(len(t) + 1):
         if i > 0:
             M[i][0] = -4 + i * -2
@@ -50,12 +50,12 @@ def max_s(lst, ind_row, ind_col, val_1, val_2):
 
 @std.vectron.dispatcher.vectron_calc
 def gotoh(t, q):
-    #M = [[0 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else 0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
-    #E = [[-10000 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else -10000 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
-    #F = [[-10000 if (_ == 0 and __ == 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else -10000 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
-    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
-    E = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
-    F = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
+    #M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    #E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    #F = [[-10000 if (i == 0 and j == 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
+    E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
+    F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
     for i in range(len(t) + 1):
         if i > 0:
             M[i][0] = -4 + i * -2
