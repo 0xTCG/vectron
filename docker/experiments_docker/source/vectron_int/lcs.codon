@@ -16,7 +16,7 @@ def lcs(t, q):
             M[i][j] = max(M[i - 1][j - 1] + (1 if q[i - 1] == t[j - 1] else 0), M[i - 1][j], M[i][j - 1])    
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_init
+@std.vectron.dispatcher.vectron_scheduler
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
