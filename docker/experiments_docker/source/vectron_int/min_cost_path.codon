@@ -11,7 +11,7 @@ var_type = "i16"
 # In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
 # function has been used instead of a ternary instruction
 
-@std.vectron.dispatcher.vectron_match
+@std.vectron.dispatcher.vectron_cmp
 def match_func_foo(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
         return am
@@ -20,7 +20,7 @@ def match_func_foo(x, a, b, am, y):
     else:
         return b
 
-@std.vectron.dispatcher.vectron_calc
+@std.vectron.dispatcher.vectron
 def orig_foo(h, m):
     q = [[0 if (i == 0 and j == 0) else (1 + i * (2)) if (j == 0 and i > 0) else (1 + j * (3)) if (i == 0 and j > 0) else 0 for j in range(len(m) + 1)] for i in range(len(h) + 1)]
     for i in range(1, len(m) + 1):
