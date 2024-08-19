@@ -26,7 +26,7 @@ void LoopAnalyzer::transform(ImperativeForFlow *v) {
     int flag = 0;
     auto *pf = getParentFunc();;
     auto att_att = util::hasAttribute(pf, "std.vectron.dispatcher.vectron_scheduler");
-    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher.vectron");
+    auto att_calc = util::hasAttribute(pf, "std.vectron.dispatcher._vectron");
     if (att_att){   
         auto pf_arg1 = pf->arg_front()->getName();
         auto pf_arg2 = pf->arg_back()->getName();
