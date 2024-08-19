@@ -49,8 +49,8 @@ def gotoh(t, q):
                         F[i][j] = -10000
                         E[i][j] = -10000
             else:
-                M[i][j] = max(M[i - 1][j - 1] + S(m[i - 1], 2, -4, -3,
-                            h[j - 1]), max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6),
+                M[i][j] = max(M[i - 1][j - 1] + S(t[i - 1], 2, -4, -3, q[j - 1]), 
+                            max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6),
                             max_s(F, i, j, F[i][j - 1] - 2, M[i][j - 1] - 6))
     print(M[-1][-1])
     return M[-1][-1]
