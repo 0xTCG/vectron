@@ -135,7 +135,7 @@ import align_gpu_min_111
 
 
 @__attribute__
-def _vectron():
+def vectron_kernel():
     pass
 @__attribute__
 def vectron_scheduler():    
