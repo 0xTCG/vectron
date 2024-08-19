@@ -4,6 +4,10 @@ import time
 import os
 import gpu
 import sys
+from vectron.dispatcher import *
+
+# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
+# function has been used instead of a ternary instruction
 
 def match_func_foo(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
@@ -13,26 +17,14 @@ def match_func_foo(x, a, b, am, y):
     else:
         return b
 
-def max_store_foo(lst, ind_row, ind_col, val_1, val_2):
-    lst[ind_row][ind_col] = max(val_1, val_2)
-    return lst[ind_row][ind_col]
-
-def max_val(a):
-    mx = 0
-    for i in range(len(a)):
-        for j in range(len(a[i])):
-            if mx < a[i][j]:
-                    mx = a[i][j]
-    return mx                
-
 def orig_foo(h, m):
     q = [[0 if (_ == 0 and __ == 0) else (_ * (-4)) if (__ == 0 and _ > 0) else (__ * (-4)) if (_ == 0 and __ > 0) else 0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):       
             q[i][j] = max(q[i - 1][j - 1] + match_func_foo(m[i - 1], 2, -4, -3, h[j - 1]), q[i - 1][j] - 4, q[i][j - 1] - 4)
-    print(q[-1][-1])
+    #print(q[-1][-1])
     return q[-1][-1]
-    
+
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
@@ -51,4 +43,3 @@ SEQ_NO_Q = len(seqs_y)
 
 with time.timing("Total: "):
     d = prep_foo(seqs_x, seqs_y)
-
