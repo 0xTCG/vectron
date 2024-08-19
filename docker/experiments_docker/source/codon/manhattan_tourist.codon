@@ -4,8 +4,14 @@ import time
 import os
 import gpu
 import sys
+from vectron.dispatcher import *
 
-def match_func_foo(x, a, b, am, y):
+var_type = "i16"
+
+# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
+# function has been used instead of a ternary instruction
+
+def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
         return am
     elif x == y:
@@ -13,31 +19,18 @@ def match_func_foo(x, a, b, am, y):
     else:
         return b
 
-def max_store_foo(lst, ind_row, ind_col, val_1, val_2):
-    lst[ind_row][ind_col] = max(val_1, val_2)
-    return lst[ind_row][ind_col]
-
-def max_val(a):
-    mx = 0
-    for i in range(len(a)):
-        for j in range(len(a[i])):
-            if mx < a[i][j]:
-                    mx = a[i][j]
-    return mx                
-
-def orig_foo(h, m):
-    q = [[0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]   
-    for i in range(1, len(m) + 1):
-        for j in range(1, len(h) + 1):       
-            q[i][j] = max(q[i][j - 1] + match_func_foo(m[i - 1], 4, 1, 0, h[j - 1]), 0, q[i - 1][j] + match_func_foo(m[i - 1], 5, 3, 1, h[j - 1])) 
-    print(q[-1][-1])
-    return q[-1][-1]
+def manhattan(t, q):
+    M = [[0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]   
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):       
+            M[i][j] = max(M[i][j - 1] + S(q[i - 1], 4, 1, 0, t[j - 1]), 0, M[i - 1][j] + S(q[i - 1], 5, 3, 1, t[j - 1])) 
+    return M[-1][-1]
 
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
         for j in range(len(y)):
-            score[i][j] = orig_foo(x[i], y[j])
+            score[i][j] = manhattan(x[i], y[j])
     return score
 
 with open(sys.argv[-1], 'r') as file:
