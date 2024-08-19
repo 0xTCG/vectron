@@ -26,6 +26,9 @@ var_type = "i16"
             F[0][j] = -4 + j * -2
 '''
 
+# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
+# function has been used instead of a ternary instruction
+
 #Can be used to determine a threshold for the returning score.
 @std.vectron.dispatcher.vectron_bypass
 def by_pass_foo(a, b, c):
