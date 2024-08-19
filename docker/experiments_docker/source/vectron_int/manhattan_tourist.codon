@@ -25,7 +25,7 @@ def manhattan(t, q):
             M[i][j] = max(M[i][j - 1] + S(q[i - 1], 4, 1, 0, t[j - 1]), 0, M[i - 1][j] + S(q[i - 1], 5, 3, 1, t[j - 1])) 
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_init
+@std.vectron.dispatcher.vectron_scheduler
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
