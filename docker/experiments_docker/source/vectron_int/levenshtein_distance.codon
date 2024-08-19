@@ -6,9 +6,6 @@ import gpu
 import sys
 from vectron.dispatcher import *
 
-var_type = "i16"
-
-
 # Although any list initialization method would technically work for the initialization of the matrices
 # we found that list comprehensions are the fastest method available out there. Therefore this approach
 # has been chosen as our method of choice. However the conventional method is also available in the following
@@ -21,6 +18,8 @@ var_type = "i16"
         M[0][j] = j * 1    
 '''
 
+var_type = "i16"
+
 @std.vectron.dispatcher.vectron_match
 def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
@@ -32,16 +31,12 @@ def S(x, a, b, am, y):
 
 @std.vectron.dispatcher.vectron_calc
 def levenshtein(t, q):
-    #M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    #M = [[0 if (_ == 0 and __ == 0) else (_ * (1)) if (__ == 0 and _ > 0) else (__ * (1)) if (_ == 0 and __ > 0) else 0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]   
     M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
     for i in range(len(t) + 1):
         M[i][0] = i * 1
     for j in range(len(q) + 1):
-        M[0][j] = j * 1    
-    for i in range(len(t) + 1):
-        M[i][0] = i * 1
-    for j in range(len(q) + 1):
-        M[0][j] = j * 1
+        M[0][j] = j * 1   
     for i in range(1, len(q)):
         for j in range(1, len(t)):       
             M[i][j] = min(M[i - 1][j - 1] + S(q[i - 1], 0, 1, 1, t[j - 1]), M[i - 1][j] + 1, M[i][j - 1] + 1)
