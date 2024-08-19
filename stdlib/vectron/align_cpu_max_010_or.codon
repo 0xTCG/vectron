@@ -1,5 +1,5 @@
 from experimental.simd import *
-from bio import *
+
 import time
 import os
 @staticmethod
@@ -61,7 +61,7 @@ def calculate(starget, squery, x, seqs_t, matrices, H, V, check, params, scores,
     U = bw_params[8]
     len_m = len(matrices[c1])
     len_h = len(H[c1])
-    len_v = len(V[c1])      
+    len_v = len(V[c1])
     for current_x in range(outer_start, outer_stop, outer_step):
         x_1_arg = x_params_1 * current_x
         x_2_arg = x_params_2 * current_x
@@ -112,7 +112,7 @@ def calculate(starget, squery, x, seqs_t, matrices, H, V, check, params, scores,
     else:
         for i in range(SEQ_NO_Q):
             ind = i // REG_SIZE
-            remain = i - (ind * REG_SIZE)   
+            remain = i - (ind * REG_SIZE)
             Vec.assign(matrices[c0][-1], ind, remain, scores, i)
             scores[i] = scores[i]
             print(scores[i])

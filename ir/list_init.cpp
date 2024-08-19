@@ -13,10 +13,10 @@
 #include <algorithm>
 #include <cctype>
 #include <locale>
-#include <unordered_map> 
+#include <unordered_map>
 
 namespace vectron {
-extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes; 
+extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes;
 using namespace codon::ir;
 
 std::string mergeVector(const std::vector<std::string>& vec) {
@@ -60,14 +60,14 @@ static inline void trim(std::string &s) {
 }
 
 
-void ListInitializer::transform(CallInstr *v) {    
+void ListInitializer::transform(CallInstr *v) {
 
-    auto *M = v->getModule(); 
+    auto *M = v->getModule();
     auto *orig = util::getFunc(v->getCallee());
-    auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.vectron_kernel");
+    auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.kernel");
     if (!att_att)
-        return;       
-    
+        return;
+
     // Open the Python script file
     std::ifstream python_script(v->getSrcInfo().file);
     if (!python_script) {
@@ -81,16 +81,16 @@ void ListInitializer::transform(CallInstr *v) {
     bool rest = false;
     std::vector<std::string> extracted_lines;
     std::vector<std::string> rest_lines;
-    
+
     // Iterate through Python script
     while (std::getline(python_script, line)) {
         if (!line.empty()) {
             size_t first_non_space_index = line.find_first_not_of(" \t");
 
             // Extract the substring starting from the first non-space character
-            std::string trimmed_line = line.substr(first_non_space_index);        
+            std::string trimmed_line = line.substr(first_non_space_index);
             // Check for function decorator
-            if (trimmed_line.find("@std.vectron.dispatcher.vectron_kernel") != std::string::npos) {
+            if (trimmed_line.find("@vectron.kernel") != std::string::npos) {
                 in_function = true;
                 in_vectron_calc = true;
                 continue;
@@ -101,16 +101,16 @@ void ListInitializer::transform(CallInstr *v) {
                 if (trimmed_line.find("for ") != std::string::npos && trimmed_line.find(":") != std::string::npos) {
                     // Found for loop, stop extracting lines
                     rest = true;
-                }  
-                if (trimmed_line.find("@std.") != std::string::npos || trimmed_line.find("return") != std::string::npos) {                
+                }
+                if (trimmed_line.find("@vectron.") != std::string::npos || trimmed_line.find("return") != std::string::npos) {
                     break;
-                }                
+                }
                 if (trimmed_line.find("def ") == std::string::npos && trimmed_line[0] != '#') {
                     if(rest){
                         rest_lines.push_back(line);
                     }
                     else{
-                        
+
                         extracted_lines.push_back(trimmed_line);
                     }
                 }
@@ -129,8 +129,8 @@ void ListInitializer::transform(CallInstr *v) {
     std::vector<std::string> processed_rest_lines;
     int index = 0;
     for(int i = rest_lines.size() - 1; i >=0 ; i--){
-        if (rest_lines[i].find("for ") != std::string::npos && rest_lines[i].find(":") != std::string::npos) {            
-            for_loop_count++;      
+        if (rest_lines[i].find("for ") != std::string::npos && rest_lines[i].find(":") != std::string::npos) {
+            for_loop_count++;
             if (for_loop_count >= 2) {
                 index = i;
                 break;
@@ -148,7 +148,7 @@ void ListInitializer::transform(CallInstr *v) {
     std::regex len_regex("len\\([^\\)]*\\)");
     for (int i = 0; i < extracted_lines.size(); ++i) {
         std::string outfile_name = "lst_";
-        outfile_name += std::to_string(i+1);         
+        outfile_name += std::to_string(i+1);
         std::vector<std::string> parts = split_first(extracted_lines[i], '=');
         std::ostringstream oss;
         oss << parts[0][0];
@@ -164,21 +164,21 @@ void ListInitializer::transform(CallInstr *v) {
                 // Move `pos` past the replaced part
                 pos += replacement[i].length();
             }
-            
+
         }
-        parts[1] = std::regex_replace(parts[1], len_regex, "SIZE");      
+        parts[1] = std::regex_replace(parts[1], len_regex, "SIZE");
 
         trim(parts[0]);
         trim(parts[1]);
-        std::map<std::string, std::string> outfile_attributes{{"part_0", parts[0]}, {"part_1", parts[1]}}; 
+        std::map<std::string, std::string> outfile_attributes{{"part_0", parts[0]}, {"part_1", parts[1]}};
         globalAttributes[outfile_name] =outfile_attributes;
-        
+
     }
     for (int j = 0; j < processed_rest_lines.size(); j++) {
-        processed_rest_lines[j] = std::regex_replace(processed_rest_lines[j], len_regex, "SIZE");      
-    }    
+        processed_rest_lines[j] = std::regex_replace(processed_rest_lines[j], len_regex, "SIZE");
+    }
     std::string merged_lines = mergeVector(processed_rest_lines);
-    std::map<std::string, std::string> merged_atts{{"rest", merged_lines}}; 
+    std::map<std::string, std::string> merged_atts{{"rest", merged_lines}};
     globalAttributes["merged"] = merged_atts;
 }
 

@@ -97,14 +97,13 @@ RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
 RUN git clone https://github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
     cd $VECTRON_PATH && \
     cmake -S . -B build -G Ninja \
+         -DCODON_PATH=/codon/install_release \
+         -DLLVM_PATH=/llvm-project/llvm/build \
          -DCMAKE_BUILD_TYPE=Release \
          -DCMAKE_CXX_COMPILER=clang++ \
          -DCMAKE_C_COMPILER=clang && \
-    cmake --build build
-
-# Move necessary files
-RUN mv ${VECTRON_PATH}/stdlib/experimental/simd.codon /codon/install_release/lib/codon/stdlib/experimental && \
-    mv ${VECTRON_PATH}/stdlib/vectron /codon/install_release/lib/codon/stdlib/
+    cmake --build build && \
+    cmake --install build
 
 RUN mkdir /vectron/docker/experiments_docker/data/cpp_medium && \
     mkdir /vectron/docker/experiments_docker/data/cpp_large && \

@@ -1,18 +1,15 @@
-from experimental.simd import *
-from bio import *
 import time
-import os
-import gpu
 import sys
-from vectron.dispatcher import *
+import vectron
 
 var_type = "i16"
 
-# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
-# function has been used instead of a ternary instruction
-
-@std.vectron.dispatcher.vectron_cmp
+@vectron.cmp
 def S(x, a, b, am, y):
+    """
+    Due to ambiguous elements ('N'), a specialized match function has been used
+    instead of a ternary operator, hence the "@vectron.cmp" decorator.
+    """
     if str(x) == "N" or str(y) == "N":
         return am
     elif x == y:
@@ -20,17 +17,21 @@ def S(x, a, b, am, y):
     else:
         return b
 
-@std.vectron.dispatcher.vectron_kernel
+@vectron.kernel
 def manhattan(t, q):
-    M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]   
+    M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]
     for i in range(1, len(q) + 1):
-        for j in range(1, len(t) + 1):       
-            M[i][j] = max(M[i][j - 1] + S(q[i - 1], 4, 1, 0, t[j - 1]), 0, M[i - 1][j] + S(q[i - 1], 5, 3, 1, t[j - 1])) 
+        for j in range(1, len(t) + 1):
+            M[i][j] = max(
+                M[i][j - 1] + S(q[i - 1], 4, 1, 0, t[j - 1]),
+                0,
+                M[i - 1][j] + S(q[i - 1], 5, 3, 1, t[j - 1])
+            )
     print(M[-1][-1])
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_scheduler
-def prep_foo(x, y):
+@vectron.scheduler
+def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
         for j in range(len(y)):
@@ -47,4 +48,4 @@ SEQ_NO_T = len(seqs_x)
 SEQ_NO_Q = len(seqs_y)
 
 with time.timing("Total: "):
-    d = prep_foo(seqs_x, seqs_y)
+    d = invoke(seqs_x, seqs_y)

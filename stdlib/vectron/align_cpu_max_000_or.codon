@@ -1,5 +1,5 @@
 from experimental.simd import *
-from bio import *
+
 import os
 
 @staticmethod
@@ -60,14 +60,14 @@ def calculate(starget, squery, x, seqs_t, matrices, H, V, check, params, scores,
     U = bw_params[8]
     len_m = len(matrices[c1])
     len_h = len(H[c1])
-    len_v = len(V[c1])    
+    len_v = len(V[c1])
     for current_x in range(outer_start, outer_stop, outer_step):
         x_1_arg = x_params_1 * current_x
         x_2_arg = x_params_2 * current_x
         x_vec_ind_1 = current_x + x_ind_1
         x_vec_ind_2 = current_x + x_ind_2
         x_vec_ind_3 = current_x + x_ind_3
-        for current_y in range(inner_start, inner_stop, inner_step):        
+        for current_y in range(inner_start, inner_stop, inner_step):
             y_1_arg = y_params_1 * current_y
             y_2_arg = y_params_2 * current_y
             if (x_1_arg + y_1_arg) <= L or (x_2_arg + y_2_arg) >= U:
@@ -93,14 +93,14 @@ def calculate(starget, squery, x, seqs_t, matrices, H, V, check, params, scores,
                         Vec.max_2(((arg_1_c0[arg_1_ind][ind_y] * i16(params[9])) + match_vec(checker_1, x_vec[x_vec_ind_1], s_1[ind_y], a_1, b_1, am_1, params[17], n)) * i16(params[12]), ((arg_2_c0[arg_2_ind][ind_y] * i16(params[10])) + match_vec(checker_2, x_vec[x_vec_ind_2], s_2[ind_y], a_2, b_2, am_2, params[23], n)) * i16(params[18]), max_score, ind_y, m_c1_x[current_y], ((arg_1_c0[arg_1_ind][ind_y + 1] * i16(params[9])) + match_vec(checker_1, x_vec[x_vec_ind_1], s_1[ind_y + 1], a_1, b_1, am_1, params[17], n)) * i16(params[12]), ((arg_2_c0[arg_2_ind][ind_y + 1] * i16(params[10])) + match_vec(checker_2, x_vec[x_vec_ind_2], s_2[ind_y + 1], a_2, b_2, am_2, params[23], n)) * i16(params[18]))
         for i in range(check):
             if count >= outer_stop:
-                break         
+                break
             m_c0_x[0][i] = Vec(i16(matrices_nv[0][count]), i16, 16)
             h_c0_x[0][i] = Vec(i16(H_nv[0][count]), i16, 16)
             v_c0_x[0][i] = Vec(i16(V_nv[0][count]), i16, 16)
         count += 1
         c1, c0, m_c1_x, m_c0_x, arg_1_c0, arg_1_c1, arg_2_c0, arg_2_c1, h_c0_x, h_c1_x, v_c0_x, v_c1_x  = c0, c1, m_c0_x, m_c1_x, arg_1_c1, arg_1_c0, arg_2_c1, arg_2_c0, h_c1_x, h_c0_x, v_c1_x, v_c0_x
         if params[11] != -1:
-            arg_3_c0, arg_3_c1 = arg_3_c1, arg_3_c0                                              
+            arg_3_c0, arg_3_c1 = arg_3_c1, arg_3_c0
     if z_value != i16(-1):
         for i in range(SEQ_NO_Q):
             ind = i // REG_SIZE
@@ -111,7 +111,7 @@ def calculate(starget, squery, x, seqs_t, matrices, H, V, check, params, scores,
     else:
         for i in range(SEQ_NO_Q):
             ind = i // REG_SIZE
-            remain = i - (ind * REG_SIZE)   
+            remain = i - (ind * REG_SIZE)
             Vec.assign(matrices[c0][-1], ind, remain, scores, i)
             scores[i] = scores[i]
             print(scores[i])

@@ -1,5 +1,4 @@
 from experimental.simd import *
-from bio import *
 import time
 import os
 import gpu
@@ -135,22 +134,22 @@ import align_gpu_min_111
 
 
 @__attribute__
-def vectron_kernel():
+def kernel():
     pass
 @__attribute__
-def vectron_scheduler():    
+def scheduler():
     pass
 @__attribute__
-def vectron_list():    
+def list():
     pass
 @__attribute__
-def vectron_bypass():
+def bypass():
     pass
 @__attribute__
-def vectron_max():
+def max():
     pass
 @__attribute__
-def vectron_cmp():
+def cmp():
     pass
 
 def vectron_cpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params, bw_param_stat: Static[int], bw_stat: Static[int], mx_i_final: Static[int], min_check: Static[int]):
@@ -162,9 +161,9 @@ def vectron_cpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_m
                 align_cpu_max_000_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_cpu_max_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_000_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
@@ -172,156 +171,156 @@ def vectron_cpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_m
                 align_cpu_min_000_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_cpu_min_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                
+                    align_cpu_min_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 1:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_001_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_cpu_max_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_001_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)         
+                    align_cpu_min_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 10:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_010_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                     
+                    align_cpu_max_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_010_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                             
+                    align_cpu_min_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 11:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_011_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_cpu_max_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_011_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                 
+                    align_cpu_min_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 100:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_100_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_cpu_max_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_100_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                                     
+                    align_cpu_min_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 101:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_101_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_cpu_max_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_101_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                                     
+                    align_cpu_min_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 110:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_110_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_cpu_max_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_110_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                                     
+                    align_cpu_min_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 111:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_cpu_max_111_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_max_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_max_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_max_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_max_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_max_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_cpu_max_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_cpu_min_111_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_cpu_min_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_cpu_min_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_cpu_min_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_cpu_min_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_cpu_min_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_cpu_min_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
 
 def vectron_gpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params, bw_param_stat: Static[int], bw_stat: Static[int], mx_i_final: Static[int], min_check: Static[int]):
     if mx_i_final == 0:
@@ -332,9 +331,9 @@ def vectron_gpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_m
                 align_gpu_max_000_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_gpu_max_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_000_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
@@ -342,153 +341,153 @@ def vectron_gpu(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_m
                 align_gpu_min_000_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_gpu_min_000_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                
+                    align_gpu_min_000.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 1:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_001_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_gpu_max_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_001_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_001_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_001_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)         
+                    align_gpu_min_001.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 10:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_010_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                     
+                    align_gpu_max_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_010_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_010_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_010_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                             
+                    align_gpu_min_010.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 11:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_011_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_gpu_max_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_011_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_011_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_011_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                 
+                    align_gpu_min_011.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 100:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_100_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_gpu_max_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_100_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_100_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_100_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                                     
+                    align_gpu_min_100.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 101:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_101_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_gpu_max_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_101_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_101_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_101_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                                     
+                    align_gpu_min_101.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 110:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_110_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_gpu_max_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_110_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_110_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_110_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                                                     
+                    align_gpu_min_110.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
     if mx_i_final == 111:
         if min_check == 1:
             if bw_param_stat == 2:
                 align_gpu_max_111_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_max_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_max_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_max_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_max_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_max_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)                                         
+                    align_gpu_max_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
         else:
             if bw_param_stat == 2:
                 align_gpu_min_111_or.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 1:
-                align_gpu_min_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                align_gpu_min_111_and.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
             elif bw_param_stat == 0:
                 if bw_stat != 0:
-                    align_gpu_min_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)        
+                    align_gpu_min_111_one.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)
                 else:
-                    align_gpu_min_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params) 
+                    align_gpu_min_111.sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, inds_mx2, inds_mx3, checker_1, checker_2, checker_3, y_params_1, y_params_2, x_params_1, x_params_2, inds_ptr, inds_H_ptr, inds_V_ptr, first_list, second_list, third_list, mx1_names_final, mx2_names_final, mx3_names_final, hyper_params)

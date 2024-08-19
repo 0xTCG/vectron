@@ -43,21 +43,19 @@ set(VECTRON_FILES
     ir/vectron.h)
 add_library(vectron SHARED ${VECTRON_FILES})
 
-# Remove the find_package(LLVM REQUIRED CONFIG) line
-# Remove the add_definitions(${LLVM_DEFINITIONS_LIST}) line
-
-set(CODON_PATH "/codon/install_release")
-set(LLVM_CUSTOM_PATH "/llvm-project/llvm/build")  # Add this line
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CODON_PATH}/lib/codon/plugins/vectron" CACHE PATH "Use the existing Codon installation" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 # Include directories for your custom LLVM
-target_include_directories(vectron PRIVATE 
-    "${CODON_PATH}/include" 
-    "${LLVM_CUSTOM_PATH}/include")
+target_include_directories(vectron PRIVATE
+    "${CODON_PATH}/include"
+    "${LLVM_PATH}/include")
 
 # Link directories and libraries for your custom LLVM
-target_link_directories(vectron PRIVATE 
+target_link_directories(vectron PRIVATE
     "${CODON_PATH}/lib/codon"
-    "${LLVM_CUSTOM_PATH}/lib")  
+    "${LLVM_PATH}/lib")
 
 target_link_libraries(vectron PRIVATE codonrt codonc LLVMCore LLVMSupport LLVMTarget)
 
