@@ -98,4 +98,4 @@ Most importantly:
 
 ## Contact
 
-[Sourena Moghaddesi](@souren) ([souren at uvic dot ca](mailto:)) or [Ibrahim Numanagić](@inumanag) ([inumanag at uvic dot ca](mailto:)).
+[Sourena Moghaddesi](https://github.com/SourenM) ([souren at uvic dot ca](mailto:)) or [Ibrahim Numanagić](https://github.com/inumanag) ([inumanag at uvic dot ca](mailto:)).
