@@ -13,19 +13,19 @@ var_type = "i16"
 # as well for the evaluators to benchmark reproducibility. Simply comment the list comprehensions
 # existing in the function and paste the following matrix initialization procedure below:
 '''
-M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
-E = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
-F = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
-
-for i in range(len(t) + 1):
-    if i > 0:
-        M[i][0] = -4 + i * -2
-        E[i][0] = -4 + i * -2
-
-for j in range(len(q) + 1):
-    if j > 0:
-        M[0][j] = -4 + j * -2
-        F[0][j] = -4 + j * -2
+    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    E = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
+    F = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
+    
+    for i in range(len(t) + 1):
+        if i > 0:
+            M[i][0] = -4 + i * -2
+            E[i][0] = -4 + i * -2
+    
+    for j in range(len(q) + 1):
+        if j > 0:
+            M[0][j] = -4 + j * -2
+            F[0][j] = -4 + j * -2
 '''
 
 
