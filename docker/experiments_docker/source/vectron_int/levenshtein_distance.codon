@@ -11,7 +11,7 @@ from vectron.dispatcher import *
 # has been chosen as our method of choice. However the conventional method is also available in the following
 # string which can be used by commenting the existing list comprehension and pasting the following in its stead:
 '''
-    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
     for i in range(len(t) + 1):
         M[i][0] = i * 1
     for j in range(len(q) + 1):
