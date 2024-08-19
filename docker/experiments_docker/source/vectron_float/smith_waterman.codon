@@ -8,6 +8,28 @@ from vectron.dispatcher import *
 
 var_type = "f32"
 
+# Although any list initialization method would technically work for the initialization of the matrices
+# we found that list comprehensions are the fastest method available out there. Therefore this approach
+# has been chosen as our method of choice. However the conventional method is also available in the following
+# string which can be used by commenting the existing list comprehension and pasting the following in its stead:
+'''
+    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    E = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
+    F = [[-10000] * (len(q) + 1) for _ in range(len(t) + 1)]
+    for i in range(len(t) + 1):
+        if i > 0:
+            M[i][0] = -4 + i * -2
+            E[i][0] = -4 + i * -2
+    for j in range(len(q) + 1):
+        if j > 0:
+            M[0][j] = -4 + j * -2
+            F[0][j] = -4 + j * -2
+'''
+
+# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
+# function has been used instead of a ternary instruction
+
+
 #Can be used to determine a threshold for the returning score.
 @std.vectron.dispatcher.vectron_bypass
 def by_pass_foo(a, b, c):
