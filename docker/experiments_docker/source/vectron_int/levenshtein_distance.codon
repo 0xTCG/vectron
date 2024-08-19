@@ -34,8 +34,8 @@ def S(x, a, b, am, y):
 
 @std.vectron.dispatcher.vectron_calc
 def levenshtein(t, q):
-    #M = [[0 if (_ == 0 and __ == 0) else (_ * (1)) if (__ == 0 and _ > 0) else (__ * (1)) if (_ == 0 and __ > 0) else 0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]   
-    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    #M = [[0 if (i == 0 and j == 0) else (i * (1)) if (j == 0 and i > 0) else (j * (1)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]   
+    M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
     for i in range(len(t) + 1):
         M[i][0] = i * 1
     for j in range(len(q) + 1):
