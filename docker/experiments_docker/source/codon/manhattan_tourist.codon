@@ -6,8 +6,6 @@ import gpu
 import sys
 from vectron.dispatcher import *
 
-var_type = "i16"
-
 # In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
 # function has been used instead of a ternary instruction
 
