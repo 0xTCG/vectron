@@ -21,7 +21,7 @@ def hamming(t, q):
     print(M[-1][-1])
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_init
+@std.vectron.dispatcher.vectron_scheduler
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
