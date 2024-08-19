@@ -4,7 +4,7 @@
 Vectron is a compiler pass that automatically analyzes and vectorizes array or matrix-based dynamic programming (DP) kernels to maximize throughput over a large set of instances.
 Based on our experiments, it can improve the performance of DP algorithms up to 18 times.
 
-Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time Pythonic compilation framework. 
+Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time Pythonic compilation framework.
 
 ## Installation
 
@@ -31,21 +31,21 @@ If stuck, please see our [Dockerfile](docker/vectron/Dockerfile) for the exact b
 
 After building Vectron, use Vectron as follows:
 ```
-codon build -plugin vectron -release example.codon 
+codon build -plugin vectron -release example.codon
 ```
 
 Here is a typical use case:
 
 ```python
-from vectron.dispatch import *
+import vectron
 
 # Custom matching functions should be decorated with vectron_cmp
-@vectron_cmp
+@vectron.cmp
 def S(q, t, match, mismatch):
   return match if q == t else mismatch
 
 # Use vectron to annotate DP kernel
-@vectron
+@vectron.kernel
 def levenshtein(Q, T, gap, match, mismatch)
   # Initialization
   M = [[0] * (m + 1) for _ in range(n + 1)]
@@ -59,7 +59,7 @@ def levenshtein(Q, T, gap, match, mismatch)
     for j in range(1, m+1):
       M[i][j] = max(
         M[i - 1][j] + gap,
-        M[i][j - 1] + gap, 
+        M[i][j - 1] + gap,
         M[i-1][j-1] + S(q[j-1], t[i-1], match, mismatch)
       )
 
@@ -67,7 +67,7 @@ def levenshtein(Q, T, gap, match, mismatch)
   return M[n][m]
 
 # Use vectron_scheduler to annotate function that invokes the kernel on list of pairs
-@vectron_scheduler
+@vectron.scheduler
 def invoke(x, y):
     score = [[0 for i in range(len(y))] for j in range(len(x))]
     for i in range(len(x)):
@@ -81,7 +81,16 @@ print(invoke(targets, queries))
 ```
 
 ## Experiments
-The [experiment directory](docker/experiments_docker) contains few popular DP implementations such as banded Smith-Waterman, Needleman-Wunsch, Hamming Distance, Levenshtein Distance, Manhattan Tourist, Minimum Cost Path, and Longest Common Subsequence (in both integer and floating point versions). Alignment scores are calculated using sample string files `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. All DP algorithms perform an all-to-all pairing and comparison between them. 
+The [experiment directory](docker/experiments_docker) contains few popular DP implementations such as banded Smith-Waterman, Needleman-Wunsch, Hamming Distance, Levenshtein Distance, Manhattan Tourist, Minimum Cost Path, and Longest Common Subsequence (in both integer and floating point versions). Alignment scores are calculated using sample string files `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. All DP algorithms perform an all-to-all pairing and comparison between them.
+
+## Limitations
+
+The current version has some limitations that will be addressed soon.
+Most importantly:
+
+- The number of arguments in the min/max function is limited to three
+- List comprehensions in the initialization cannot have newlines
+- Vectron must be imported as `import vectron` (aliases won't work)
 
 ## License
 
