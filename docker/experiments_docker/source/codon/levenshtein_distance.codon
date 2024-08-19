@@ -6,33 +6,24 @@ import gpu
 import sys
 from vectron.dispatcher import *
 
+# Although any list initialization method would technically work for the initialization of the matrices
+# we found that list comprehensions are the fastest method available out there. Therefore this approach
+# has been chosen as our method of choice. However the conventional method is also available in the following
+# string which can be used by commenting the existing list comprehension and pasting the following in its stead:
+'''
+    M = [[0] * (len(q) + 1) for _ in range(len(t) + 1)]
+    for i in range(len(t) + 1):
+        M[i][0] = i * 1
+    for j in range(len(q) + 1):
+        M[0][j] = j * 1    
+'''
+
 var_type = "i16"
 
-@__attribute__
-def vectron_calc():
-    pass
-@__attribute__
-def vectron_init():    
-    pass
-@__attribute__
-def vectron_list():    
-    pass
-@__attribute__
-def vectron_bypass():
-    pass
-@__attribute__
-def vectron_max():
-    pass
-@__attribute__
-def vectron_match():
-    pass
+# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
+# function has been used instead of a ternary instruction
 
-@vectron_bypass
-def by_pass_foo(a, b, c):
-    return 0
-
-@vectron_match
-def match_func_foo(x, a, b, am, y):
+def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
         return am
     elif x == y:
@@ -40,38 +31,19 @@ def match_func_foo(x, a, b, am, y):
     else:
         return b
 
-@vectron_max
-def max_store_foo(lst, ind_row, ind_col, val_1, val_2):
-    lst[ind_row][ind_col] = max(val_1, val_2)
-    return lst[ind_row][ind_col]
+def levenshtein(t, q):
+    M = [[0 if (_ == 0 and __ == 0) else (_ * (1)) if (__ == 0 and _ > 0) else (__ * (1)) if (_ == 0 and __ > 0) else 0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]       
+    for i in range(1, len(q)):
+        for j in range(1, len(t)):       
+            M[i][j] = min(M[i - 1][j - 1] + S(q[i - 1], 0, 1, 1, t[j - 1]), M[i - 1][j] + 1, M[i][j - 1] + 1)
+    print(M[-1][-1])
+    return M[-1][-1]
 
-def max_val(a):
-    mx = 0
-    for i in range(len(a)):
-        for j in range(len(a[i])):
-            if mx < a[i][j]:
-                    mx = a[i][j]
-    return mx                
-
-@vectron_calc
-def orig_foo(h, m):
-    q = [[0 if (_ == 0 and __ == 0) else (_ * (1)) if (__ == 0 and _ > 0) else (__ * (1)) if (_ == 0 and __ > 0) else 0 for __ in range(len(m) + 1)] for _ in range(len(h) + 1)]   
-    for i in range(1, len(m) + 1):
-        for j in range(1, len(h) + 1):       
-            if j - i <= -1 or j - i >= 1:
-                    if j - i == -1 or j - i == 1:
-                        q[i][j] = -10000
-            else:
-                q[i][j] = max(q[i - 1][j - 1] + match_func_foo(m[i - 1], 0, 1, 1, h[j - 1]), q[i][j - 1] + 1, q[i - 1][j] + 1)
-    print(q[-1][-1])
-    return q[-1][-1]
-
-@vectron_init
 def prep_foo(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
         for j in range(len(y)):
-            score[i][j] = orig_foo(x[i], y[j])
+            score[i][j] = levenshtein(x[i], y[j])
     return score
 
 with open(sys.argv[-1], 'r') as file:
@@ -85,4 +57,3 @@ SEQ_NO_Q = len(seqs_y)
 
 with time.timing("Total: "):
     d = prep_foo(seqs_x, seqs_y)
-
