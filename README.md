@@ -1,4 +1,4 @@
-# Vectron
+# 💠 Vectron
 
 ## Introduction
 Vectron is a compiler pass that automatically analyzes and vectorizes array or matrix-based dynamic programming (DP) kernels to maximize throughput over a large set of instances.
