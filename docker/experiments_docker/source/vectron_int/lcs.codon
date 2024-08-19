@@ -8,7 +8,7 @@ from vectron.dispatcher import *
 
 var_type = "i16"
 
-@std.vectron.dispatcher._vectron
+@std.vectron.dispatcher.vectron_kernel
 def lcs(t, q):
     M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]
     for i in range(1, len(q) + 1):
