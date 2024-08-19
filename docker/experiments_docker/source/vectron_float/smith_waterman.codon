@@ -49,7 +49,7 @@ def max_s(lst, ind_row, ind_col, val_1, val_2):
     lst[ind_row][ind_col] = max(val_1, val_2)
     return lst[ind_row][ind_col]
 
-@std.vectron.dispatcher.vectron
+@std.vectron.dispatcher._vectron
 def gotoh(t, q):
     M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
     E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
