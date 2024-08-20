@@ -4,7 +4,7 @@ import vectron
 
 var_type = "i16"
 
-@vectron.cmp
+@std.vectron.dispatcher.cmp
 def S(x, a, b, am, y):
     """
     Due to ambiguous elements ('N'), a specialized match function has been used
@@ -17,7 +17,7 @@ def S(x, a, b, am, y):
     else:
         return b
 
-@vectron.kernel
+@std.vectron.dispatcher.kernel
 def min_cost_path(h, m):
     q = [[0 if (i == 0 and j == 0) else (1 + i * (2)) if (j == 0 and i > 0) else (1 + j * (3)) if (i == 0 and j > 0) else 0 for j in range(len(m) + 1)] for i in range(len(h) + 1)]
     for i in range(1, len(m) + 1):
@@ -28,7 +28,7 @@ def min_cost_path(h, m):
     print(q[-1][-1])
     return q[-1][-1]
 
-@vectron.scheduler
+@std.vectron.dispatcher.scheduler
 def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
