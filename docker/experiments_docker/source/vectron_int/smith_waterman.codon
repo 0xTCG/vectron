@@ -9,7 +9,7 @@ var_type = "i16"
 def by_pass_foo(a, b, c):
     return 0
 
-@std.vectron.dispatcher.cmp
+@std.vectron.dispatcher.vectron_cmp
 def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
         return am
@@ -18,7 +18,7 @@ def S(x, a, b, am, y):
     else:
         return b
 
-@std.vectron.dispatcher.max
+@std.vectron.dispatcher.vectron_max
 def max_s(lst, ind_row, ind_col, val_1, val_2):
     lst[ind_row][ind_col] = max(val_1, val_2)
     return lst[ind_row][ind_col]
@@ -36,7 +36,7 @@ def max_s(lst, ind_row, ind_col, val_1, val_2):
 #         M[0][j] = -4 + j * -2
 #         F[0][j] = -4 + j * -2
 
-@std.vectron.dispatcher.kernel
+@std.vectron.dispatcher.vectron_kernel
 def gotoh(t, q):
     M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
     E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
@@ -55,7 +55,7 @@ def gotoh(t, q):
     print(M[-1][-1])
     return M[-1][-1]
 
-@std.vectron.dispatcher.scheduler
+@std.vectron.dispatcher.vectron_scheduler
 def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
