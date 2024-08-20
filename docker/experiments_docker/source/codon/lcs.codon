@@ -1,6 +1,5 @@
 import time
 import sys
-import vectron
 
 def lcs(t, q):
     M = [[0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
