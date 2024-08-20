@@ -1,6 +1,6 @@
 import time
 import sys
-from vectron.dipatcher import *
+from vectron.dispatcher import *
 
 # Setting this to "f32" turns on the GPU support.
 var_type = "f32"
