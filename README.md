@@ -20,7 +20,7 @@ Then, build vectron as follows:
 cmake -S vectron -B vectron/build -G Ninja \
       -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang \
       -DCODON_PATH=<path to Codon>
-      -DLLVM_CUSTOM_PATH=<path to Codon LLVM>
+      -DLLVM_PATH=<path to Codon LLVM>
 cmake --build vectron/build
 cmake --install vectron/build
 ```
