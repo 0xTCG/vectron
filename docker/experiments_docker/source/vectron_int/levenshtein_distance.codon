@@ -4,7 +4,7 @@ from vectron.dispatcher import *
 
 var_type = "i16"
 
-@std.vectron.dispatcher.vectron_cmp
+@vectron_cmp
 def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":  # N is special case
         return am
@@ -14,8 +14,8 @@ def S(x, a, b, am, y):
         return b
 
 # List comprehensions are bit faster than explicit for loops for initialization.
-@std.vectron.dispatcher.vectron_kernel
-def levenshtein(t, q):    
+@vectron_kernel
+def levenshtein(t, q):
     M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
     for i in range(len(t) + 1):
         M[i][0] = i * 1
@@ -24,12 +24,12 @@ def levenshtein(t, q):
     for i in range(1, len(q)):
         for j in range(1, len(t)):
             M[i][j] = min(M[i - 1][j - 1] + S(q[i - 1], 0, 1, 1, t[j - 1]),
-                        M[i - 1][j] + 1, 
+                        M[i - 1][j] + 1,
                         M[i][j - 1] + 1)
     print(M[-1][-1])
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_scheduler
+@vectron_scheduler
 def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):

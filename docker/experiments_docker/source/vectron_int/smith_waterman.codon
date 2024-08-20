@@ -5,11 +5,11 @@ from vectron.dispatcher import *
 var_type = "i16"
 
 #Can be used to determine a threshold for the returning score.
-@std.vectron.dispatcher.vectron_bypass
+@vectron_bypass
 def by_pass_foo(a, b, c):
     return 0
 
-@std.vectron.dispatcher.vectron_cmp
+@vectron_cmp
 def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
         return am
@@ -18,7 +18,7 @@ def S(x, a, b, am, y):
     else:
         return b
 
-@std.vectron.dispatcher.vectron_max
+@vectron_max
 def max_s(lst, ind_row, ind_col, val_1, val_2):
     lst[ind_row][ind_col] = max(val_1, val_2)
     return lst[ind_row][ind_col]
@@ -36,7 +36,7 @@ def max_s(lst, ind_row, ind_col, val_1, val_2):
 #         M[0][j] = -4 + j * -2
 #         F[0][j] = -4 + j * -2
 
-@std.vectron.dispatcher.vectron_kernel
+@vectron_kernel
 def gotoh(t, q):
     M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
     E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
@@ -49,13 +49,13 @@ def gotoh(t, q):
                         F[i][j] = -10000
                         E[i][j] = -10000
             else:
-                M[i][j] = max(M[i - 1][j - 1] + S(t[i - 1], 2, -4, -3, q[j - 1]), 
+                M[i][j] = max(M[i - 1][j - 1] + S(t[i - 1], 2, -4, -3, q[j - 1]),
                             max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6),
                             max_s(F, i, j, F[i][j - 1] - 2, M[i][j - 1] - 6))
     print(M[-1][-1])
     return M[-1][-1]
 
-@std.vectron.dispatcher.vectron_scheduler
+@vectron_scheduler
 def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):

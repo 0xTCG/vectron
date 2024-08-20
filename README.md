@@ -37,10 +37,10 @@ codon build -plugin vectron -release example.codon
 Here is a typical use case:
 
 ```python
-import vectron
+from vectron.dispatch import *
 
 # Use vectron to annotate DP kernel
-@vectron.kernel
+@vectron_kernel
 def levenshtein(Q, T):
   M = [[0] * (len(Q) + 1) for _ in range(len(T) + 1)]
   for i in range(len(T) + 1):
@@ -61,7 +61,7 @@ def levenshtein(Q, T):
   return M[-1][-1]
 
 # Use vectron_scheduler to annotate function that invokes the kernel on list of pairs
-@vectron.scheduler
+@vectron_scheduler
 def invoke(x, y):
     score = [[0 for i in range(len(y))] for j in range(len(x))]
     for i in range(len(x)):
@@ -71,7 +71,7 @@ def invoke(x, y):
 
 targets = [...]  # list of strings
 queries = [...]
-print(invoke(targets, queries))
+invoke(targets, queries)
 ```
 
 ## Experiments
