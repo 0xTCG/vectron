@@ -121,6 +121,8 @@ void ListInitializer::transform(CallInstr *v) {
 
     // Close the Python script file
     python_script.close();
+    for (int i = 0; i < extracted_lines.size(); i ++)
+        std::cout << extracted_lines[i] << std::endl;
     if (extracted_lines.size() < 1 || extracted_lines.size() > 3) {
         std::cerr << "Error: Extracted lines count should be between 1 to 3 " << extracted_lines.size() << std::endl;
         return;
