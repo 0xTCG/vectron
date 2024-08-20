@@ -22,11 +22,9 @@ def nw(h, m):
     q = [[0 if (i == 0 and j == 0) else (i * (-4)) if (j == 0 and i > 0) else (j * (-4)) if (i == 0 and j > 0) else 0 for j in range(len(m) + 1)] for i in range(len(h) + 1)]
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):
-            q[i][j] = max(
-                q[i - 1][j - 1] + M(m[i - 1], 2, -4, -3, h[j - 1]),
-                q[i - 1][j] - 4,
-                q[i][j - 1] - 4
-            )
+            q[i][j] = max(q[i - 1][j - 1] + M(m[i - 1], 2, -4, -3, h[j - 1]),
+                        q[i - 1][j] - 4, 
+                        q[i][j - 1] - 4)
     print(q[-1][-1])
     return q[-1][-1]
 

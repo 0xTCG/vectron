@@ -1,35 +1,5 @@
-from experimental.simd import *
-
 import time
-import os
-import gpu
 import sys
-from vectron.dispatcher import *
-
-# Although any list initialization method would technically work for the initialization of the matrices
-# we found that list comprehensions are the fastest method available out there. Therefore this approach
-# has been chosen as our method of choice. However the conventional method is also available in the following
-# string which can be used by commenting the existing list comprehension and pasting the following in its stead:
-'''
-    M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
-    E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
-    F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
-    for i in range(len(t) + 1):
-        if i > 0:
-            M[i][0] = -4 + i * -2
-            E[i][0] = -4 + i * -2
-    for j in range(len(q) + 1):
-        if j > 0:
-            M[0][j] = -4 + j * -2
-            F[0][j] = -4 + j * -2
-'''
-
-# In this DP problem, since the matching comparisons are a bit more complicated (due to ambiguous elements i.e. 'N'), a match
-# function has been used instead of a ternary instruction
-
-#Can be used to determine a threshold for the returning score.
-def by_pass_foo(a, b, c):
-    return 0
 
 def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
@@ -43,21 +13,23 @@ def max_s(lst, ind_row, ind_col, val_1, val_2):
     lst[ind_row][ind_col] = max(val_1, val_2)
     return lst[ind_row][ind_col]
 
+# Alternative initialization for kernel matrices (instead of list comprehensions):
+# M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
+# E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
+# F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
+# for i in range(len(t) + 1):
+#     if i > 0:
+#         M[i][0] = -4 + i * -2
+#         E[i][0] = -4 + i * -2
+# for j in range(len(q) + 1):
+#     if j > 0:
+#         M[0][j] = -4 + j * -2
+#         F[0][j] = -4 + j * -2
+
 def gotoh(t, q):
-    #M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
-    #E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
-    #F = [[-10000 if (i == 0 and j == 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
-    M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
-    E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
-    F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
-    for i in range(len(t) + 1):
-        if i > 0:
-            M[i][0] = -4 + i * -2
-            E[i][0] = -4 + i * -2
-    for j in range(len(q) + 1):
-        if j > 0:
-            M[0][j] = -4 + j * -2
-            F[0][j] = -4 + j * -2
+    M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    F = [[-10000 if (i == 0 and j == 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
     for i in range(1, len(q) + 1):
         for j in range(1, len(t) + 1):
             if j - i <= -105 or j - i >= 105:
@@ -66,11 +38,13 @@ def gotoh(t, q):
                         F[i][j] = -10000
                         E[i][j] = -10000
             else:
-                M[i][j] = max(M[i - 1][j - 1] + S(q[i - 1], 2, -4, -3, t[j - 1]), max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6), max_s(F, i, j, F[i][j - 1] - 2, M[i][j - 1] - 6))
+                M[i][j] = max(M[i - 1][j - 1] + S(t[i - 1], 2, -4, -3, q[j - 1]), 
+                            max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6),
+                            max_s(F, i, j, F[i][j - 1] - 2, M[i][j - 1] - 6))
     print(M[-1][-1])
     return M[-1][-1]
 
-def prep_foo(x, y):
+def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
         for j in range(len(y)):
@@ -87,4 +61,4 @@ SEQ_NO_T = len(seqs_x)
 SEQ_NO_Q = len(seqs_y)
 
 with time.timing("Total: "):
-    d = prep_foo(seqs_x, seqs_y)
+    d = invoke(seqs_x, seqs_y)
