@@ -84,7 +84,7 @@ Most importantly:
 
 - The number of arguments in the min/max function is limited to three
 - List comprehensions in the initialization cannot have newlines
-- Vectron must be imported as `import vectron` (aliases won't work)
+- Vectron must be imported as `from vectron.dispatch import *` (aliases won't work)
 
 ## License
 
