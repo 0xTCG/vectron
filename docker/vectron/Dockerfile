@@ -124,6 +124,8 @@ EXPOSE 8888
 #Install tabulate
 RUN pip3 install tabulate
 
+COPY simd.codon /codon/install_release/lib/codon/stdlib/experimental/
+
 # Copy the local Jupyter notebook file into the container
 COPY benchmarks.ipynb /root/
 
