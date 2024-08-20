@@ -39,32 +39,26 @@ Here is a typical use case:
 ```python
 import vectron
 
-# Custom matching functions should be decorated with vectron_cmp
-@vectron.cmp
-def S(q, t, match, mismatch):
-  return match if q == t else mismatch
-
 # Use vectron to annotate DP kernel
 @vectron.kernel
-def levenshtein(Q, T, gap, match, mismatch)
-  # Initialization
-  M = [[0] * (m + 1) for _ in range(n + 1)]
-  for i in range(n + 1):
-    M[i][0] = gap_o + i * gap_e
-  for j in range(m + 1):
-    M[0][j] = gap_o + j * gap_e
+def levenshtein(Q, T):
+  M = [[0] * (len(Q) + 1) for _ in range(len(T) + 1)]
+  for i in range(len(T) + 1):
+    M[i][0] = -2 + i * -4
+  for j in range(len(Q) + 1):
+    M[0][j] = -2 + j * -4
 
   # Kernel
-  for i in range(1, n+1):
-    for j in range(1, m+1):
+  for i in range(1, len(T)+1):
+    for j in range(1, len(Q)+1):
       M[i][j] = max(
-        M[i - 1][j] + gap,
-        M[i][j - 1] + gap,
-        M[i-1][j-1] + S(q[j-1], t[i-1], match, mismatch)
+        M[i - 1][j] - 2,
+        M[i][j - 1] - 2,
+        M[i-1][j-1] + (2 if q[j-1] == t[i-1] else -3)
       )
 
   # Aggregation
-  return M[n][m]
+  return M[-1][-1]
 
 # Use vectron_scheduler to annotate function that invokes the kernel on list of pairs
 @vectron.scheduler
