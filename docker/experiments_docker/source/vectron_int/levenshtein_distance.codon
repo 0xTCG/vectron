@@ -1,6 +1,6 @@
 import time
 import sys
-from vectron.dipatcher import *
+from vectron.dispatcher import *
 
 var_type = "i16"
 
