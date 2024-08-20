@@ -43,7 +43,7 @@ void byPass::transform(ReturnInstr *v) {
                 // Extract the substring starting from the first non-space character
                 std::string trimmed_line = line.substr(first_non_space_index);
                 // Check for function decorator
-                if (trimmed_line.find("@vectron.kernel") != std::string::npos) {
+                if (trimmed_line.find("@std.vectron.dispatcher.kernel") != std::string::npos) {
                     in_function = true;
                     in_vectron_calc = true;
                     continue;
