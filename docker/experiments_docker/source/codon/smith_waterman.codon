@@ -1,6 +1,5 @@
 import time
 import sys
-import vectron
 
 def S(x, a, b, am, y):
     if str(x) == "N" or str(y) == "N":
