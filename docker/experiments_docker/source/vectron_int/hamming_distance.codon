@@ -4,7 +4,7 @@ from vectron.dispatcher import *
 
 var_type = "i16"
 
-@std.vectron.dispatcher.kernel
+@std.vectron.dispatcher.vectron_kernel
 def hamming(t, q):
     M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]
     for i in range(1, len(q) + 1):
@@ -20,7 +20,7 @@ def hamming(t, q):
     print(M[-1][-1])
     return M[-1][-1]
 
-@std.vectron.dispatcher.scheduler
+@std.vectron.dispatcher.vectron_scheduler
 def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
