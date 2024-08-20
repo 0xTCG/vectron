@@ -5,7 +5,7 @@ from vectron.dispatcher import *
 var_type = "i16"
 
 #Can be used to determine a threshold for the returning score.
-@vectron.bypass
+@std.vectron.dispatcher.vectron_bypass
 def by_pass_foo(a, b, c):
     return 0
 
