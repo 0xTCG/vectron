@@ -8,27 +8,27 @@
 #include "codon/parser/peg/peg.h"
 #include <iostream>
 #include <fstream>
-#include <unordered_map>
+#include <unordered_map> 
 
 namespace vectron {
-    extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes;
+    extern std::unordered_map<std::string, std::map<std::string, std::string>> globalAttributes; 
     using namespace codon::ir;
 
 
-    void FuncReplacement::transform(CallInstr *v) {
-        auto *M = v->getModule();
+    void FuncReplacement::transform(CallInstr *v) {      
+        auto *M = v->getModule(); 
         auto *orig = util::getFunc(v->getCallee());
-        auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.scheduler");
+        auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.vectron_scheduler");
         if (!att_att)
-            return;
+            return;   
         else{
             int checker_1 = 0;
             int checker_2 = 0;
-            int checker_3 = 0;
+            int checker_3 = 0;     
             std::string mx_1_checker = "0";
             std::string mx_2_checker = "0";
-            std::string mx_3_checker = "0";
-            auto bypass_attr = globalAttributes["bypass"];
+            std::string mx_3_checker = "0";       
+            auto bypass_attr = globalAttributes["bypass"];                                                       
             std::string code = "";
             auto params_attr = globalAttributes["params"];
             std::map<std::string, std::string> arg1_attr;
@@ -40,78 +40,78 @@ namespace vectron {
             auto arg1_finder = globalAttributes.find("arg1");
             if (arg1_finder != globalAttributes.end()) {
                 checker_1 = 1;
-                arg1_attr = globalAttributes["arg1"];
-            }
+                arg1_attr = globalAttributes["arg1"];  
+            }                
             auto arg2_finder = globalAttributes.find("arg2");
             if (arg2_finder != globalAttributes.end()) {
                 checker_2 = 1;
-                arg2_attr = globalAttributes["arg2"];
+                arg2_attr = globalAttributes["arg2"];  
             }
             auto arg3_finder = globalAttributes.find("arg3");
             if (arg3_finder != globalAttributes.end()) {
                 checker_3 = 1;
-                arg3_attr = globalAttributes["arg3"];
+                arg3_attr = globalAttributes["arg3"];  
             }
             auto mx1_finder = globalAttributes.find("mx1");
             if (mx1_finder != globalAttributes.end()) {
                 mx_1_checker = "1";
                 mx1_attr = globalAttributes["mx1"];
-            }
+            }            
             auto mx2_finder = globalAttributes.find("mx2");
             if (mx2_finder != globalAttributes.end()) {
                 mx_2_checker = "1";
                 mx2_attr = globalAttributes["mx2"];
-            }
+            }    
             auto mx3_finder = globalAttributes.find("mx3");
             if (mx3_finder != globalAttributes.end()) {
                 mx_3_checker = "1";
                 mx3_attr = globalAttributes["mx3"];
-            }
+            }    
             int lst1[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> lst1_arr;
+            std::vector<Value*> lst1_arr;        
             int lst2[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> lst2_arr;
+            std::vector<Value*> lst2_arr;  
             int lst3[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> lst3_arr;
+            std::vector<Value*> lst3_arr;        
             std::string lst1_name = "";
             std::string lst2_name = "";
             std::string lst3_name = "";
             std::string lst1_eq = "";
             std::string lst2_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";
-            std::string lst3_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";
+            std::string lst3_eq = "[[0 for _ in range(SIZE + 1)] for __ in range(SIZE + 1)]";            
             auto lst1_finder = globalAttributes.find("lst_1");
             if (lst1_finder != globalAttributes.end()) {
-                auto lst_1 = globalAttributes["lst_1"];
+                auto lst_1 = globalAttributes["lst_1"]; 
                 lst1_name = lst_1["part_0"];
-                lst1_eq = lst_1["part_1"];
+                lst1_eq = lst_1["part_1"];                 
             }
             auto lst2_finder = globalAttributes.find("lst_2");
             if (lst2_finder != globalAttributes.end()) {
-                auto lst_2 = globalAttributes["lst_2"];
+                auto lst_2 = globalAttributes["lst_2"]; 
                 lst2_name = lst_2["part_0"];
-                lst2_eq = lst_2["part_1"];
+                lst2_eq = lst_2["part_1"];             
             }
             auto lst3_finder = globalAttributes.find("lst_3");
             if (lst3_finder != globalAttributes.end()) {
-                auto lst_3 = globalAttributes["lst_3"];
+                auto lst_3 = globalAttributes["lst_3"]; 
                 lst3_name = lst_3["part_0"];
-                lst3_eq = lst_3["part_1"];
-            }
+                lst3_eq = lst_3["part_1"]; 
+            }   
             auto _init = globalAttributes.find("merged");
             std::string rest_init = "";
             if(_init != globalAttributes.end()){
                 auto rest = globalAttributes["merged"];
                 rest_init = rest["rest"];
-            }
-            auto var_value = globalAttributes["var"];
-
-            auto lst_2 = globalAttributes["lst_2"];
-            auto lst_3 = globalAttributes["lst_3"];
-            auto prep = globalAttributes["prep"];
+            }                                
+            auto var_value = globalAttributes["var"];                                                       
+                                                   
+            auto lst_2 = globalAttributes["lst_2"];                                                       
+            auto lst_3 = globalAttributes["lst_3"]; 
+            auto prep = globalAttributes["prep"];  
             int bw_temp[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
             auto bw_finder = globalAttributes.find("bw");
-            if (bw_finder != globalAttributes.end()) {
-                auto bw_mat = globalAttributes["bw"];
+            if (bw_finder != globalAttributes.end()) {            
+                auto bw_mat = globalAttributes["bw"];  
                 bw_temp[0] = std::stoi(bw_mat["bw_00"]);
                 bw_temp[1] = std::stoi(bw_mat["bw_01"]);
                 bw_temp[2] = std::stoi(bw_mat["bw_02"]);
@@ -120,16 +120,16 @@ namespace vectron {
                 bw_temp[5] = std::stoi(bw_mat["bw_05"]);
                 bw_temp[6] = std::stoi(bw_mat["bw_06"]);
                 bw_temp[7] = std::stoi(bw_mat["bw_07"]);
-                bw_temp[8] = std::stoi(bw_mat["bw_08"]);
+                bw_temp[8] = std::stoi(bw_mat["bw_08"]);                
             }
-
-            std::vector<Value*> bw_arr;
+        
+            std::vector<Value*> bw_arr;  
             int bw = 0;
             int bw_param = bw_temp[0];
             for(int i = 0; i < 9; i++){
                 bw += bw_temp[i];
-            }
-            std::string var_type = var_value["Value"];
+            }            
+            std::string var_type = var_value["Value"];     
             std::basic_string min_check = "";
             //std::string params = "";
             std::string temp_reader = "";
@@ -179,7 +179,7 @@ namespace vectron {
             std::string first_param = "";
             std::string second_param = "";
             std::string third_param = "";
-            std::string left_param = "";
+            std::string left_param = "";      
             if(params_test[11] == "-1"){
                 third_param = "0";
                 first_param = params_test[24].substr(0, params_test[24].find('.'));
@@ -195,7 +195,7 @@ namespace vectron {
                 third_param = params_test[32].substr(0, params_test[32].find('.'));
                 left_param = params_test[33].substr(0, params_test[33].find('.'));
                 for(int i = 0; i < 30; i++){
-                if(i == 16){
+                if(i == 16){            
                     if(params_test[i].length() > 2){
                     temp_reader = params_test[i][0];
                     if(temp_reader == "-"){
@@ -208,7 +208,7 @@ namespace vectron {
                         if(temp_reader == "-"){
                         temp_reader += params_test[i][6];
                         }
-                        array_ind_1[2] = std::stoi(temp_reader);
+                        array_ind_1[2] = std::stoi(temp_reader);                
                     }
                     else{
                         array_ind_1[0] = std::stoi(temp_reader);
@@ -218,7 +218,7 @@ namespace vectron {
                         if(temp_reader == "-"){
                         temp_reader += params_test[i][5];
                         }
-                        array_ind_1[2] = std::stoi(temp_reader);
+                        array_ind_1[2] = std::stoi(temp_reader);                                
                     }
 
                     }
@@ -239,7 +239,7 @@ namespace vectron {
                         if(temp_reader == "-"){
                         temp_reader += params_test[i][6];
                         }
-                        array_ind_2[2] = std::stoi(temp_reader);
+                        array_ind_2[2] = std::stoi(temp_reader);                
                     }
                     else{
                         array_ind_2[0] = std::stoi(temp_reader);
@@ -249,13 +249,13 @@ namespace vectron {
                         if(temp_reader == "-"){
                         temp_reader += params_test[i][5];
                         }
-                        array_ind_2[2] = std::stoi(temp_reader);
+                        array_ind_2[2] = std::stoi(temp_reader);                                
                     }
                     }
                     else{
                     params[i] = std::stoi(params_test[i]);
-                    }
-                }
+                    }            
+                }   
                 if(i == 28){
                     if(params_test[i].length() > 3){
                     temp_reader = params_test[i][0];
@@ -269,7 +269,7 @@ namespace vectron {
                         if(temp_reader == "-"){
                         temp_reader += params_test[i][6];
                         }
-                        array_ind_3[2] = std::stoi(temp_reader);
+                        array_ind_3[2] = std::stoi(temp_reader);                
                     }
                     else{
                         array_ind_3[0] = std::stoi(temp_reader);
@@ -279,20 +279,20 @@ namespace vectron {
                         if(temp_reader == "-"){
                         temp_reader += params_test[i][5];
                         }
-                        array_ind_3[2] = std::stoi(temp_reader);
+                        array_ind_3[2] = std::stoi(temp_reader);                                
                     }
                     }
                     else{
                     params[i] = std::stoi(params_test[i]);
-                    }
+                    }            
                 }
-                if(i != 16 && i != 22 && i != 28){
+                if(i != 16 && i != 22 && i != 28){                 
                     params[i] = std::stoi(params_test[i]);
                 }
-                }
+                }        
 
             }
-            int hyper_p[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+            int hyper_p[8] = {0, 0, 0, 0, 0, 0, 0, 0};            
             hyper_p[0] = std::stoi(prep["prep_00"]);
             hyper_p[1] = std::stoi(prep["prep_01"]);
             hyper_p[2] = std::stoi(prep["prep_02"]);
@@ -301,97 +301,97 @@ namespace vectron {
             hyper_p[5] = std::stoi(prep["prep_05"]);
             hyper_p[6] = std::stoi(prep["prep_06"]);
             hyper_p[7] = std::stoi(prep["prep_07"]);
-            std::vector<Value*> hyper_params_arr;
+            std::vector<Value*> hyper_params_arr;    
             for(int i = 0; i < 8; i++){
                 hyper_params_arr.push_back(M->getInt(hyper_p[i]));
             }
-            Value *hyper_params_ptr = util::makeTuple(hyper_params_arr, M);
+            Value *hyper_params_ptr = util::makeTuple(hyper_params_arr, M);       
 
-            std::vector<Value*> arr_params_arr1;
+            std::vector<Value*> arr_params_arr1;    
             for(int i = 0; i < 4; i++){
                 arr_params_arr1.push_back(M->getInt(array_ind_1[i]));
             }
-            Value *arr1_params_ptr = util::makeTuple(arr_params_arr1, M);
+            Value *arr1_params_ptr = util::makeTuple(arr_params_arr1, M);       
 
-            std::vector<Value*> arr_params_arr2;
+            std::vector<Value*> arr_params_arr2;    
             for(int i = 0; i < 4; i++){
                 arr_params_arr2.push_back(M->getInt(array_ind_2[i]));
             }
-            Value *arr2_params_ptr = util::makeTuple(arr_params_arr2, M);
+            Value *arr2_params_ptr = util::makeTuple(arr_params_arr2, M); 
 
-            std::vector<Value*> arr_params_arr3;
+            std::vector<Value*> arr_params_arr3;    
             for(int i = 0; i < 4; i++){
                 arr_params_arr3.push_back(M->getInt(array_ind_3[i]));
             }
-            Value *arr3_params_ptr = util::makeTuple(arr_params_arr3, M);
+            Value *arr3_params_ptr = util::makeTuple(arr_params_arr3, M);                                       
 
-            std::vector<types::Type*> types_arr;
+            std::vector<types::Type*> types_arr;    
             for(int i = 0; i < 30; i++){
                 types_arr.push_back(M->getIntType());
             }
             types::Type *typ_ptr30 = M->getTupleType(types_arr);
 
-            std::vector<types::Type*> types_arr_int3;
+            std::vector<types::Type*> types_arr_int3;  
             for(int i = 0; i < 3; i++){
                 types_arr_int3.push_back(M->getIntType());
             }
             types::Type *typ_ptr_int3 = M->getTupleType(types_arr_int3);
 
-            std::vector<types::Type*> types_arr_int4;
+            std::vector<types::Type*> types_arr_int4;  
             for(int i = 0; i < 4; i++){
                 types_arr_int4.push_back(M->getIntType());
             }
-            types::Type *typ_ptr_int4 = M->getTupleType(types_arr_int4);
+            types::Type *typ_ptr_int4 = M->getTupleType(types_arr_int4); 
 
-            std::vector<types::Type*> types_arr6;
+            std::vector<types::Type*> types_arr6;  
             for(int i = 0; i < 6; i++){
                 types_arr6.push_back(M->getIntType());
             }
             types::Type *typ_ptr6 = M->getTupleType(types_arr6);
 
-            std::vector<types::Type*> types_arr8;
+            std::vector<types::Type*> types_arr8;  
             for(int i = 0; i < 8; i++){
                 types_arr8.push_back(M->getIntType());
             }
-            types::Type *typ_ptr8 = M->getTupleType(types_arr8);
+            types::Type *typ_ptr8 = M->getTupleType(types_arr8);            
 
-            std::vector<types::Type*> types_arr9;
+            std::vector<types::Type*> types_arr9;  
             for(int i = 0; i < 9; i++){
                 types_arr9.push_back(M->getIntType());
             }
             types::Type *typ_ptr9 = M->getTupleType(types_arr9);
+            
 
-
-            std::vector<types::Type*> types_arr10;
+            std::vector<types::Type*> types_arr10;  
             for(int i = 0; i < 10; i++){
                 types_arr10.push_back(M->getStringType());
             }
-            types::Type *typ_ptr10 = M->getTupleType(types_arr10);
+            types::Type *typ_ptr10 = M->getTupleType(types_arr10);    
 
-            std::vector<types::Type*> types_arr_int10;
+            std::vector<types::Type*> types_arr_int10;  
             for(int i = 0; i < 10; i++){
                 types_arr_int10.push_back(M->getIntType());
             }
-            types::Type *typ_ptr_int10 = M->getTupleType(types_arr_int10);
+            types::Type *typ_ptr_int10 = M->getTupleType(types_arr_int10);          
 
-            std::vector<types::Type*> types_arr3;
+            std::vector<types::Type*> types_arr3;  
             for(int i = 0; i < 3; i++){
                 types_arr3.push_back(M->getStringType());
             }
             types::Type *typ_ptr3 = M->getTupleType(types_arr3);
 
-            std::vector<Value*> params_arr;
+            std::vector<Value*> params_arr;    
             for(int i = 0; i < 30; i++){
                 params_arr.push_back(M->getInt(params[i]));
             }
-            Value *params_ptr = util::makeTuple(params_arr, M);
+            Value *params_ptr = util::makeTuple(params_arr, M);      
 
             int args1_test[6] = {0, 0, 0, 0, 0, -1};
-            std::vector<Value*> arg1_arr;
+            std::vector<Value*> arg1_arr;    
             int args2_test[6] = {0, 0, 0, 0, 0, -1};
-            std::vector<Value*> arg2_arr;
+            std::vector<Value*> arg2_arr;    
             int args3_test[6] = {0, 0, 0, 0, 0, -1};
-            std::vector<Value*> arg3_arr;
+            std::vector<Value*> arg3_arr;        
             if(checker_1 == 1){
                 args1_test[0] = std::stoi(arg1_attr["arg1_00"]);
                 args1_test[1] = std::stoi(arg1_attr["arg1_01"]);
@@ -426,9 +426,9 @@ namespace vectron {
                 arg2_arr.push_back(M->getInt(args2_test[i]));
                 arg3_arr.push_back(M->getInt(args3_test[i]));
             }
-            Value *args1_ptr = util::makeTuple(arg1_arr, M);
-            Value *args2_ptr = util::makeTuple(arg2_arr, M);
-            Value *args3_ptr = util::makeTuple(arg3_arr, M);
+            Value *args1_ptr = util::makeTuple(arg1_arr, M);    
+            Value *args2_ptr = util::makeTuple(arg2_arr, M);    
+            Value *args3_ptr = util::makeTuple(arg3_arr, M);    
             //for(int i = 0; i < 10; i++){
             //    lst1_arr.push_back(M->getInt(lst1[i]));
             //    lst2_arr.push_back(M->getInt(lst2[i]));
@@ -439,7 +439,7 @@ namespace vectron {
             auto *lst3_ptr = M->getString(lst3_eq);
             auto *lst1_name_ptr = M->getString(lst1_name);
             auto *lst2_name_ptr = M->getString(lst2_name);
-            auto *lst3_name_ptr = M->getString(lst3_name);
+            auto *lst3_name_ptr = M->getString(lst3_name);          
             int byPass = -1;
             std::string byPass_mat = "";
             byPass = stoi(bypass_attr["Value"]);
@@ -450,9 +450,9 @@ namespace vectron {
             auto *args_1 = v->front();
             auto *args_2 = v->back();
             static int64_t bw_param_stat = bw_param;
-            static int64_t bw_stat = bw;
+            static int64_t bw_stat = bw;                         
             int t1_l = 0;
-            int t2_l = 0;
+            int t2_l = 0;     
             int t3_l = 0;
             int t4_l = 0;
             int t1_r = 0;
@@ -462,7 +462,7 @@ namespace vectron {
             int y_params_1 = 0;
             int y_params_2 = 0;
             int x_params_1 = 0;
-            int x_params_2 = 0;
+            int x_params_2 = 0;      
             if(bw != 0){
                 if(bw_temp[2] == -2 || bw_temp[2] == 2){
                     t1_l = bw_temp[2];
@@ -500,31 +500,31 @@ namespace vectron {
                 y_params_1 = (bw_temp[2] - t2_l) + (bw_temp[3] - t4_l);
                 y_params_2 = (bw_temp[6] - t2_r) + (bw_temp[7] - t4_r);
                 x_params_1 = (bw_temp[2] - t1_l) + (bw_temp[3] - t3_l);
-                x_params_2 = (bw_temp[6] - t1_r) + (bw_temp[7] - t3_r);
+                x_params_2 = (bw_temp[6] - t1_r) + (bw_temp[7] - t3_r);           
             }
             auto *y_params_1_ptr = M->getInt(y_params_1);
             auto *y_params_2_ptr = M->getInt(y_params_2);
             auto *x_params_1_ptr = M->getInt(x_params_1);
             auto *x_params_2_ptr = M->getInt(x_params_2);
-
+        
             for(int i = 0; i < 9; i++){
                 bw_arr.push_back(M->getInt(bw_temp[i]));
             }
-            Value *bw_ptr = util::makeTuple(bw_arr, M);
+            Value *bw_ptr = util::makeTuple(bw_arr, M); 
 
             std::string mx_1_array_str[3] = {"0", "0", "0"};
-            std::vector<Value*> mx1_arr_str;
+            std::vector<Value*> mx1_arr_str;  
             std::string mx_2_array_str[3] = {"0", "0", "0"};
-            std::vector<Value*> mx2_arr_str;
+            std::vector<Value*> mx2_arr_str;        
             std::string mx_3_array_str[3] = {"0", "0", "0"};
             std::vector<Value*> mx3_arr_str;
 
             int mx_1_array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> mx1_arr;
+            std::vector<Value*> mx1_arr;  
             int mx_2_array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> mx2_arr;
+            std::vector<Value*> mx2_arr;  
             int mx_3_array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-            std::vector<Value*> mx3_arr;
+            std::vector<Value*> mx3_arr;                
 
             if(mx_1_checker == "1"){
                 mx_1_array_str[0] = mx1_attr["mx1_00"].substr(0, mx1_attr["mx1_00"].find('.'));
@@ -537,7 +537,7 @@ namespace vectron {
                 mx_1_array[4] = std::stoi(mx1_attr["mx1_06"]);
                 mx_1_array[5] = std::stoi(mx1_attr["mx1_08"]);
                 mx_1_array[6] = std::stoi(mx1_attr["mx1_09"]);
-                mx_1_array[7] = std::stoi(mx1_attr["mx1_10"]);
+                mx_1_array[7] = std::stoi(mx1_attr["mx1_10"]);                                                                                     
             }
 
             if(mx_2_checker == "1"){
@@ -551,7 +551,7 @@ namespace vectron {
                 mx_2_array[4] = std::stoi(mx2_attr["mx2_06"]);
                 mx_2_array[5] = std::stoi(mx2_attr["mx2_08"]);
                 mx_2_array[6] = std::stoi(mx2_attr["mx2_09"]);
-                mx_2_array[7] = std::stoi(mx2_attr["mx2_10"]);
+                mx_2_array[7] = std::stoi(mx2_attr["mx2_10"]);                                                                                     
             }
 
             if(mx_3_checker == "1"){
@@ -565,7 +565,7 @@ namespace vectron {
                 mx_3_array[4] = std::stoi(mx3_attr["mx3_06"]);
                 mx_3_array[5] = std::stoi(mx3_attr["mx3_08"]);
                 mx_3_array[6] = std::stoi(mx3_attr["mx3_09"]);
-                mx_3_array[7] = std::stoi(mx3_attr["mx3_10"]);
+                mx_3_array[7] = std::stoi(mx3_attr["mx3_10"]);                                                                                     
             }
 
 
@@ -574,22 +574,22 @@ namespace vectron {
                 mx2_arr.push_back(M->getInt(mx_2_array[i]));
                 mx3_arr.push_back(M->getInt(mx_3_array[i]));
             }
-            Value *mx1_ptr = util::makeTuple(mx1_arr, M);
-            Value *mx2_ptr = util::makeTuple(mx2_arr, M);
-            Value *mx3_ptr = util::makeTuple(mx3_arr, M);
+            Value *mx1_ptr = util::makeTuple(mx1_arr, M);    
+            Value *mx2_ptr = util::makeTuple(mx2_arr, M);    
+            Value *mx3_ptr = util::makeTuple(mx3_arr, M);        
 
             for(int i = 0; i < 3; i++){
                 mx1_arr_str.push_back(M->getString(mx_1_array_str[i]));
                 mx2_arr_str.push_back(M->getString(mx_2_array_str[i]));
                 mx3_arr_str.push_back(M->getString(mx_3_array_str[i]));
             }
-            Value *mx1_ptr_str = util::makeTuple(mx1_arr_str, M);
-            Value *mx2_ptr_str = util::makeTuple(mx2_arr_str, M);
-            Value *mx3_ptr_str = util::makeTuple(mx3_arr_str, M);
-
+            Value *mx1_ptr_str = util::makeTuple(mx1_arr_str, M);    
+            Value *mx2_ptr_str = util::makeTuple(mx2_arr_str, M);    
+            Value *mx3_ptr_str = util::makeTuple(mx3_arr_str, M);    
+            
             int mx1_names_final[3] = {-1, -1, -1};
             int mx2_names_final[3] = {-1, -1, -1};
-            int mx3_names_final[3] = {-1, -1, -1};
+            int mx3_names_final[3] = {-1, -1, -1};       
 
             int inds[8] = {0, 0, 0, 0, 0, 0, 0, 0};
             int inds_H[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -613,7 +613,7 @@ namespace vectron {
                 inds_H[4] = lst2[6];
                 inds_H[5] = lst2[7];
                 inds_H[6] = lst2[8];
-                inds_H[7] = lst2[9];
+                inds_H[7] = lst2[9];          
                 inds_V[0] = 3;
                 inds_V[1] = 3;
                 inds_V[2] = lst3[4];
@@ -621,7 +621,7 @@ namespace vectron {
                 inds_V[4] = lst3[6];
                 inds_V[5] = lst3[7];
                 inds_V[6] = lst3[8];
-                inds_V[7] = lst3[9];
+                inds_V[7] = lst3[9];                    
                 if(first_param == lst1_name){
                     first_list = 0;
                 }
@@ -653,7 +653,7 @@ namespace vectron {
                         second_list = -1;
                     }
                     }
-                }
+                }      
                 if(third_param == lst1_name){
                     third_list = 0;
                 }
@@ -774,7 +774,7 @@ namespace vectron {
                     }
                     }
 
-                }
+                }          
                 if(mx_3_checker != "0"){
                     if(mx_3_array_str[0] == lst1_name){
                     mx3_names_final[0] = 0;
@@ -828,9 +828,9 @@ namespace vectron {
 
                 }
 
-            }
+            }             
             else{
-                if(left_param == lst2_name){
+                if(left_param == lst2_name){  
                 inds[0] = 2;
                 inds[1] = 2;
                 inds[2] = lst2[4];
@@ -846,7 +846,7 @@ namespace vectron {
                 inds_H[4] = lst1[6];
                 inds_H[5] = lst1[7];
                 inds_H[6] = lst1[8];
-                inds_H[7] = lst1[9];
+                inds_H[7] = lst1[9];          
                 inds_V[0] = 3;
                 inds_V[1] = 3;
                 inds_V[2] = lst3[4];
@@ -854,7 +854,7 @@ namespace vectron {
                 inds_V[4] = lst3[6];
                 inds_V[5] = lst3[7];
                 inds_V[6] = lst3[8];
-                inds_V[7] = lst3[9];
+                inds_V[7] = lst3[9];            
                 if(first_param == lst1_name){
                     first_list = 1;
                 }
@@ -886,7 +886,7 @@ namespace vectron {
                         second_list = -1;
                     }
                     }
-                }
+                }      
                 if(third_param == lst1_name){
                     third_list = 1;
                 }
@@ -1007,7 +1007,7 @@ namespace vectron {
                     }
                     }
 
-                }
+                }          
                 if(mx_3_checker != "0"){
                     if(mx_3_array_str[0] == lst1_name){
                     mx3_names_final[0] = 1;
@@ -1059,7 +1059,7 @@ namespace vectron {
                     }
                     }
 
-                }
+                }                
                 }
                 else{
                 inds[0] = 3;
@@ -1077,7 +1077,7 @@ namespace vectron {
                 inds_H[4] = lst2[6];
                 inds_H[5] = lst2[7];
                 inds_H[6] = lst2[8];
-                inds_H[7] = lst2[9];
+                inds_H[7] = lst2[9];          
                 inds_V[0] = 1;
                 inds_V[1] = 1;
                 inds_V[2] = lst1[4];
@@ -1085,7 +1085,7 @@ namespace vectron {
                 inds_V[4] = lst1[6];
                 inds_V[5] = lst1[7];
                 inds_V[6] = lst1[8];
-                inds_V[7] = lst1[9];
+                inds_V[7] = lst1[9];            
                 if(first_param == lst1_name){
                     first_list = 2;
                 }
@@ -1117,7 +1117,7 @@ namespace vectron {
                         second_list = -1;
                     }
                     }
-                }
+                }      
                 if(third_param == lst1_name){
                     third_list = 2;
                 }
@@ -1238,7 +1238,7 @@ namespace vectron {
                     }
                     }
 
-                }
+                }          
                 if(mx_3_checker != "0"){
                     if(mx_3_array_str[0] == lst1_name){
                     mx3_names_final[0] = 2;
@@ -1290,38 +1290,38 @@ namespace vectron {
                     }
                     }
 
-                }
-                }
+                }     
+                }     
             }
             auto *first_list_ptr = M->getInt(first_list);
             auto *second_list_ptr = M->getInt(second_list);
             auto *third_list_ptr = M->getInt(third_list);
-            std::vector<Value*> inds_arr;
-            std::vector<Value*> inds_H_arr;
-            std::vector<Value*> inds_V_arr;
+            std::vector<Value*> inds_arr;  
+            std::vector<Value*> inds_H_arr;  
+            std::vector<Value*> inds_V_arr;                    
             for(int i = 0; i < 8; i++){
                 inds_arr.push_back(M->getInt(inds[i]));
                 inds_H_arr.push_back(M->getInt(inds_H[i]));
                 inds_V_arr.push_back(M->getInt(inds_V[i]));
             }
-            Value *inds_ptr = util::makeTuple(inds_arr, M);
-            Value *inds_H_ptr = util::makeTuple(inds_H_arr, M);
-            Value *inds_V_ptr = util::makeTuple(inds_V_arr, M);
+            Value *inds_ptr = util::makeTuple(inds_arr, M);    
+            Value *inds_H_ptr = util::makeTuple(inds_H_arr, M);    
+            Value *inds_V_ptr = util::makeTuple(inds_V_arr, M);        
 
-            std::vector<Value*> mx1_names_arr;
-            std::vector<Value*> mx2_names_arr;
-            std::vector<Value*> mx3_names_arr;
+            std::vector<Value*> mx1_names_arr;  
+            std::vector<Value*> mx2_names_arr;  
+            std::vector<Value*> mx3_names_arr;              
             for(int i = 0; i < 3; i++){
                 mx1_names_arr.push_back(M->getInt(mx1_names_final[i]));
                 mx2_names_arr.push_back(M->getInt(mx2_names_final[i]));
                 mx3_names_arr.push_back(M->getInt(mx3_names_final[i]));
             }
-            Value *mx1_names_ptr = util::makeTuple(mx1_names_arr, M);
-            Value *mx2_names_ptr = util::makeTuple(mx2_names_arr, M);
-            Value *mx3_names_ptr = util::makeTuple(mx3_names_arr, M);
+            Value *mx1_names_ptr = util::makeTuple(mx1_names_arr, M);    
+            Value *mx2_names_ptr = util::makeTuple(mx2_names_arr, M);    
+            Value *mx3_names_ptr = util::makeTuple(mx3_names_arr, M);          
 
             std::string mx_final = mx_1_checker + mx_2_checker + mx_3_checker;
-            int mx_final_i = stoi(mx_final);
+            int mx_final_i = stoi(mx_final);    
             static int64_t mx_i = mx_final_i;
             std::string name = "";
             if (var_type == "\"i16\"")
@@ -1338,37 +1338,37 @@ namespace vectron {
                     break;
                 case 1:
                     name += "_001";
-                    break;
+                    break;                        
                 case 10:
                     name += "_010";
-                    break;
+                    break;                        
                 case 11:
                     name += "_011";
-                    break;
+                    break;                        
                 case 100:
                     name += "_100";
-                    break;
+                    break;                        
                 case 101:
                     name += "_101";
-                    break;
+                    break;                        
                 case 110:
                     name += "_110";
-                    break;
+                    break;                        
                 case 111:
-                    name += "_111";
-                    break;
+                    name += "_111";                                                                                                                                                
+                    break;                        
             }
             if(bw != 0){
                 switch(bw_param){
                 case 2:
                     name += "_or";
-                    break;
+                    break;                        
                 case 1:
                     name += "_and";
-                    break;
+                    break;                        
                 case 0:
                     name += "_one";
-                    break;
+                    break;                        
                 }
             }
             name += ".codon";
@@ -1403,18 +1403,18 @@ namespace vectron {
                     if (line.find("    H_nv = ") == 0 && !found_h) {
                         init_lines.push_back("    H_nv = " + lst2_eq);
                         found_h = true;
-                    }
-                    else{
+                    } 
+                    else{   
                         if (line.find("    V_nv = ") == 0 && !found_v) {
                             init_lines.push_back("    V_nv = " + lst3_eq);
                             found_v = true;
-                        }
-                        else{
+                        } 
+                        else{  
                             if (line.find("            scores[i] = ") == 0) {
                                 init_lines.push_back("            scores[i] = " + byPass_mat);
-                            }
-                            else{
-
+                            }                                 
+                            else{                                                                               
+        
                                 init_lines.push_back(line);
                             }
                         }
@@ -1447,28 +1447,28 @@ namespace vectron {
                     lines.push_back(line);
                 }
             }
-
+            
 
             std::ofstream fileOut(name);
 
 
             for (const auto& l : lines) {
                 fileOut << l << "\n";
-            }
-            fileOut.close();
+            }                
+            fileOut.close();  
 
-            if (var_type == "\"i16\""){
+            if (var_type == "\"i16\""){             
                 auto *sumOne = M->getOrRealizeFunc("vectron_cpu", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8}, {bw_param_stat, bw_stat, mx_i, min_check_int}, "std.vectron.dispatcher");
-                auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});
-                v->replaceAll(sumOneCall);
+                auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});                        
+                v->replaceAll(sumOneCall);                                                    
             }
-            else{
+            else{    
                 auto *sumOne = M->getOrRealizeFunc("vectron_gpu", {args_1->getType(), args_2->getType(), M->getIntType(), typ_ptr30, typ_ptr6, typ_ptr6, typ_ptr6, typ_ptr9, typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr8, typ_ptr8, typ_ptr8, M->getIntType(), M->getIntType(), M->getIntType(), typ_ptr_int3, typ_ptr_int3, typ_ptr_int3, typ_ptr8}, {bw_param_stat, bw_stat, mx_i, min_check_int}, "std.vectron.dispatcher");
-                auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});
-                v->replaceAll(sumOneCall);
-            }
+                auto *sumOneCall = util::call(sumOne, {args_1, args_2, byPass_ptr, params_ptr, args1_ptr, args2_ptr, args3_ptr, bw_ptr, mx1_ptr, mx2_ptr, mx3_ptr, checker_1_ptr, checker_2_ptr, checker_3_ptr, y_params_1_ptr, y_params_2_ptr, x_params_1_ptr, x_params_2_ptr, inds_ptr, inds_H_ptr, inds_V_ptr, first_list_ptr, second_list_ptr, third_list_ptr, mx1_names_ptr, mx2_names_ptr, mx3_names_ptr, hyper_params_ptr});                        
+                v->replaceAll(sumOneCall);                                  
+            }                                           
 
-
+        
         }
 
     }
