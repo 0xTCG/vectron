@@ -4,7 +4,7 @@ import vectron
 
 var_type = "i16"
 
-@vectron.kernel
+@std.vectron.dispatcher.kernel
 def lcs(t, q):
     M = [[0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
     for i in range(1, len(q) + 1):
@@ -14,7 +14,7 @@ def lcs(t, q):
                         M[i][j - 1])
     return M[-1][-1]
 
-@vectron.scheduler
+@std.vectron.dispatcher.scheduler
 def invoke(x, y):
     score = [[0 for _ in range(len(y))] for __ in range(len(x))]
     for i in range(len(x)):
