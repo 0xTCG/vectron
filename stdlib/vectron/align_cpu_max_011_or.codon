@@ -135,9 +135,10 @@ def sumOne(s_x, s_y, byPass, params, args1, args2, args3, bw_params, inds_mx1, i
     major_inner_inst = hyper_params[7]
     major_params_1 = s_x[major_outer_start: len(s_x) + major_outer_inst: major_outer_step]
     major_params_2 = s_y[major_inner_start: len(s_y) + major_inner_inst: major_inner_step]
-    matrices_nv = [[0 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else 0 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
-    H_nv = [[-10000 if (_ == 0 and __ == 0) else (-4 + _ * (-2)) if (__ == 0 and _ > 0) else -10000 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
-    V_nv = [[-10000 if (_ == 0 and __ == 0) else (-4 + __ * (-2)) if (_ == 0 and __ > 0) else -10000 for __ in range(SIZE + 1)] for _ in range(SIZE + 1)]
+    matrices_nv = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(SIZE + 1)] for i in range(SIZE + 1)]
+    H_nv = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(SIZE + 1)] for i in range(SIZE + 1)]
+    V_nv = [[-10000 if (i == 0 and j == 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else -10000 for j in range(SIZE + 1)] for i in range(SIZE + 1)]
+
     if hyper_params[2] == -2:
         major_params_1 = s_y[major_outer_start: len(s_y) + major_outer_inst: major_outer_step]
     if hyper_params[6] == -1:
