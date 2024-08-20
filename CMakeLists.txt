@@ -43,10 +43,6 @@ set(VECTRON_FILES
     ir/vectron.h)
 add_library(vectron SHARED ${VECTRON_FILES})
 
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "${CODON_PATH}/lib/codon/plugins/vectron" CACHE PATH "Use the existing Codon installation" FORCE)
-endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-
 # Include directories for your custom LLVM
 target_include_directories(vectron PRIVATE
     "${CODON_PATH}/include"
@@ -59,6 +55,12 @@ target_link_directories(vectron PRIVATE
 
 target_link_libraries(vectron PRIVATE codonrt codonc LLVMCore LLVMSupport LLVMTarget)
 
-install(TARGETS vectron DESTINATION build)
-install(FILES plugin.toml DESTINATION .)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/stdlib DESTINATION .)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CODON_PATH}/lib/codon" CACHE PATH "Use the existing Codon installation" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
+install(TARGETS vectron DESTINATION plugins/vectron/build)
+install(FILES plugin.toml DESTINATION plugins/vectron)
+install(FILES stdlib/experimental/simd.codon DESTINATION stdlib/experimental)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/stdlib DESTINATION plugins/vectron)
+

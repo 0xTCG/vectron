@@ -64,7 +64,7 @@ void ListInitializer::transform(CallInstr *v) {
 
   auto *M = v->getModule();
   auto *orig = util::getFunc(v->getCallee());
-  auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.kernel");
+  auto att_att = util::hasAttribute(orig, "std.vectron.dispatcher.vectron_kernel");
   if (!att_att)
     return;
 
@@ -90,7 +90,7 @@ void ListInitializer::transform(CallInstr *v) {
       // Extract the substring starting from the first non-space character
       std::string trimmed_line = line.substr(first_non_space_index);
       // Check for function decorator
-      if (trimmed_line.find("@vectron.kernel") != std::string::npos) {
+      if (trimmed_line.find("@vectron_kernel") != std::string::npos) {
         in_function = true;
         in_vectron_calc = true;
         continue;
@@ -121,6 +121,8 @@ void ListInitializer::transform(CallInstr *v) {
 
   // Close the Python script file
   python_script.close();
+  for (int i = 0; i < extracted_lines.size(); i++)
+    std::cout << extracted_lines[i] << std::endl;
   if (extracted_lines.size() < 1 || extracted_lines.size() > 3) {
     std::cerr << "Error: Extracted lines count should be between 1 to 3 "
               << extracted_lines.size() << std::endl;
