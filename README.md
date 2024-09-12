@@ -37,7 +37,11 @@ codon build -plugin vectron -release example.codon
 Here is a typical use case:
 
 ```python
-from vectron.dispatch import *
+import time
+import sys
+from vectron.dispatcher import *
+
+var_type = "i16"
 
 # Use vectron to annotate DP kernel
 @vectron_kernel
@@ -54,7 +58,7 @@ def levenshtein(Q, T):
       M[i][j] = max(
         M[i - 1][j] - 2,
         M[i][j - 1] - 2,
-        M[i-1][j-1] + (2 if q[j-1] == t[i-1] else -3)
+        M[i-1][j-1] + (2 if Q[j-1] == T[i-1] else -3)
       )
 
   # Aggregation
@@ -68,10 +72,17 @@ def invoke(x, y):
         for j in range(len(y)):
             score[i][j] = levenshtein(x[i], y[j])
     return score
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
 
-targets = [...]  # list of strings
-queries = [...]
-invoke(targets, queries)
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)
 ```
 
 ## Experiments
