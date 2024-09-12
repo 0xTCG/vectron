@@ -80,7 +80,6 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, i
     std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
     std::vector<dp_mat> matrices_left(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
     std::vector<dp_mat> matrices_top(QUANTITY, dp_mat(SIZE + 1, std::vector<int>(SIZE + 1)));
-    std::cout << "Before Align\n";
     auto const start_time = std::chrono::steady_clock::now();
     align(scores, matrices, matrices_left, matrices_top, sequences, QUANTITY);
     for (auto e : scores) {
@@ -117,9 +116,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::string> target_sequences = read_sequences_from_file(target_file);
     std::vector<std::string> query_sequences = read_sequences_from_file(query_file);
-    std::cout << "Quantity Before: " << QUANTITY << std::endl;
     QUANTITY = target_sequences.size();
-    std::cout << "Quantity After: " << QUANTITY << std::endl;
     if (target_sequences.size() != query_sequences.size()) {
         std::cerr << "Error: Number of target sequences does not match number of query sequences." << std::endl;
         std::cout << "Target Size: " << target_sequences.size() << ", Query Size: " << query_sequences.size() << "\n";
