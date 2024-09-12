@@ -84,6 +84,18 @@ SEQ_NO_Q = len(seqs_y)
 with time.timing("Total: "):
     d = invoke(seqs_x, seqs_y)
 ```
+- ```var_type```: determines the type of auto-vectorization, where i16 will invoke the CPU and f32 will invoke the GPU mode.
+- ```@vectron_kernel```: is the decorator for the main kernel of vectron. It has 3 parts:
+     - Initialization: Where you can initialize 1 to 3 matrices for the desired DP using for loops or list comprehensions
+     - Kernel: Where the main DP operation is done. The main available operations are a min or a max, with 2 or 3 arguments. Each argument can be a matrix element (+ or - a constant), a ternary instruction (a sample of which is provided above), or a call to a function decorated with ```@vectron_max```, which compares two input elements, returns their maximum and at the same time stores this maximum at a given destination.
+     - Aggregation: Where the final results are returned. This part can return a matrix element (or a math operation on a matrix element), or a call to a function decorated with ```@vectron_bypass``` which compares the matrix element to a fixed threshold and returns a default number (usually a large negative number) if the result is smaller than the threshold. (```@vectron_bypass``` is mostly used in genomic applications and is called ```zdrop```)
+- ```@vectron_scheduler``` which is used to handle and modify how the input sequences are paired and sent to the main kernel. In this function -- which basically loops over the target and then the query sequences -- the user can determine which target sequences gets paired up with which query sequences by modifying the nested loops' start, step and stop values.
+
+After using the above build command for the sample script, one can run the built script by passing the target and query sequences to it as ```sys.arg``` values. Here's a sample command:
+
+```
+./example ../data/seqx.txt ../data/seqy.txt
+```
 
 ## Experiments
 The [experiment directory](docker/experiments_docker) contains few popular DP implementations such as banded Smith-Waterman, Needleman-Wunsch, Hamming Distance, Levenshtein Distance, Manhattan Tourist, Minimum Cost Path, and Longest Common Subsequence (in both integer and floating point versions). Alignment scores are calculated using sample string files `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. All DP algorithms perform an all-to-all pairing and comparison between them.
