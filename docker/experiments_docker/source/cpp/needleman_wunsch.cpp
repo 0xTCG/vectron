@@ -71,7 +71,9 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, i
         std::cout << e << "\n";
     }
     auto const end_time = std::chrono::steady_clock::now();
-    std::cout << "Time: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() << std::endl;
+    std::cout << std::fixed << std::setprecision(2)
+              << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / 1e6
+              << std::endl;
 }
 
 std::vector<std::string> read_sequences_from_file(const std::string &filename) {
