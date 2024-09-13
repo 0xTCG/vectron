@@ -74,7 +74,9 @@ After building Vectron, use Vectron as follows:
 codon build -plugin vectron -release example.codon
 ```
 
-Here is a typical use case:
+Here are some typical use cases:
+
+### Levenshtein Distance
 
 ```python
 import time
@@ -131,7 +133,214 @@ with time.timing("Total: "):
      - Aggregation: Where the final results are returned. This part can return a matrix element (or a math operation on a matrix element), or a call to a function decorated with ```@vectron_bypass``` which compares the matrix element to a fixed threshold and returns a default number (usually a large negative number) if the result is smaller than the threshold. (```@vectron_bypass``` is mostly used in genomic applications and is called ```zdrop```)
 - ```@vectron_scheduler``` which is used to handle and modify how the input sequences are paired and sent to the main kernel. In this function -- which basically loops over the target and then the query sequences -- the user can determine which target sequences gets paired up with which query sequences by modifying the nested loops' start, step and stop values.
 
-After using the above build command for the sample script, one can run the built script by passing the target and query sequences to it as ```sys.arg``` values. These sequences do not need to be paired up in advance, as `@vectron_schudler` will do that. Here's a sample command:
+### Banded Hamming Distance
+
+```python
+import time
+import sys
+from vectron.dispatcher import *
+
+var_type = "i16"
+
+@vectron_kernel
+def hamming(t, q):
+    M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):
+            if j - i <= -1 or j - i >= 1:
+                if j - i == -1 or j - i == 1:
+                    M[i][j] = -10000
+            else:
+                M[i][j] = max(
+                    M[i - 1][j - 1] + (0 if q[i - 1] == t[j - 1] else 1),
+                    0, 0
+                )
+    print(M[-1][-1])
+    return M[-1][-1]
+
+@vectron_scheduler
+def invoke(x, y):
+    score = [[0 for _ in range(len(y))] for __ in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(y)):
+            score[i][j] = hamming(x[i], y[j])
+    return score
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)
+```
+This sample consists of an additional `if` block compared to the previous sample.
+
+- The `if` block can have one or two operands.
+     - The two operands can be connected via and `or` or an `and`
+     - Each operand consists of loops' indices on the left side (with `-` or `+` signs) an arithmetic operator in between (`>`, `<`, `==`, `!=`, `>=`, `<=`) and a constant on the right side.
+     - The above sample implements a banded implementation of the hamming distance algorithm that only fills in the diagonal of the resulting matrix.
+ 
+### Manhattan Tourist
+
+```python
+import time
+import sys
+from vectron.dispatcher import *
+
+var_type = "i16"
+
+@vectron_cmp
+def S(x, a, b, am, y):
+    """
+    Due to ambiguous elements ('N'), a specialized match function has been used
+    instead of a ternary operator, hence the "@vectron.cmp" decorator.
+    """
+    if str(x) == "N" or str(y) == "N":
+        return am
+    elif x == y:
+        return a
+    else:
+        return b
+
+@vectron_kernel
+def manhattan(t, q):
+    M = [[0 for i in range(len(q) + 1)] for j in range(len(t) + 1)]
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):
+            M[i][j] = max(
+                M[i][j - 1] + S(q[i - 1], 4, 1, 0, t[j - 1]),
+                0,
+                M[i - 1][j] + S(q[i - 1], 5, 3, 1, t[j - 1])
+            )
+    print(M[-1][-1])
+    return M[-1][-1]
+
+@vectron_scheduler
+def invoke(x, y):
+    score = [[0 for _ in range(len(y))] for __ in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(y)):
+            score[i][j] = manhattan(x[i], y[j])
+    return score
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)
+```
+
+This sample implements the Manhattan Tourist DP algorithm and has the `@vectron_cmp` decorated function in addition to the previous samples.
+
+- The `@vectron_cmp` function has the following signature: ```python S(x, a, b, am, y)``` where `x` and `y` are two sequence elements, `a` is the matching reward, `b` is the mismatching penalty, and `am` is the ambiguous score (in case either `x` or `y` are equal to `N`).
+
+### Banded Gotoh Smith-Waterman with Bypass
+
+```python
+import time
+import sys
+from vectron.dispatcher import *
+
+var_type = "i16"
+
+@vectron_bypass
+def bypass(a, b, c):
+    return 0
+
+@vectron_cmp
+def S(x, a, b, am, y):
+    if str(x) == "N" or str(y) == "N":
+        return am
+    elif x == y:
+        return a
+    else:
+        return b
+
+@vectron_max
+def max_s(lst, ind_row, ind_col, val_1, val_2):
+    lst[ind_row][ind_col] = max(val_1, val_2)
+    return lst[ind_row][ind_col]
+
+def max_val(a):
+    mx = 0
+    for i in range(len(a)):
+        for j in range(len(a[i])):
+            if mx < a[i][j]:
+                    mx = a[i][j]
+    return mx  
+
+# Alternative initialization for kernel matrices (instead of list comprehensions):
+# M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
+# E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
+# F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
+# for i in range(len(t) + 1):
+#     if i > 0:
+#         M[i][0] = -4 + i * -2
+#         E[i][0] = -4 + i * -2
+# for j in range(len(q) + 1):
+#     if j > 0:
+#         M[0][j] = -4 + j * -2
+#         F[0][j] = -4 + j * -2
+
+@vectron_kernel
+def gotoh(t, q):
+    M = [[0 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else 0 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    E = [[-10000 if (i == 0 and j == 0) else (-4 + i * (-2)) if (j == 0 and i > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    F = [[-10000 if (i == 0 and j == 0) else (-4 + j * (-2)) if (i == 0 and j > 0) else -10000 for j in range(len(q) + 1)] for i in range(len(t) + 1)]
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):
+            if j - i <= -105 or j - i >= 105:
+                    if j - i == -105 or j - i == 105:
+                        M[i][j] = -10000
+                        F[i][j] = -10000
+                        E[i][j] = -10000
+            else:
+                M[i][j] = max(M[i - 1][j - 1] + S(t[i - 1], 2, -4, -3, q[j - 1]),
+                            max_s(E, i, j, E[i - 1][j] - 2, M[i - 1][j] - 6),
+                            max_s(F, i, j, F[i][j - 1] - 2, M[i][j - 1] - 6))
+    print(bypass(M[-1][-1], max_val(M), 800))
+    return bypass(M[-1][-1], max_val(M), 800)
+
+@vectron_scheduler
+def invoke(x, y):
+    score = [[0 for _ in range(len(y))] for __ in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(y)):
+            score[i][j] = gotoh(x[i], y[j])
+    return score
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)
+```
+
+The banded Smith-Waterman with Gotoh scoring is the most sophisticated implementation in Vectron. It consists of 3 matrices, the use of `@vectron_max` and the use of `@vectron_bypass`.
+
+- The `@vectron_max`function signature is as follows: ```python max_s(lst, ind_row, ind_col, val_1, val_2)``` where it receives a destination matrix pointer (`lst`), an index for its row value (`ind_row`), and index for its column value `ind_col`, and two values for comparison (`val_1` and `val_2`). These two values can be constants or matrix elements `+` or `-` a constant. The function compares the two values and stores the maximum in the pointer's specified location. It also returns this maximum value to the kernel.
+- The `@vectron_bypass` function is used mostly in genomics. Its main job is to filter out values that are more than a user-specified distance away from the maximum value in the scoring matrix. With the help of the `max_val` function that returns the maximum value of a given matrix, the `@vectron_bypass` function compares each score (`a` in the function signature) with the maximum value in the result matrix (`b` in the function signature) and determines if the distance between these two is greater than a user-specified value (`c` in the function signature). If `True` this function will return a large negative number, and if `False` the same score will be returned.
+
+### Running the Samples with Input Sequences
+
+After using the above build command for the any of the sample scripts, one can run the built script by passing the target and query sequences to it as ```sys.arg``` values. These sequences do not need to be paired up in advance, as `@vectron_schudler` will do that. Here's a sample command to run the built script with input sequences `seqx.txt` and `seqy.txt`:
 
 ```
 ./example ../data/seqx.txt ../data/seqy.txt
