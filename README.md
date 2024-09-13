@@ -6,6 +6,41 @@ Based on our experiments, it can improve the performance of DP algorithms up to 
 
 Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time Pythonic compilation framework.
 
+## Beneath the Hood
+
+Vectron starts by analyzing all functions with decorators starting with the `@vectron` decorator that contain a single instance DP kernel (this kernel function is decorated with ‘@vectron_kernel’). For each such kernel, Vectron generates a new procedure that takes a list of instances as input and performs a set of specific operations in parallel on these instances.
+
+Kernel analysis begins by dividing the kernel function into four major blocks.
+The first block — **initialization block** — deals with the creation and initialization of a DP matrix. Vectron considers anything before the main set of `for` loops as a part of the initialization block.
+The second block — **loop block** — is the core part of a DP method responsible for populating the DP matrix. It consists of a series of nested `for` loops and a DP recurrence. DP recurrence is considered as a **recurrence block**. Vectron assumes that everything within the innermost `for` loop is a recurrence block.
+Finally, the **aggregation block** aggregates and returns the final result from the calculated matrix. Vectron treats anything after the iteration block as the aggregation block.
+
+### Recurrence analysis
+
+The main Vectron analysis pass consists of identifying and analyzing the iteration and recurrence blocks within a DP kernel. 
+The pass begins by detecting a block of the nested for loops within the function. Once found, Vectron identifies the iteration behavior by extracting `start`, `step`, and `stop` bounds of each loop. 
+Typically, `stop` is a constant or the length of an instance (e.g., string) plus or minus a constant, while the `start` and `step` values are constants.
+However, Vectron supports more complex custom ranges within the innermost loop. One example of this is the banded Smith-Waterman algorithm that only populates `M` within a diagonal band of a certain, user-defined length. 
+
+Once the loop range values have been identified, the pass moves on to the recurrence within the innermost `for` loop. There, it analyzes the recurrence expression and replaces it with the vectorized equivalent; in the case of SIMD, Vectron uses the `Vec` type and the associated SIMD intrinsics from Codon's SIMD library. 
+
+A recurrence expression is any expression that minimizes or maximizes something via `min` or `max` operator. 
+This expression is itself composed of various subexpressions that are typically arguments to the `min`/`max` operators.
+Vectron vectorizes these subexpressions that are either (1) constants, (2) arithmetic operations on top of a previously calculated DP matrix value, (3) `max` operators + ‘store’ (assignment) operator (by calling a function decorated with `@vectron_max`), (4) comparator function (which can be a ternary operator or a call to a comparator function decorated with `@vectron_cmp`), or (5) an arithmetic combination of previous expressions. 
+
+Upon analyzing the loop block, Vectron instantiates a separate loop block that iterates over a set of instances and auto-vectorizes the recurrence to perform each step in a data-parallel manner through either SIMD or SIMT (GPU) strategy. 
+
+
+### Initialization and aggregation
+
+Vectron treats any code before the main loops as the initialization block where the DP matrices are built. The user can build one to three different matrices in this block through conventional methods. Vectron will attempt to vectorize the initialization list comprehensions if possible; if not, it will build matrices as-is. Following the initialization, Vectron will identify the DP matrices and translate them to a semi-3D cache-friendly vectorized structure that will be used by the vectorized kernel. 
+
+The aggregation block typically contains a return statement that can be easily vectorized. In some instances, this block can contain a more complex set of statements or call a special `aggregation` function (decorated with `@vectron_bypass`, which performs additional operations on top of the final matrix score (e.g., `z-drop` score processing implemented by many Smith-Waterman methods). Aggregation functions are also vectorized whenever possible.
+
+### Scheduling
+
+Finally, Vectron integrates previous steps into a scheduler function that processes sequence pairs and dispatches them to the vectorized kernel (decorated with `@vectron_scheduler`). Currently, Vectron's scheduler groups together pairs into blocks that are all to be executed in a data-parallel fashion. Typically, the scheduler groups `n` pairs into `n/v` blocks, where `v` is the maximum parallel throughput (e.g., `v` is 16 for 256-bit AVX2 vectors that contain packed 16-bit integer values). Each block will form a 3D structure that will be handled by the vectorized kernel.
+
 ## Installation
 
 Before building and using Vectron, please ensure that you have the following prerequisites:
