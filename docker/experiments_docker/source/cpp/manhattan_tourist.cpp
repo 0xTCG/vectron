@@ -11,7 +11,7 @@ int QUANTITY = 0;
  
 using dp_mat = std::vector<std::vector<int16_t>>;
 
-void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
+void align(std::vector<int16_t> &scores, dp_mat &matrix,
            std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     auto const mismatch = 3;
     auto const match = 5;
@@ -22,7 +22,7 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
         int16_t max_value = 0;
         for (int16_t i = 1; i < SIZE + 1; ++i) {
             for (int16_t j = 1; j < SIZE + 1; ++j) {
-                int16_t diagonal_value = matrices[t][i - 1][j - 1];
+                int16_t diagonal_value = matrix[i - 1][j - 1];
                 int16_t m_value_row = 0;
                 if (sequences[t].first[i - 1] == 'N' || sequences[t].second[j - 1] == 'N') {
                     m_value_row += ambig;
@@ -32,10 +32,10 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
 
                 int16_t m_value_col = 0;
                 m_value_col += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? match : mismatch);
-                int16_t top_value = matrices[t][i - 1][j] + m_value_row;
-                int16_t left_value = matrices[t][i][j - 1] + m_value_col;
+                int16_t top_value = matrix[i - 1][j] + m_value_row;
+                int16_t left_value = matrix[i][j - 1] + m_value_col;
                 target_value = std::max(top_value, left_value);
-                matrices[t][i][j] = target_value;
+                matrix[i][j] = target_value;
 
 
             }
@@ -46,10 +46,10 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
 
 void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     std::vector<int16_t> scores(QUANTITY);
-    std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int16_t>(SIZE + 1)));
+    dp_mat matrix(SIZE + 1, std::vector<int16_t>(SIZE + 1));
 
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, sequences, QUANTITY);
+    align(scores, matrix, sequences, QUANTITY);
     for (auto e : scores) {
         std::cout << e << "\n";
     }
