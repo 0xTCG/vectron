@@ -68,7 +68,7 @@ void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, i
     dp_mat matrix_left(SIZE + 1, std::vector<int>(SIZE + 1));
     dp_mat matrix_top(SIZE + 1, std::vector<int>(SIZE + 1));
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, matrices_left, matrices_top, sequences, QUANTITY);
+    align(scores, matrix, matrix_left, matrix_top, sequences, QUANTITY);
     for (auto e : scores) {
         std::cout << e << "\n";
     }
