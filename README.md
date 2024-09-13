@@ -8,7 +8,7 @@ Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time 
 
 ## Beneath the Hood
 
-Vectron starts by analyzing all functions with decorators starting with the `@vectron` decorator that contain a single instance DP kernel (this kernel function is decorated with ‘@vectron_kernel’). For each such kernel, Vectron generates a new procedure that takes a list of instances as input and performs a set of specific operations in parallel on these instances.
+Vectron starts by analyzing all functions with decorators starting with the `@vectron` decorator that contain a single instance DP kernel (this kernel function is decorated with `@vectron_kernel`). For each such kernel, Vectron generates a new procedure that takes a list of instances as input and performs a set of specific operations in parallel on these instances.
 
 Kernel analysis begins by dividing the kernel function into four major blocks.
 The first block — **initialization block** — deals with the creation and initialization of a DP matrix. Vectron considers anything before the main set of `for` loops as a part of the initialization block.
