@@ -11,7 +11,7 @@ int QUANTITY = 0;
  
 using dp_mat = std::vector<std::vector<int16_t>>;
 
-void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
+void align(std::vector<int16_t> &scores, dp_mat &matrix,
            std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     auto const gap_o = 0;
     auto const mismatch = 1;
@@ -20,28 +20,28 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
     auto const ambig = 1;
 
     for (int t = 0; t < QUANTITY; ++t) {
-        matrices[t][0][0] = 0;
+        matrix[0][0] = 0;
 
         for (int16_t i = 1; i < SIZE; ++i) {
-            matrices[t][0][i] = gap_o + gap_e * i;
-            matrices[t][i][0] = gap_o + gap_e * i;
+            matrix[0][i] = gap_o + gap_e * i;
+            matrix[i][0] = gap_o + gap_e * i;
         }
         int16_t target_value;
         int16_t max_value = 0;
         for (int16_t i = 1; i < SIZE; ++i) {
             for (int16_t j = 1; j < SIZE; ++j) {
 
-                int16_t diagonal_value = matrices[t][i - 1][j - 1];
+                int16_t diagonal_value = matrix[i - 1][j - 1];
                 if (sequences[t].first[i - 1] == 'N' || sequences[t].second[j - 1] == 'N') {
                     diagonal_value += ambig;
                 } else {
                     diagonal_value += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? match : mismatch);
                 }
-                int16_t top_value = matrices[t][i - 1][j] + 1;
-                int16_t left_value = matrices[t][i][j - 1] + 1;
+                int16_t top_value = matrix[i - 1][j] + 1;
+                int16_t left_value = matrix[i][j - 1] + 1;
                 int16_t temp = top_value - ((top_value - left_value) & ((top_value - left_value) >> (sizeof(int16_t) * 8 - 1)));
                 target_value = diagonal_value - ((diagonal_value - temp) & ((diagonal_value - temp) >> (sizeof(int16_t) * 8 - 1)));
-                matrices[t][i][j] = target_value;
+                matrix[i][j] = target_value;
 
 
             }
@@ -52,10 +52,10 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
 
 void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     std::vector<int16_t> scores(QUANTITY);
-    std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE, std::vector<int16_t>(SIZE)));
+    dp_mat matrix(SIZE, std::vector<int16_t>(SIZE));
 
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, sequences, QUANTITY);
+    align(scores, matrix, sequences, QUANTITY);
     for (auto e : scores) {
         std::cout << e << "\n";
     }
