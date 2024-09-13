@@ -126,7 +126,7 @@ with time.timing("Total: "):
      - Aggregation: Where the final results are returned. This part can return a matrix element (or a math operation on a matrix element), or a call to a function decorated with ```@vectron_bypass``` which compares the matrix element to a fixed threshold and returns a default number (usually a large negative number) if the result is smaller than the threshold. (```@vectron_bypass``` is mostly used in genomic applications and is called ```zdrop```)
 - ```@vectron_scheduler``` which is used to handle and modify how the input sequences are paired and sent to the main kernel. In this function -- which basically loops over the target and then the query sequences -- the user can determine which target sequences gets paired up with which query sequences by modifying the nested loops' start, step and stop values.
 
-After using the above build command for the sample script, one can run the built script by passing the target and query sequences to it as ```sys.arg``` values. Here's a sample command:
+After using the above build command for the sample script, one can run the built script by passing the target and query sequences to it as ```sys.arg``` values. These sequences do not need to be paired up in advance, as `@vectron_schudler` will do that. Here's a sample command:
 
 ```
 ./example ../data/seqx.txt ../data/seqy.txt
