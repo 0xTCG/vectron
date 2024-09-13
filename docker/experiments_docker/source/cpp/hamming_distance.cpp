@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -12,31 +11,31 @@ int QUANTITY = 0;
  
 using dp_mat = std::vector<std::vector<int16_t>>;
 
-void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
+void align(std::vector<int16_t> &scores, dp_mat &matrix,
            std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     auto const mismatch = 1;
     auto const match = 0;
     auto const ambig = 1;
 
     for (int t = 0; t < QUANTITY; ++t) {
-        matrices[t][0][0] = 0;
+        matrix[0][0] = 0;
         for (int16_t i = 1; i < SIZE + 1; ++i) {
-            matrices[t][0][i] = 0;
-            matrices[t][i][0] = 0;
+            matrix[0][i] = 0;
+            matrix[i][0] = 0;
         }
         int16_t target_value;
         int16_t diagonal_value = 0;
         for (int16_t i = 1; i < SIZE + 1; ++i) {
             for (int16_t j = 1; j < SIZE + 1; ++j) {
 
-                int16_t diagonal_value = matrices[t][i - 1][j - 1];
+                int16_t diagonal_value = matrix[i - 1][j - 1];
                 if (sequences[t].first[i - 1] == 'N' || sequences[t].second[j - 1] == 'N') {
                     diagonal_value += ambig;
                 } else {
                     diagonal_value += (sequences[t].first[i - 1] == sequences[t].second[j - 1] ? match : mismatch);
                 }
                 target_value = diagonal_value;
-                matrices[t][i][j] = diagonal_value;
+                matrix[i][j] = diagonal_value;
 
             }
         }
@@ -46,10 +45,10 @@ void align(std::vector<int16_t> &scores, std::vector<dp_mat> &matrices,
 
 void sw_cpu(std::vector<std::pair<std::string, std::string>> const &sequences, int QUANTITY) {
     std::vector<int16_t> scores(QUANTITY);
-    std::vector<dp_mat> matrices(QUANTITY, dp_mat(SIZE + 1, std::vector<int16_t>(SIZE + 1)));
+    dp_mat matrix(SIZE + 1, std::vector<int16_t>(SIZE + 1));
 
     auto const start_time = std::chrono::steady_clock::now();
-    align(scores, matrices, sequences, QUANTITY);
+    align(scores, matrix, sequences, QUANTITY);
     for (auto e : scores) {
         std::cout << e << "\n";
     }
