@@ -6,7 +6,7 @@ Based on our experiments, it can improve the performance of DP algorithms up to 
 
 Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time Pythonic compilation framework.
 
-## Beneath the Hood
+## Under the Hood
 
 Vectron starts by analyzing all functions with decorators starting with the `@vectron` decorator that contain a single instance DP kernel (this kernel function is decorated with `@vectron_kernel`). For each such kernel, Vectron generates a new procedure that takes a list of instances as input and performs a set of specific operations in parallel on these instances.
 
@@ -36,6 +36,11 @@ Upon analyzing the loop block, Vectron instantiates a separate loop block that i
 Vectron treats any code before the main loops as the initialization block where the DP matrices are built. The user can build one to three different matrices in this block through conventional methods. Vectron will attempt to vectorize the initialization list comprehensions if possible; if not, it will build matrices as-is. Following the initialization, Vectron will identify the DP matrices and translate them to a semi-3D cache-friendly vectorized structure that will be used by the vectorized kernel. 
 
 The aggregation block typically contains a return statement that can be easily vectorized. In some instances, this block can contain a more complex set of statements or call a special `aggregation` function (decorated with `@vectron_bypass`, which performs additional operations on top of the final matrix score (e.g., `z-drop` score processing implemented by many Smith-Waterman methods). Aggregation functions are also vectorized whenever possible.
+
+The following photo demonstrates a sample of the kernel. This sample is the Needleman Wunsch Algorithm and its components. The initialization block (lines 1–2; yellow box) initializes the DP matrix M. The loop block (lines 3–9; green box) iterates through the subproblems. The recurrence block within it (lines 5–9; blue box) populates M via the DP recurrence, while the aggregation block (line 10; red box) returns the desired score.
+
+![Kernel Sample](./kernel_sample.png)
+
 
 ### Scheduling
 
