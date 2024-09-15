@@ -1,0 +1,139 @@
+from experimental.simd import Vec
+
+
+size_t = i16
+LANE_SIZE: Static[int] = 16
+vec_type = Vec[size_t, LANE_SIZE]
+
+
+@extend
+class Vec:
+    def __bool__(self: Vec[T, N]) -> bool:
+        raise ValueError("cannot call bool on Vec")
+
+    @llvm
+    def __eq__(self: Vec[T, N], other: Vec[T, N]) -> Vec[u1, N]:
+        %0 = icmp eq <{=N} x {=T}> %self, %other
+        ret <{=N} x i1> %0
+
+    @llvm
+    def add(self: Vec[T, N], other: Vec[T, N]) -> Vec[T, N]:
+        %0 = add <{=N} x {=T}> %self, %other
+        ret <{=N} x {=T}> %0
+
+    @llvm
+    def add(self: Vec[T, N], other: T) -> Vec[T, N]:
+        %0 = insertelement <{=N} x {=T}> undef, {=T} %other, i32 0
+        %1 = shufflevector <{=N} x {=T}> %0, <{=N} x {=T}> undef, <{=N} x i32> zeroinitializer
+        %2 = add <{=N} x {=T}> %self, %1
+        ret <{=N} x {=T}> %2
+
+    def __add__(self: Vec[T, N], other) -> Vec[T, N]:
+        _other = other if isinstance(other, Vec) else T(other)
+        return self.add(_other)
+
+    @llvm
+    def sub(self: Vec[T, N], other: Vec[T, N]) -> Vec[T, N]:
+        %0 = sub <{=N} x {=T}> %self, %other
+        ret <{=N} x {=T}> %0
+
+    @llvm
+    def sub(self: Vec[T, N], other: T) -> Vec[T, N]:
+        %0 = insertelement <{=N} x {=T}> undef, {=T} %other, i32 0
+        %1 = shufflevector <{=N} x {=T}> %0, <{=N} x {=T}> undef, <{=N} x i32> zeroinitializer
+        %2 = sub <{=N} x {=T}> %self, %1
+        ret <{=N} x {=T}> %2
+
+    def __sub__(self: Vec[T, N], other) -> Vec[T, N]:
+        _other = other if isinstance(other, Vec) else T(other)
+        return self.sub(_other)
+    
+    @llvm
+    def mask(self: Vec[T, N], mask: Vec[u1, N], other: Vec[T, N]) -> Vec[T, N]:
+        %0 = select <{=N} x i1> %mask, <{=N} x {=T}> %self, <{=N} x {=T}> %other
+        ret <{=N} x {=T}> %0
+
+    @llvm
+    def max(self: Vec[i16, N], other: Vec[i16, N]) -> Vec[i16, N]:
+        declare <{=N} x i16> @llvm.smax.v{=N}i16(<{=N} x i16>, <{=N} x i16>)
+        %0 = call <{=N} x i16> @llvm.smax.v{=N}i16(<{=N} x i16> %self, <{=N} x i16> %other)
+        ret <{=N} x i16> %0
+
+
+@extend
+class List:
+    def __setitem__(self: List[vec_type], idx: int, val: size_t):
+        self[idx] = vec_type(val)
+    
+    def __setitem__(self: List[vec_type], idx: int, val: int):
+        self[idx] = size_t(val)
+    
+    def transpose(self: list[T]) -> list[T]:
+        if not self:
+            return self
+        
+        if isinstance(T, list[list]):
+            compile_error("List.transpose: Cannot transpose dimension larger than 2")
+        elif isinstance(T, list):
+            rows, cols = len(self), len(self[0])
+            return [[self[j][i] for j in range(rows)] for i in range(cols)]
+        else:
+            return self
+    
+
+def to_int_nucl(n):
+    if n == "A":
+        return size_t(0)
+    if n == "C":
+        return size_t(1)
+    if n == "G":
+        return size_t(2)
+    if n == "T":
+        return size_t(3)
+    if n == "N":
+        return size_t(-1)
+    raise ValueError(f"Invalid nucl: {n}")
+
+def canon(seqs):
+    return [[to_int_nucl(c) for c in seq] for seq in seqs]
+
+def print_ln(x: vec_type):
+    for i in staticrange(LANE_SIZE):
+        print(x[i])
+
+def ternary(cmp, x, y):
+    if not isinstance(cmp, Vec):
+        if cmp:
+            return x
+        return y
+
+    if isinstance(x, Vec) and isinstance(y, Vec):
+        return x.mask(cmp, y)
+
+    return vec_type(size_t(x)).mask(cmp, vec_type(size_t(y)))
+
+def max(*args):
+    if staticlen(args) == 0:
+        compile_error("invalid args for max")
+    
+    if staticlen(args) == 1:
+        return args[0]
+
+    if staticlen(args) == 2:
+        return args[0].max(args[1])
+    
+    return max(max(*args[:2]), *args[2:])
+
+def alpern(vec_foo, xs, ys):
+    yst = ys.transpose()
+    for i in range(len(xs)):
+        xvecs = [vec_type(nucl) for nucl in xs[i]]
+        for j in range(len(ys) // LANE_SIZE):
+            yvecs = [vec_type(row[j * LANE_SIZE:]) for row in yst]
+            print_ln(vec_foo(xvecs, yvecs))
+
+def dpmat(*args):
+    if staticlen(args) > 0:
+        return [dpmat(*args[1:]) for _ in range(args[0])]
+    else:
+        return vec_type(size_t(0))
