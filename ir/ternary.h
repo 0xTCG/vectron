@@ -39,9 +39,10 @@ class TernaryVec : public transform::OperatorPass {
     assert(ternaryCall);
 
     auto *caller = findLast<CallInstr>();
-    if ( !caller ) 
+    if ( !caller ) {
       v->replaceAll(ternaryCall);
       return;
+    }
     
     // Figure out a better way to do this:
     // v->replaceAll(ternaryCall) does not invoke typecheck of the caller
