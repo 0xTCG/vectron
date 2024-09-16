@@ -6,14 +6,99 @@ Based on our experiments, it can improve the performance of DP algorithms up to 
 
 Vectron is based on [Codon](https://github.com/exaloop/codon), an ahead-of-time Pythonic compilation framework.
 
+## Installation
+
+Before building and using Vectron, please ensure that you have the following prerequisites:
+
+- Codon and its LLVM distribution (ideally built from source; see [here](https://docs.exaloop.io/codon/advanced/build) for details)
+     - Codon GPU support (with LLVM NVPTX) is required for GPU support
+- Clang++
+- (optional) [Seq library](https://github.com/exaloop/seq) for experimental section
+
+Then, build vectron as follows:
+```cmake
+cmake -S vectron -B vectron/build -G Ninja \
+      -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang \
+      -DCODON_PATH=<path to Codon>
+      -DLLVM_PATH=<path to Codon LLVM>
+cmake --build vectron/build
+cmake --install vectron/build
+```
+
+If stuck, please see our [Dockerfile](docker/vectron/Dockerfile) for the exact build script.
+
+## Running
+
+After building Vectron, use Vectron as follows:
+```
+codon build -plugin vectron -release example.codon
+```
+
+Vectron will vectorize a dynamic programming kernel annotated with `@vectron_kernel` (see below for details).
+For example, here is implementation of edit distance calculation that can be vectorized by Vectron:
+
+```python
+import time, sys
+from vectron.dispatcher import *
+
+var_type = "i16"  # Use CPU SIMD
+
+# Use vectron to annotate DP kernel
+@vectron_kernel
+def levenshtein(Q, T):
+  M = [[0] * (len(Q) + 1) for _ in range(len(T) + 1)]
+  for i in range(len(T) + 1):
+    M[i][0] = -2 + i * -4
+  for j in range(len(Q) + 1):
+    M[0][j] = -2 + j * -4
+
+  # Kernel
+  for i in range(1, len(T)+1):
+    for j in range(1, len(Q)+1):
+      M[i][j] = max(
+        M[i - 1][j] - 2,
+        M[i][j - 1] - 2,
+        M[i-1][j-1] + (2 if Q[j-1] == T[i-1] else -3)
+      )
+
+  # Aggregation
+  return M[-1][-1]
+
+# Use @vectron_scheduler for functions that call the kernel on list of pairs
+@vectron_scheduler
+def invoke(x, y):
+    score = [[0 for i in range(len(y))] for j in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(y)):
+            score[i][j] = levenshtein(x[i], y[j])
+    return score
+
+# x and y are lists of strings; 
+# each sequence from x is aligned to a sequence from y at the same position
+# (i.e., we align x[i] to y[i] for each i)
+d = invoke(x, y)
+```
+
+Details:
+- `var_type`: determines the type of auto-vectorization, where `i16` will invoke the CPU and `f32` will invoke the GPU mode.
+- `@vectron_kernel`: is the decorator for the main kernel of vectron. It has three parts:
+     - Initialization: initialization of 1 to 3 DP matrices through for loops or list comprehensions
+     - Kernel: DP recurrence calculation. 
+       The main available operations are: `min`, `max` (with 2 or 3 arguments); matrix element access, addition/subtraction with a constant, 
+       a ternary `if-else` instruction, or a call to a function decorated with `@vectron_max` (for comparing two input elements).
+     - Aggregation: compute the final result. 
+       This part can return a matrix element (or a math operation on a matrix element), or a call to a function decorated with `@vectron_bypass`.
+- `@vectron_scheduler`: handles and modifies how the input sequences are paired and sent to the main kernel. In this function---which basically loops over the target and then the query sequences---the user can determine which target sequences gets paired up with which query sequences by modifying the nested loops' start, step and stop values.
+
+
 ## Under the Hood
 
 Vectron starts by analyzing all functions with decorators starting with the `@vectron` decorator that contain a single instance DP kernel (this kernel function is decorated with `@vectron_kernel`). For each such kernel, Vectron generates a new procedure that takes a list of instances as input and performs a set of specific operations in parallel on these instances.
 
-Kernel analysis begins by dividing the kernel function into four major blocks.
-The first block — **initialization block** — deals with the creation and initialization of a DP matrix. Vectron considers anything before the main set of `for` loops as a part of the initialization block.
-The second block — **loop block** — is the core part of a DP method responsible for populating the DP matrix. It consists of a series of nested `for` loops and a DP recurrence. DP recurrence is considered as a **recurrence block**. Vectron assumes that everything within the innermost `for` loop is a recurrence block.
-Finally, the **aggregation block** aggregates and returns the final result from the calculated matrix. Vectron treats anything after the iteration block as the aggregation block.
+Kernel analysis begins by dividing the kernel function into three major blocks.
+1. The first block — **initialization block** — deals with the creation and initialization of a DP matrix. Vectron considers anything before the main set of `for` loops as a part of the initialization block.
+2. The second block — **loop block** — is the core part of a DP method responsible for populating the DP matrix. It consists of a series of nested `for` loops and a DP recurrence. DP recurrence is considered as a **recurrence block**. Vectron assumes that everything within the innermost `for` loop is a recurrence block.
+3. Finally, the **aggregation block** aggregates and returns the final result from the calculated matrix. Vectron treats anything after the iteration block as the aggregation block.
 
 ### Recurrence analysis
 
@@ -46,92 +131,8 @@ The following photo demonstrates a sample of the kernel. This sample is the Need
 
 Finally, Vectron integrates previous steps into a scheduler function that processes sequence pairs and dispatches them to the vectorized kernel (decorated with `@vectron_scheduler`). Currently, Vectron's scheduler groups together pairs into blocks that are all to be executed in a data-parallel fashion. Typically, the scheduler groups `n` pairs into `n/v` blocks, where `v` is the maximum parallel throughput (e.g., `v` is 16 for 256-bit AVX2 vectors that contain packed 16-bit integer values). Each block will form a 3D structure that will be handled by the vectorized kernel.
 
-## Installation
 
-Before building and using Vectron, please ensure that you have the following prerequisites:
-
-- Codon and its LLVM distribution (ideally built from source; see [here](https://docs.exaloop.io/codon/advanced/build) for details)
-     - Codon GPU support (with LLVM NVPTX) is required for GPU support
-- Clang++
-- (optional) [Seq library](https://github.com/exaloop/seq) for experimental section
-
-Then, build vectron as follows:
-```cmake
-cmake -S vectron -B vectron/build -G Ninja \
-      -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang \
-      -DCODON_PATH=<path to Codon>
-      -DLLVM_PATH=<path to Codon LLVM>
-cmake --build vectron/build
-cmake --install vectron/build
-```
-
-If stuck, please see our [Dockerfile](docker/vectron/Dockerfile) for the exact build script.
-
-## Running
-
-After building Vectron, use Vectron as follows:
-```
-codon build -plugin vectron -release example.codon
-```
-
-Here are some typical use cases:
-
-### Levenshtein Distance
-
-```python
-import time
-import sys
-from vectron.dispatcher import *
-
-var_type = "i16"
-
-# Use vectron to annotate DP kernel
-@vectron_kernel
-def levenshtein(Q, T):
-  M = [[0] * (len(Q) + 1) for _ in range(len(T) + 1)]
-  for i in range(len(T) + 1):
-    M[i][0] = -2 + i * -4
-  for j in range(len(Q) + 1):
-    M[0][j] = -2 + j * -4
-
-  # Kernel
-  for i in range(1, len(T)+1):
-    for j in range(1, len(Q)+1):
-      M[i][j] = max(
-        M[i - 1][j] - 2,
-        M[i][j - 1] - 2,
-        M[i-1][j-1] + (2 if Q[j-1] == T[i-1] else -3)
-      )
-
-  # Aggregation
-  return M[-1][-1]
-
-# Use vectron_scheduler to annotate function that invokes the kernel on list of pairs
-@vectron_scheduler
-def invoke(x, y):
-    score = [[0 for i in range(len(y))] for j in range(len(x))]
-    for i in range(len(x)):
-        for j in range(len(y)):
-            score[i][j] = levenshtein(x[i], y[j])
-    return score
-with open(sys.argv[-1], 'r') as file:
-    seqs_x = [line.strip() for line in file]
-
-with open(sys.argv[-2], 'r') as file:
-    seqs_y = [line.strip() for line in file]
-
-SEQ_NO_T = len(seqs_x)
-SEQ_NO_Q = len(seqs_y)
-
-with time.timing("Total: "):
-    d = invoke(seqs_x, seqs_y)
-```
-- ```var_type```: determines the type of auto-vectorization, where i16 will invoke the CPU and f32 will invoke the GPU mode.
-- ```@vectron_kernel```: is the decorator for the main kernel of vectron. It has 3 parts:
-     - Initialization: Where you can initialize 1 to 3 matrices for the desired DP using for loops or list comprehensions
-     - Kernel: Where the main DP operation is done. The main available operations are a min or a max, with 2 or 3 arguments. Each argument can be a matrix element (+ or - a constant), a ternary instruction (a sample of which is provided above), or a call to a function decorated with ```@vectron_max```, which compares two input elements, returns their maximum and at the same time stores this maximum at a given destination.
-     - Aggregation: Where the final results are returned. This part can return a matrix element (or a math operation on a matrix element), or a call to a function decorated with ```@vectron_bypass``` which compares the matrix element to a fixed threshold and returns a default number (usually a large negative number) if the result is smaller than the threshold. (```@vectron_bypass``` is mostly used in genomic applications and is called ```zdrop```)
-- ```@vectron_scheduler``` which is used to handle and modify how the input sequences are paired and sent to the main kernel. In this function -- which basically loops over the target and then the query sequences -- the user can determine which target sequences gets paired up with which query sequences by modifying the nested loops' start, step and stop values.
+## More examples
 
 ### Banded Hamming Distance
 
@@ -279,19 +280,6 @@ def max_val(a):
             if mx < a[i][j]:
                     mx = a[i][j]
     return mx  
-
-# Alternative initialization for kernel matrices (instead of list comprehensions):
-# M = [[0] * (len(q) + 1) for i in range(len(t) + 1)]
-# E = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
-# F = [[-10000] * (len(q) + 1) for i in range(len(t) + 1)]
-# for i in range(len(t) + 1):
-#     if i > 0:
-#         M[i][0] = -4 + i * -2
-#         E[i][0] = -4 + i * -2
-# for j in range(len(q) + 1):
-#     if j > 0:
-#         M[0][j] = -4 + j * -2
-#         F[0][j] = -4 + j * -2
 
 @vectron_kernel
 def gotoh(t, q):
