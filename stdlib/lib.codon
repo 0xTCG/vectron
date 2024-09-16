@@ -9,7 +9,7 @@ vec_type = Vec[size_t, LANE_SIZE]
 @extend
 class Vec:
     def __bool__(self: Vec[T, N]) -> bool:
-        raise ValueError("cannot call bool on Vec")
+        raise ValueError("IR pass malfunctioned: cannot call bool on Vec")
 
     @llvm
     def __eq__(self: Vec[T, N], other: Vec[T, N]) -> Vec[u1, N]:
