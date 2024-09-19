@@ -79,6 +79,11 @@ class Vec:
         %0 = call <{=N} x i16> @llvm.smax.v{=N}i16(<{=N} x i16> %self, <{=N} x i16> %other)
         ret <{=N} x i16> %0
 
+    @pure
+    @inline
+    def scatter(self: Vec[T, N]) -> List[T]:
+        return [self[i] for i in staticrange(N)]
+
 
 @extend
 class List:
@@ -143,19 +148,22 @@ def maximum(*args):
     return maximum(maximum(*args[:2]), *args[2:])
 
 def alpern(vec_foo, xs, ys):
+    scores = [[size_t(0) for _ in range(len(ys))] for _ in range(len(xs))]
+
     if NOVEC == 1:
         for i in range(len(xs)):
             for j in range(len(ys)):
-                print(vec_foo(xs[i], ys[j]))
-        return
+                scores[i][j] = vec_foo(xs[i], ys[j])
+        return scores
 
     yst = ys.transpose()
     for i in range(len(xs)):
         xvecs = [vec_type(nucl) for nucl in xs[i]]
         for j in range(len(ys) // LANE_SIZE):
             yvecs = [vec_type(row[j * LANE_SIZE:]) for row in yst]
-            print_ln(vec_foo(xvecs, yvecs))
+            scores[i][j * LANE_SIZE:(j + 1) * LANE_SIZE] = vec_foo(xvecs, yvecs).scatter()
 
+    return scores
 
 class Cache:
     dp_mat: list[list[vec_type]]
