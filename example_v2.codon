@@ -1,6 +1,6 @@
 import time
 import sys
-from lib import dpmat, max, alpern, canon
+from lib import dpmat, maximum, alpern, canon
 
 
 def levenshtein(Q, T):
@@ -13,7 +13,7 @@ def levenshtein(Q, T):
     # Kernel
     for i in range(1, len(T) + 1):
         for j in range(1, len(Q) + 1):
-            M[i][j] = max(
+            M[i][j] = maximum(
                 M[i - 1][j] - 2,
                 M[i][j - 1] - 2,
                 M[i - 1][j - 1] + (2 if T[i - 1] == Q[j - 1] else -3)

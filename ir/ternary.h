@@ -29,7 +29,7 @@ class TernaryVec : public transform::OperatorPass {
       return;
     
     auto *vecType = M->getOrRealizeType("Vec", generics, "std.experimental.simd");
-    if ( !cond->getType()->is(vecType) )
+    if ( !vecType || !cond->getType()->is(vecType) )
       return;
 
     auto *ternaryHelper = M->getOrRealizeFunc("ternary", {cond->getType(), trueVal->getType(), falseVal->getType()}, {}, "std.lib");
