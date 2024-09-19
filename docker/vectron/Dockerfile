@@ -65,14 +65,25 @@ RUN git clone https://github.com/exaloop/codon.git ${VECTRON_CODON_PATH} && \
     cd $VECTRON_CODON_PATH && \
     cmake -S . -B build_release -G Ninja \
          -DCMAKE_BUILD_TYPE=Release \
-         -DCODON_GPU=ON \
          -DCMAKE_C_COMPILER=clang \
          -DCMAKE_CXX_COMPILER=clang++ \
          -DLLVM_DIR=/llvm-project/llvm/build/lib/cmake/llvm \
          -DCMAKE_INSTALL_PREFIX=${VECTRON_CODON_PATH}/install_release \
          -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON && \
-    LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build_release && \
+    cmake --build build_release && \
     cmake --install build_release
+
+RUN cd $VECTRON_CODON_PATH && \
+    cmake -S . -B build_release_gpu -G Ninja \
+         -DCMAKE_BUILD_TYPE=Release \
+         -DCODON_GPU=ON \
+         -DCMAKE_C_COMPILER=clang \
+         -DCMAKE_CXX_COMPILER=clang++ \
+         -DLLVM_DIR=/llvm-project/llvm/build/lib/cmake/llvm \
+         -DCMAKE_INSTALL_PREFIX=${VECTRON_CODON_PATH}/install_release_gpu \
+         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON && \
+    LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build_release_gpu && \
+    cmake --install build_release_gpu
 
 # Update PATH environment variable
 ENV PATH=/codon/install_release/bin/:$PATH
@@ -90,8 +101,20 @@ RUN git clone --depth 1 https://github.com/exaloop/seq ${VECTRON_SEQ_PATH} && \
          -DCODON_PATH=/codon/install_release \
          -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
          -DCMAKE_INSTALL_PREFIX=/codon/install_release/lib/codon/plugins/seq && \
-    LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build && \
+    cmake --build build && \
     cmake --install build
+
+RUN cd $VECTRON_SEQ_PATH && \
+    cmake -S . -B build_gpu -G Ninja  \
+         -DCMAKE_BUILD_TYPE=Release \
+         -DCMAKE_C_COMPILER=clang \
+         -DCMAKE_CXX_COMPILER=clang++ \
+         -DLLVM_DIR=/llvm-project/llvm/build/lib/cmake/llvm \
+         -DCODON_PATH=/codon/install_release_gpu \
+         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+         -DCMAKE_INSTALL_PREFIX=/codon/install_release/lib/codon/plugins/seq && \
+    LD_LIBRARY_PATH=/usr/local/cuda-12.4/compat:${LD_LIBRARY_PATH} cmake --build build_gpu && \
+    cmake --install build_gpu
 
 # Build Vectron
 RUN git clone https://github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
@@ -104,6 +127,15 @@ RUN git clone https://github.com/0xTCG/vectron.git ${VECTRON_PATH} && \
          -DCMAKE_C_COMPILER=clang && \
     cmake --build build && \
     cmake --install build
+RUN cd $VECTRON_PATH && \
+    cmake -S . -B build_gpu -G Ninja \
+        -DCODON_PATH=/codon/install_release_gpu \
+        -DLLVM_PATH=/llvm-project/llvm/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_C_COMPILER=clang && \
+    cmake --build build_gpu && \
+    cmake --install build_gpu
 
 RUN mkdir /vectron/docker/experiments_docker/data/cpp_medium && \
     mkdir /vectron/docker/experiments_docker/data/cpp_large && \
