@@ -32,4 +32,3 @@ with open(sys.argv[-2], 'r') as file:
 
 with time.timing("Total: "):
     scores = alpern(levenshtein, canon(seqs_x), canon(seqs_y))
-    print(scores)

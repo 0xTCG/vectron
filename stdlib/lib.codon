@@ -1,3 +1,5 @@
+import openmp as omp
+
 from experimental.simd import Vec
 
 
@@ -8,6 +10,7 @@ size_t = Int[INT_SIZE]
 LANE_SIZE: Static[int] = 32
 vec_type = Vec[size_t, LANE_SIZE]
 zero_vec = vec_type(size_t(0))
+NUM_THREADS: Static[int] = 6
 
 
 @extend
@@ -157,8 +160,10 @@ def alpern(vec_foo, xs, ys):
         return scores
 
     yst = ys.transpose()
+    @par(num_threads=NUM_THREADS)
     for i in range(len(xs)):
         xvecs = [vec_type(nucl) for nucl in xs[i]]
+        @par(num_threads=NUM_THREADS)
         for j in range(len(ys) // LANE_SIZE):
             yvecs = [vec_type(row[j * LANE_SIZE:]) for row in yst]
             scores[i][j * LANE_SIZE:(j + 1) * LANE_SIZE] = vec_foo(xvecs, yvecs).scatter()
@@ -166,8 +171,7 @@ def alpern(vec_foo, xs, ys):
     return scores
 
 class Cache:
-    dp_mat: list[list[vec_type]]
-    dp_mat_initialized: bool
+    dp_mat: dict[int, list[list[vec_type]]]
 
     def _dpmat(self, *args):
         if staticlen(args) > 0:
@@ -180,11 +184,11 @@ class Cache:
             if not isinstance(self.dp_mat, list[list[int]]):
                 compile_error("Set type of Cache.dp_mat to list[list[int]] when running with NOVEC")
 
-        if not self.dp_mat_initialized:
-            self.dp_mat = self._dpmat(*args)
-            self.dp_mat_initialized = True
+        thr_id = omp.get_thread_num()
+        if not thr_id in self.dp_mat:
+            self.dp_mat[thr_id] = self._dpmat(*args)
 
-        return self.dp_mat
+        return self.dp_mat[thr_id]
 
 cache = Cache()
 
