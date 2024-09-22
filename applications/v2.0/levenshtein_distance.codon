@@ -6,11 +6,10 @@ from lib import dpmat, maximum, alpern, canon
 def levenshtein(Q, T):
     M = dpmat(len(Q) + 1, len(T) + 1)
     for i in range(len(T) + 1):
-        M[i][0] = -2 + i * -4
+        M[i][0] = -2 - i * 4
     for j in range(len(Q) + 1):
-        M[0][j] = -2 + j * -4
+        M[0][j] = -2 - j * 4
 
-    # Kernel
     for i in range(1, len(T) + 1):
         for j in range(1, len(Q) + 1):
             M[i][j] = maximum(
@@ -19,7 +18,6 @@ def levenshtein(Q, T):
                 M[i - 1][j - 1] + (2 if T[i - 1] == Q[j - 1] else -3)
             )
 
-    # Aggregation
     return M[-1][-1]
 
 
@@ -32,3 +30,4 @@ with open(sys.argv[-2], 'r') as file:
 
 with time.timing("Total: "):
     scores = alpern(levenshtein, canon(seqs_x), canon(seqs_y))
+    print(scores)

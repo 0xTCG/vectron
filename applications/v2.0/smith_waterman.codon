@@ -1,0 +1,46 @@
+import time
+import sys
+from lib import dpmat, maximum, alpern, canon
+
+
+def gotoh(t, q):
+    M = dpmat(len(t) + 1, len(q) + 1)
+    E = dpmat(len(t) + 1, len(q) + 1, init=-10000, idx=1)
+    F = dpmat(len(t) + 1, len(q) + 1, init=-10000, idx=2)
+
+    for i in range(len(t) + 1):
+        for j in range(len(q) + 1):
+            if j == 0 and i > 0:
+                M[i][j] = -4 - i * 2
+                E[i][j] = -4 - i * 2
+            elif i == 0 and j > 0:
+                M[i][j] = -4 - j * 2
+                F[i][j] = -4 - j * 2
+    
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):
+            if j - i == -105:
+                M[i][j] = -10000
+                F[i][j] = -10000
+                E[i][j] = -10000
+            else:
+                E[i][j] = maximum(E[i - 1][j] - 2, M[i - 1][j] - 6)
+                F[i][j] = maximum(F[i][j - 1] - 2, M[i][j - 1] - 6)
+                M[i][j] = max(
+                    M[i - 1][j - 1] + (2 if t[i - 1] == q[j - 1] else -4),
+                    E[i][j],
+                    F[i][j])
+
+    return M[-1][-1]
+
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+
+with time.timing("Total: "):
+    scores = alpern(gotoh, canon(seqs_x), canon(seqs_y))
+    print(scores)

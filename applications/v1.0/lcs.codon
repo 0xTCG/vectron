@@ -1,0 +1,36 @@
+import time
+import sys
+from vectron.dispatcher import *
+
+var_type = "i16"
+
+@vectron_kernel
+def lcs(t, q):
+    M = [[0 for __ in range(len(q) + 1)] for _ in range(len(t) + 1)]
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):       
+            M[i][j] = max(M[i - 1][j - 1] + (1 if q[i - 1] == t[j - 1] else 0), 
+                        M[i - 1][j], 
+                        M[i][j - 1])
+    print(M[-1][-1])
+    return M[-1][-1]
+
+@vectron_scheduler
+def invoke(x, y):
+    score = [[0 for _ in range(len(y))] for __ in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(y)):
+            score[i][j] = lcs(x[i], y[j])
+    return score
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)

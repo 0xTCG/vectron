@@ -1,0 +1,28 @@
+import time
+import sys
+from lib import dpmat, maximum, alpern, canon
+
+
+def manhattan(t, q):
+    M = dpmat(len(t) + 1, len(q) + 1)
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):
+            M[i][j] = maximum(
+                M[i][j - 1] + (4 if q[i - 1] == t[j - 1] else 1),
+                0,
+                M[i - 1][j] + (5 if q[i - 1] == t[j - 1] else 3)
+            )
+
+    return M[-1][-1]
+
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+
+with time.timing("Total: "):
+    scores = alpern(manhattan, canon(seqs_x), canon(seqs_y))
+    print(scores)

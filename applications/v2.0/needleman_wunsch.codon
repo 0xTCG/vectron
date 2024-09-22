@@ -1,0 +1,33 @@
+import time
+import sys
+from lib import dpmat, maximum, alpern, canon
+
+
+def nw(h, m):
+    q = dpmat(len(h) + 1, len(m) + 1)
+    for i in range(len(h) + 1):
+        for j in range(len(m) + 1):
+            if j == 0 and i > 0:
+                q[i][j] = -i * 4
+            elif i == 0 and j > 0:
+                q[i][j] = -j * 4
+
+    for i in range(1, len(m) + 1):
+        for j in range(1, len(h) + 1):
+            q[i][j] = maximum(q[i - 1][j - 1] + (2 if m[i - 1] == h[j - 1] else -4),
+                        q[i - 1][j] - 4, 
+                        q[i][j - 1] - 4)
+
+    return q[-1][-1]
+
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+
+with time.timing("Total: "):
+    scores = alpern(nw, canon(seqs_x), canon(seqs_y))
+    print(scores)
