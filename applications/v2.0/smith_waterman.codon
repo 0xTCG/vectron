@@ -19,14 +19,15 @@ def gotoh(t, q):
     
     for i in range(1, len(q) + 1):
         for j in range(1, len(t) + 1):
-            if j - i == -105:
-                M[i][j] = -10000
-                F[i][j] = -10000
-                E[i][j] = -10000
+            if j - i <= -105 or j - i >= 105:
+                if j - i == -105:
+                    M[i][j] = -10000
+                    F[i][j] = -10000
+                    E[i][j] = -10000
             else:
                 E[i][j] = maximum(E[i - 1][j] - 2, M[i - 1][j] - 6)
                 F[i][j] = maximum(F[i][j - 1] - 2, M[i][j - 1] - 6)
-                M[i][j] = max(
+                M[i][j] = maximum(
                     M[i - 1][j - 1] + (2 if t[i - 1] == q[j - 1] else -4),
                     E[i][j],
                     F[i][j])
@@ -41,6 +42,7 @@ with open(sys.argv[-2], 'r') as file:
     seqs_y = [line.strip() for line in file]
 
 
-with time.timing("Total: "):
+with time.timing("SW"):
     scores = alpern(gotoh, canon(seqs_x), canon(seqs_y))
-    print(scores)
+
+print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")

@@ -9,8 +9,7 @@ INT_SIZE: Static[int] = 64 if NOVEC == 1 else 16
 size_t = Int[INT_SIZE]
 LANE_SIZE: Static[int] = 32
 vec_type = Vec[size_t, LANE_SIZE]
-zero_vec = vec_type(size_t(0))
-NUM_THREADS: Static[int] = 1
+NUM_THREADS: Static[int] = 4
 
 
 @extend
@@ -169,10 +168,9 @@ def alpern(vec_foo, xs, ys):
         return scores
 
     yst = ys.transpose()
-    # @par(num_threads=NUM_THREADS)
+    @par(num_threads=NUM_THREADS)
     for i in range(len(xs)):
         xvecs = [vec_type(nucl) for nucl in xs[i]]
-        # @par(num_threads=NUM_THREADS)
         for j in range(len(ys) // LANE_SIZE):
             yvecs = [vec_type(row[j * LANE_SIZE:]) for row in yst]
             scores[i][j * LANE_SIZE:(j + 1) * LANE_SIZE] = vec_foo(xvecs, yvecs).scatter()
@@ -189,9 +187,10 @@ class Cache:
             return init if NOVEC == 1 else vec_type(size_t(init))
     
     def dpmat(self, *args, init: Static[int]):
-        if NOVEC == 1:
-            if not isinstance(self.dp_mat, dict[int, list[list[int]]]):
-                compile_error("Set type of Cache.dp_mat to dict[int, list[list[int]]] when running with NOVEC")
+        if NOVEC == 0 and not isinstance(self.dp_mat, dict[int, list[list[vec_type]]]):
+            compile_error("Set type of Cache.dp_mat to dict[int, list[list[vec_type]]] when running without NOVEC")
+        if NOVEC == 1 and not isinstance(self.dp_mat, dict[int, list[list[int]]]):
+            compile_error("Set type of Cache.dp_mat to dict[int, list[list[int]]] when running with NOVEC")
 
         thr_id = omp.get_thread_num()
         if NUM_THREADS == 1:

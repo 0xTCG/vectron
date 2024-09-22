@@ -16,10 +16,17 @@ else
 fi
 OPTS_FLAG=`echo $DISABLE_OPTS | awk '{for(i=1; i<=NF; i++) printf("--disable-opt=%s ", $i)}'`
 
+if [[ $* == *--time* ]]
+then
+    TIME_COMMAND='/usr/bin/time -v'
+else
+    TIME_COMMAND=''
+fi
+
 if [[ $* == *--jit* ]]
 then
     echo "Running $2 in $1 mode ..."
-    /usr/bin/time -v $VECTRON_CODON_PATH/bin/codon run $OPTS_FLAG -plugin vectron ${*:1}
+    $TIME_COMMAND $VECTRON_CODON_PATH/bin/codon run $OPTS_FLAG -plugin vectron ${*:1}
 else
     if [[ $* == *--build* ]]
     then
@@ -37,6 +44,6 @@ else
     if [[ ! $* == *--build-only* ]]
     then
         echo "Running $2 in $1 mode ..."
-        /usr/bin/time -v ./vectronx ${*:2}
+        $TIME_COMMAND ./vectronx ${*:2}
     fi
 fi
