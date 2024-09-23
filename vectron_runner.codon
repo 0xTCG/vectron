@@ -1,0 +1,60 @@
+import os
+from random import randint
+import sys
+
+file_path = sys.argv[-1]
+
+print("Creating sample files...")
+
+def get_new_seq(l):
+    dna = ['A', 'C', 'G', 'T', 'N']
+    s = ""
+    for i in range(l):
+        t = randint(0, 4)
+        s += dna[t]
+    return s
+
+SEQ_NO = 64
+length = 512
+
+# Create seqx.txt
+with open("seqx.txt", "w") as f:
+    for j in range(SEQ_NO):
+        f.write(get_new_seq(length))
+        f.write("\n")    
+
+# Create seqy.txt
+with open("seqy.txt", "w") as f:
+    for j in range(SEQ_NO):
+        f.write(get_new_seq(length))
+        f.write("\n")    
+
+print(f"Building {file_path}")
+
+# Build command using codon
+build_command = f"codon build -plugin vectron -release {file_path}"
+exit_status = os.system(build_command)
+
+if exit_status == 0:
+    print("Build succeeded")
+else:
+    print(f"Build failed with exit status: {exit_status}")
+    print("Usage: ./vectron_runner <file_path>")
+
+# Extract the executable path (without extension)
+exec_path = file_path.rsplit('.', 1)[0]
+
+print(f"Running {exec_path} with {SEQ_NO} * {SEQ_NO} alignments of length {length}:")
+
+# Run the executable and redirect output to a file
+run_command = f"{exec_path} ./seqx.txt ./seqy.txt > run_output.txt 2>&1"
+exit_status = os.system(run_command)
+
+# Display the output from running the executable
+with open("run_output.txt", "r") as output_file:
+    print(output_file.read())
+
+if exit_status == 0:
+    print("Execution succeeded")
+else:
+    print(f"Execution failed with exit status: {exit_status}")
