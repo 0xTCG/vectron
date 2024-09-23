@@ -134,6 +134,20 @@ Finally, Vectron integrates previous steps into a scheduler function that proces
 
 ## More examples
 
+The following examples can be run as is with sample-generated data using `vectron_runner.codon` provided in the root folder of this repository. First build `vectron_runner.codon` in release mode:
+
+```bash
+codon build vectron_runner.codon -release
+```
+
+Then run the resulting executable with the path to any of the following scripts:
+
+```bash
+./vectron_runner /path/to/sample/script.codon
+```
+
+This will create a set of sample target and query sequences and run the sample script using them.
+
 ### Banded Hamming Distance
 
 ```python
