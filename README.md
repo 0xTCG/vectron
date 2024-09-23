@@ -73,10 +73,17 @@ def invoke(x, y):
             score[i][j] = levenshtein(x[i], y[j])
     return score
 
-# x and y are lists of strings; 
-# each sequence from x is aligned to a sequence from y at the same position
-# (i.e., we align x[i] to y[i] for each i)
-d = invoke(x, y)
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+SEQ_NO_T = len(seqs_x)
+SEQ_NO_Q = len(seqs_y)
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)
 ```
 
 Details:
