@@ -44,6 +44,9 @@ else:
 # Extract the executable path (without extension)
 exec_path = file_path.rsplit('.', 1)[0]
 
+if not exec_path.startswith("./"):
+    exec_path = "./" + exec_path
+
 print(f"Running {exec_path} with {SEQ_NO} * {SEQ_NO} alignments of length {length}:")
 
 # Run the executable and redirect output to a file
