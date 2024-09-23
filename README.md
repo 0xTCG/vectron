@@ -73,12 +73,18 @@ def invoke(x, y):
             score[i][j] = levenshtein(x[i], y[j])
     return score
 
-# x and y are lists of strings; 
-# each sequence from x is aligned to a sequence from y at the same position
-# (i.e., we align x[i] to y[i] for each i)
-x = [rand_seq().strip() for _ in range(64)]
-y = [rand_seq().strip() for _ in range(64)]
-d = invoke(x, y)
+# x and y are lists of strings;
+# below sample x and y sequences are generated and an all-to-all;
+# comparison/alignment is made between them.
+def rand_seq():
+    DNA = ['A', 'C', 'G', 'T', 'N']
+    return ''.join(DNA[(id(object()) % 5)] for _ in range(512))
+
+seqs_x = [rand_seq().strip() for _ in range(64)]
+seqs_y = [rand_seq().strip() for _ in range(64)]
+
+with time.timing("Total: "):
+    d = invoke(seqs_x, seqs_y)
 ```
 
 Details:
