@@ -134,19 +134,17 @@ Finally, Vectron integrates previous steps into a scheduler function that proces
 
 ## More examples
 
-The following examples can be run as is with sample-generated data using `vectron_runner.codon` provided in the root folder of this repository. First build `vectron_runner.codon` in release mode:
+The following examples are self-contained and will run with sample-generated DNA data using the same build and run approach described above:
 
 ```bash
-codon build vectron_runner.codon -release
+codon build -plugin vectron -release example.codon
 ```
 
-Then run the resulting executable with the path to any of the following scripts:
+and
 
 ```bash
-./vectron_runner /path/to/sample/script.codon
+./example
 ```
-
-This will create a set of sample target and query sequences and run the sample script using them.
 
 ### Banded Hamming Distance
 
@@ -181,14 +179,12 @@ def invoke(x, y):
             score[i][j] = hamming(x[i], y[j])
     return score
 
-with open(sys.argv[-1], 'r') as file:
-    seqs_x = [line.strip() for line in file]
+def rand_seq():
+    DNA = ['A', 'C', 'G', 'T', 'N']
+    return ''.join(DNA[(id(object()) % 5)] for _ in range(512))
 
-with open(sys.argv[-2], 'r') as file:
-    seqs_y = [line.strip() for line in file]
-
-SEQ_NO_T = len(seqs_x)
-SEQ_NO_Q = len(seqs_y)
+seqs_x = [rand_seq().strip() for _ in range(64)]
+seqs_y = [rand_seq().strip() for _ in range(64)]
 
 with time.timing("Total: "):
     d = invoke(seqs_x, seqs_y)
@@ -243,14 +239,12 @@ def invoke(x, y):
             score[i][j] = manhattan(x[i], y[j])
     return score
 
-with open(sys.argv[-1], 'r') as file:
-    seqs_x = [line.strip() for line in file]
+def rand_seq():
+    DNA = ['A', 'C', 'G', 'T', 'N']
+    return ''.join(DNA[(id(object()) % 5)] for _ in range(512))
 
-with open(sys.argv[-2], 'r') as file:
-    seqs_y = [line.strip() for line in file]
-
-SEQ_NO_T = len(seqs_x)
-SEQ_NO_Q = len(seqs_y)
+seqs_x = [rand_seq().strip() for _ in range(64)]
+seqs_y = [rand_seq().strip() for _ in range(64)]
 
 with time.timing("Total: "):
     d = invoke(seqs_x, seqs_y)
@@ -322,14 +316,12 @@ def invoke(x, y):
             score[i][j] = gotoh(x[i], y[j])
     return score
 
-with open(sys.argv[-1], 'r') as file:
-    seqs_x = [line.strip() for line in file]
+def rand_seq():
+    DNA = ['A', 'C', 'G', 'T', 'N']
+    return ''.join(DNA[(id(object()) % 5)] for _ in range(512))
 
-with open(sys.argv[-2], 'r') as file:
-    seqs_y = [line.strip() for line in file]
-
-SEQ_NO_T = len(seqs_x)
-SEQ_NO_Q = len(seqs_y)
+seqs_x = [rand_seq().strip() for _ in range(64)]
+seqs_y = [rand_seq().strip() for _ in range(64)]
 
 with time.timing("Total: "):
     d = invoke(seqs_x, seqs_y)
@@ -339,14 +331,6 @@ The banded Smith-Waterman with Gotoh scoring is the most sophisticated implement
 
 - The `@vectron_max`function signature is as follows: ```python max_s(lst, ind_row, ind_col, val_1, val_2)``` where it receives a destination matrix pointer (`lst`), an index for its row value (`ind_row`), and index for its column value `ind_col`, and two values for comparison (`val_1` and `val_2`). These two values can be constants or matrix elements `+` or `-` a constant. The function compares the two values and stores the maximum in the pointer's specified location. It also returns this maximum value to the kernel.
 - The `@vectron_bypass` function is used mostly in genomics. Its main job is to filter out values that are more than a user-specified distance away from the maximum value in the scoring matrix. With the help of the `max_val` function that returns the maximum value of a given matrix, the `@vectron_bypass` function compares each score (`a` in the function signature) with the maximum value in the result matrix (`b` in the function signature) and determines if the distance between these two is greater than a user-specified value (`c` in the function signature). If `True` this function will return a large negative number, and if `False` the same score will be returned.
-
-### Running the Samples with Input Sequences
-
-After using the above build command for the any of the sample scripts, one can run the built script by passing the target and query sequences to it as ```sys.arg``` values. These sequences do not need to be paired up in advance, as `@vectron_schudler` will do that. Here's a sample command to run the built script with input sequences `seqx.txt` and `seqy.txt`:
-
-```
-./example ../data/seqx.txt ../data/seqy.txt
-```
 
 ## Experiments
 The [experiment directory](docker/experiments_docker) contains few popular DP implementations such as banded Smith-Waterman, Needleman-Wunsch, Hamming Distance, Levenshtein Distance, Manhattan Tourist, Minimum Cost Path, and Longest Common Subsequence (in both integer and floating point versions). Alignment scores are calculated using sample string files `seqx.txt` and `seqy.txt`, each containing 64 DNA sequences of length 512. All DP algorithms perform an all-to-all pairing and comparison between them.
