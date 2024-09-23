@@ -359,6 +359,7 @@ Most importantly:
 - The number of arguments in the min/max function is limited to three
 - List comprehensions in the initialization cannot have newlines
 - Vectron must be imported as `from vectron.dispatcher import *` (aliases won't work)
+- For the GPU version, we tested Vectron on Tesla V100 GPU with 32 GB of VRAM. Due to all DP implementations needing a large amount of VRAM, we expect significant changes if the amount of VRAM is varied. We had similar issues with C++ CUDA versions where any change in memory management would yield different results. Please note that Vectron produces Codon-compatible GPU kernels that cannot (yet) modify memory management due to a lack of sufficient APIs (this is expected to change in future Codon releases).
 
 ## License
 
