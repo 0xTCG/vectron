@@ -8,6 +8,16 @@ fi
 
 echo "Codon path: $VECTRON_CODON_PATH"
 
+VECTRON_PLUGIN_PATH=$VECTRON_CODON_PATH/lib/codon/plugins/vectron/stdlib/
+if [[ $* == *--no-vec* ]]
+then
+    echo "NOVEC: Static[int] = 1" > $VECTRON_PLUGIN_PATH/static.codon
+    VEC_FLAG="non-vectorized"
+else
+    echo "NOVEC: Static[int] = 0" > $VECTRON_PLUGIN_PATH/static.codon
+    VEC_FLAG="vectorized"
+fi
+
 if [[ $* == */v2.0/* ]]
 then
     DISABLE_OPTS='vectron-byPass-analysis vectron-loop-analysis vectron-ListInitializer vectron-VarTypeSelector vectron-funcreplacement'
@@ -25,13 +35,13 @@ fi
 
 if [[ $* == *--jit* ]]
 then
-    echo "Running $2 in $1 mode ..."
+    echo "Running $2 in $1 mode ($VEC_FLAG) ..."
     $TIME_COMMAND $VECTRON_CODON_PATH/bin/codon run $OPTS_FLAG -plugin vectron ${*:1}
 else
     if [[ $* == *--build* ]]
     then
         rm -f ./vectronx
-        echo "Compiling $2 in $1 mode ..."
+        echo "Compiling $2 in $1 mode ($VEC_FLAG) ..."
         CC=clang CXX=clang++ $VECTRON_CODON_PATH/bin/codon build $OPTS_FLAG -plugin vectron $1 -o vectronx ${*:2}
     fi
 
@@ -43,7 +53,7 @@ else
 
     if [[ ! $* == *--build-only* ]]
     then
-        echo "Running $2 in $1 mode ..."
+        echo "Running $2 in $1 mode ($VEC_FLAG) ..."
         $TIME_COMMAND ./vectronx ${*:2}
     fi
 fi

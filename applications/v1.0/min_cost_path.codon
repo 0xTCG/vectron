@@ -24,9 +24,9 @@ def min_cost_path(h, m):
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):
             q[i][j] = max(
-                q[i - 1][j - 1] + (2 if m[i - 1] == h[j - 1] else -3),  # S(m[i - 1], 2, -3, -1, h[j - 1]), 
-                q[i - 1][j] + (1 if m[i - 1] == h[j - 1] else -2),  # S(m[i - 1], 1, -2, -1, h[j - 1]), 
-                q[i][j - 1] + (1 if m[i - 1] == h[j - 1] else -2)  # S(m[i - 1], 1, -2, -2, h[j - 1])
+                q[i - 1][j - 1] + S(m[i - 1], 2, -3, -1, h[j - 1]), 
+                q[i - 1][j] + S(m[i - 1], 1, -2, -1, h[j - 1]), 
+                q[i][j - 1] + S(m[i - 1], 1, -2, -2, h[j - 1])
                 )
 
     return q[-1][-1]

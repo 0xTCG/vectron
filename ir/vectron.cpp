@@ -43,7 +43,7 @@ void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {
   pm->registerPass(std::make_unique<EvnSelector>(), "core-folding-pass-group");    
   pm->registerPass(std::make_unique<FuncReplacement>(), "core-folding-pass-group");
 
-  pm->registerPass(std::make_unique<TernaryVec>(), "core-pythonic-dict-arithmetic-opt");
+  pm->registerPass(std::make_unique<TernaryVec>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
 }
 
 } // namespace vectron

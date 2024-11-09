@@ -1,8 +1,10 @@
 import time
 import sys
+from vectron.attributes import vectron
 from lib import dpmat, maximum, alpern, canon
 
 
+@vectron
 def gotoh(t, q):
     M = dpmat(len(t) + 1, len(q) + 1)
     E = dpmat(len(t) + 1, len(q) + 1, init=-10000, idx=1)
@@ -28,7 +30,7 @@ def gotoh(t, q):
                 E[i][j] = maximum(E[i - 1][j] - 2, M[i - 1][j] - 6)
                 F[i][j] = maximum(F[i][j - 1] - 2, M[i][j - 1] - 6)
                 M[i][j] = maximum(
-                    M[i - 1][j - 1] + (2 if t[i - 1] == q[j - 1] else -4),
+                    M[i - 1][j - 1] + (-3 if ((t[i - 1] == -1).__or__(q[j - 1] == -1)) else 2 if t[i - 1] == q[j - 1] else -4),
                     E[i][j],
                     F[i][j])
 

@@ -13,24 +13,33 @@ class TernaryVec : public transform::OperatorPass {
   const std::string KEY = "ternary-vec";
   std::string getKey() const override { return KEY; }
 
-  void handle(TernaryInstr *v) override {
-    auto values = v->getCond()->getUsedValues();
-    
+  Value *ternToCall(Value *v) {
+    auto ternVal = cast<TernaryInstr>(v);
+    assert(ternVal);
+
+    auto values = ternVal->getCond()->getUsedValues();
     if ( !values.size() )
-      return;
+      return v;
     
-    auto *M        = v->getModule();
+    auto *M        = ternVal->getModule();
     auto *cond     = values[0];
-    auto *trueVal  = v->getTrueValue();
-    auto *falseVal = v->getFalseValue();
+    auto *trueVal  = ternVal->getTrueValue();
+    auto *falseVal = ternVal->getFalseValue();
 
     auto generics = cond->getType()->getGenerics();
     if ( !generics.size() )
-      return;
+      return v;
     
     auto *vecType = M->getOrRealizeType("Vec", generics, "std.experimental.simd");
     if ( !vecType || !cond->getType()->is(vecType) )
-      return;
+      return v;
+    
+    auto *ternTrueVal  = cast<TernaryInstr>(trueVal);
+    auto *ternFalseVal = cast<TernaryInstr>(falseVal);
+    if ( ternTrueVal )
+      trueVal = ternToCall(ternTrueVal);
+    if ( ternFalseVal )
+      falseVal = ternToCall(ternFalseVal);
 
     auto *ternaryHelper = M->getOrRealizeFunc("ternary", {cond->getType(), trueVal->getType(), falseVal->getType()}, {}, "std.lib");
     assert(ternaryHelper);
@@ -38,27 +47,32 @@ class TernaryVec : public transform::OperatorPass {
     auto *ternaryCall = util::call(ternaryHelper, {cond, trueVal, falseVal});
     assert(ternaryCall);
 
-    auto *caller = findLast<CallInstr>();
-    if ( !caller ) {
-      v->replaceAll(ternaryCall);
+    return ternaryCall;
+  }
+  
+  void handle(CallInstr *v) override {
+    auto *pf = getParentFunc();
+    if ( !bool(pf) || !util::hasAttribute(pf, "std.vectron.attributes.vectron") )
       return;
-    }
     
-    // Figure out a better way to do this:
-    // v->replaceAll(ternaryCall) does not invoke typecheck of the caller
-    // forcing the call of newly realized function below
-    // (won't work for non-method caller)
+    auto *M = v->getModule();
     std::vector<Value*> args;
     std::vector<types::Type*> argsTypes;
-    for ( auto it = caller->begin(); it != caller->end(); ++it ) {
-      auto arg = (*it)->is<TernaryInstr>() ? ternaryCall : *it;
+    bool ternFound = false;
+    for ( auto it = v->begin(); it != v->end(); ++it ) {
+      bool check = (*it)->is<TernaryInstr>();
+      ternFound |= check;
+      auto arg = check ? ternToCall(*it) : *it;
       args.push_back(arg);
       argsTypes.push_back(arg->getType());
     }
     
+    if ( !ternFound )
+      return;
+
     auto *newCallerHelper = M->getOrRealizeMethod(
-      caller->getType(),
-      util::getFunc(caller->getCallee())->getUnmangledName(),
+      v->getType(),
+      util::getFunc(v->getCallee())->getUnmangledName(),
       argsTypes
     );
     assert(newCallerHelper);
@@ -66,7 +80,7 @@ class TernaryVec : public transform::OperatorPass {
     auto *newCaller = util::call(newCallerHelper, args);
     assert(newCaller);
 
-    caller->replaceAll(newCaller);
+    v->replaceAll(newCaller);
   }
 };
 

@@ -1,8 +1,10 @@
 import time
 import sys
+from vectron.attributes import vectron
 from lib import dpmat, maximum, alpern, canon
 
 
+@vectron
 def nw(h, m):
     q = dpmat(len(h) + 1, len(m) + 1)
     for i in range(len(h) + 1):
@@ -14,7 +16,7 @@ def nw(h, m):
 
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):
-            q[i][j] = maximum(q[i - 1][j - 1] + (2 if m[i - 1] == h[j - 1] else -4),
+            q[i][j] = maximum(q[i - 1][j - 1] + (-3 if ((m[i - 1] == -1).__or__(h[j - 1] == -1)) else 2 if m[i - 1] == h[j - 1] else -4),
                         q[i - 1][j] - 4, 
                         q[i][j - 1] - 4)
 
