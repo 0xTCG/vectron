@@ -1,7 +1,7 @@
 import time
 import sys
 from vectron.attributes import vectron
-from lib import dpmat, maximum, alpern, canon
+from lib import dpmat, maximum, canon
 
 
 @vectron
@@ -27,6 +27,7 @@ with open(sys.argv[-2], 'r') as file:
 
 
 with time.timing("Hamming"):
-    scores = alpern(hamming, canon(seqs_x), canon(seqs_y))
+    x, y = canon(seqs_x), canon(seqs_y)
+    scores = [[hamming(x[i], y[j])[0] for j in range(len(y))] for i in range(len(x))]
 
 print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")

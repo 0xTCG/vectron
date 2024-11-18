@@ -11,9 +11,17 @@ NUM_THREADS: Static[int] = 4
 
 
 @extend
+class int:
+    def __getitem__(self, *args):
+        return self
+
+@extend
 class Vec:
     def __bool__(self: Vec[T, N]) -> bool:
         raise ValueError("IR pass malfunctioned: cannot call bool on Vec")
+    
+    def __int__(self: Vec[T, N]) -> int:
+        raise ValueError("IR pass malfunctioned: cannot call int on Vec")
     
     @llvm
     @pure
