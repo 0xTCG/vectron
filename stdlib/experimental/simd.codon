@@ -146,7 +146,7 @@ class Vec[T, N: Static[int]]:
     @llvm
     def _mm512_loadu_epi16(data: Ptr[i16]) -> Vec[i16, 32]:
         %0 = bitcast i16* %data to <32 x i16>*
-        %1 = load <32 x i16>, <32 x i16>* %0
+        %1 = load <32 x i16>, <32 x i16>* %0, align 1
         ret <32 x i16> %1                
 
     @llvm

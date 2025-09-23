@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(Vectron)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wall -Wno-return-type-c-linkage")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-limit-debug-info")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
@@ -40,6 +40,8 @@ set(VECTRON_FILES
     ir/env_select.cpp
     ir/env_select.h
     ir/vectron.cpp
+    ir/loop.cpp
+    ir/loop.h
     ir/vectron.h)
 add_library(vectron SHARED ${VECTRON_FILES})
 
