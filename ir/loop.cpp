@@ -185,7 +185,7 @@ void LoopVec::handle(AssignInstr *w) {
 
   auto *vectronFunc = util::getFunc(vectronCall->getCallee());
   if (!bool(vectronFunc) ||
-      !util::hasAttribute(vectronFunc, "std.vectron.attributes.vectron"))
+      !util::hasAttribute(vectronFunc, "std.vectron.attributes.vectron.0:0"))
     return;
 
   // LOG("VEC TYPE -> {}", util::getReturnType(M->getOrRealizeFunc("_get_vec_type", {}, {}, "std.lib"))->getName());
