@@ -4,6 +4,7 @@
 #include "codon/cir/util/cloning.h"
 #include "codon/cir/util/irtools.h"
 #include "codon/parser/ast.h"
+#include "codon/parser/match.h"
 #include "codon/parser/visitors/format/format.h"
 #include "codon/parser/visitors/translate/translate.h"
 #include "codon/parser/visitors/typecheck/ctx.h"
@@ -14,6 +15,7 @@ namespace vectron {
 
 using namespace codon;
 using namespace codon::ir;
+using namespace codon::matcher;
 
 Value *VectronFunctionTransformer::getRange(ForFlow *forFl) {
   auto *M = forFl->getModule();
@@ -31,7 +33,8 @@ Value *VectronFunctionTransformer::getRange(ForFlow *forFl) {
   if (!rangeVal)
     return nullptr;
 
-  auto *rangeType = M->getOrRealizeType(codon::ast::getMangledClass("std.internal.types.range", "range"), {});
+  auto *rangeType = M->getOrRealizeType(
+      codon::ast::getMangledClass("std.internal.types.range", "range"), {});
   if (!rangeVal->getType()->is(rangeType))
     return nullptr;
 
@@ -94,40 +97,44 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
 
 // Search expression tree for a identifier
 class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, void> {
+  ast::Cache *cache;
   bool stop;
   int depth;
   std::string wrapFunc, castType;
 
 public:
-  ComprehensionSearchVisitor(std::string wrapFunc, std::string castType, int depth = 0)
-      : stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
+  ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc,
+                             std::string castType, int depth = 0)
+      : cache(cache), stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
         castType(std::move(castType)) {}
-  void transform(const ast::ExprPtr &expr) override {
+  void transform(ast::Expr *expr) override {
     if (stop || !expr)
       return;
-    ComprehensionSearchVisitor v(wrapFunc, castType, depth + 1);
+    ComprehensionSearchVisitor v(cache, wrapFunc, castType, depth + 1);
     if (expr)
       expr->accept(v);
     stop = v.stop;
   }
-  void transform(const ast::StmtPtr &stmt) override {
+  void transform(ast::Stmt *stmt) override {
     if (stop || !stmt)
       return;
-    ComprehensionSearchVisitor v(wrapFunc, castType, depth + (!stmt->getSuite()));
+    ComprehensionSearchVisitor v(cache, wrapFunc, castType,
+                                 depth + (!ast::cast<ast::SuiteStmt>(stmt)));
     if (stmt)
       stmt->accept(v);
     stop = v.stop;
   }
   void visit(ast::AssignStmt *stmt) override {
-    if (stmt->lhs->getId() && stmt->rhs->getIf()) {
-      auto s = stmt->rhs->getIf()->elsexpr->getStmtExpr();
-      if (s && !s->stmts.empty() && s->stmts[0]->getSuite()) {
-        auto sp = s->stmts[0]->getSuite();
-        if (!sp->stmts.empty() && sp->stmts[0]->getAssign()) {
-          auto i = sp->stmts[0]->getAssign()->lhs->getId();
-          if (i && ast::startswith(i->value, "._gen_")) {
-            stmt->rhs = N<ast::CallExpr>(N<ast::IdExpr>(wrapFunc), stmt->rhs);
-          }
+    using namespace codon::ast;
+    StmtExpr *elsExpr;
+    if (match(stmt,
+              M<AssignStmt>(M<IdExpr>(), M<IfExpr>(M_, M_, MVar<StmtExpr>(elsExpr))))) {
+      SuiteStmt *elsFirst;
+      if (!elsExpr->empty() && (elsFirst = cast<SuiteStmt>((*elsExpr)[0]))) {
+        std::string varName;
+        if (!elsFirst->empty() &&
+            match((*elsFirst)[0], M<AssignStmt>(M<IdExpr>(MStarts("._gen_"))))) {
+          stmt->setRhs(cache->N<CallExpr>(cache->N<IdExpr>(wrapFunc), stmt->getRhs()));
         }
       }
     }
@@ -138,24 +145,13 @@ public:
     else
       CallbackASTVisitor<void, void>::visit(stmt);
   }
-  // void visit(ast::CallExpr *expr) override {
-  //   if (expr->expr->getDot() && expr->expr->getDot()->expr->getId() &&
-  //       ast::startswith(expr->expr->getDot()->expr->getId()->value, "._gen_") &&
-  //       expr->expr->getDot()->member == "append" && expr->args.size() == 1) {
-  //     transform(expr->args.front().value);
-  //     expr->args.front().value = N<ast::CallExpr>(
-  //         N<ast::IdExpr>(wrapFunc), expr->args.front().value, N<ast::IdExpr>(castType));
-  //   } else {
-  //     CallbackASTVisitor<void, void>::visit(expr);
-  //   }
-  // }
 };
 
 void LoopVec::handle(AssignInstr *w) {
   auto *v = cast<FlowInstr>(w->getRhs());
   if (!v)
     return;
-  
+
   auto *M = v->getModule();
 
   // Skip if inner comprehension.
@@ -188,33 +184,37 @@ void LoopVec::handle(AssignInstr *w) {
       !util::hasAttribute(vectronFunc, "std.vectron.attributes.vectron.0:0"))
     return;
 
-  // LOG("VEC TYPE -> {}", util::getReturnType(M->getOrRealizeFunc("_get_vec_type", {}, {}, "std.lib"))->getName());
+  // LOG("VEC TYPE -> {}", util::getReturnType(M->getOrRealizeFunc("_get_vec_type", {},
+  // {}, "std.lib"))->getName());
 
   // @inumanag: begin change
 
   auto cache = v->getModule()->getCache();
-  auto fnAst = vectronFunc->getType()->getAstType()->getFunc()->ast->clone();
-  auto origFnName = fnAst->getFunction()->name;
-  fnAst->getFunction()->name += "_vectron";
-  auto fnName = fnAst->getFunction()->name;
+  auto fnAst = cast<ast::FunctionStmt>(
+      vectronFunc->getType()->getAstType()->getFunc()->ast->clone());
+  auto origFnName = fnAst->getName();
+  auto fnName = origFnName + "_vectron";
+  fnAst->setName(fnName);
   auto cv = ComprehensionSearchVisitor(
-    "std.lib.dpmat_temp", // I use this as wrapper, feel free to change
-    "std.experimental.simd.Vec[Int[16],32]" // init type, get it here; check dpmat_cast
-                                            // as well
+      cache,
+      "std.lib.dpmat_temp", // I use this as wrapper, feel free to change
+      "std.experimental.simd.Vec[Int[16],32]" // init type, get it here; check
+                                              // dpmat_cast as well
   );
   cv.transform(fnAst);
 
-  cache->functions[fnName].ast = std::static_pointer_cast<ast::FunctionStmt>(fnAst);
+  cache->functions[fnName].ast = fnAst;
   cache->functions[fnName].isToplevel = cache->functions[origFnName].isToplevel;
   cache->functions[fnName].rootName = fnName;
   cache->reverseIdentifierLookup[fnName] =
-    cache->reverseIdentifierLookup[origFnName] + ".vectron";
-  fnAst = ast::TypecheckVisitor::apply(cache, fnAst);
-  ast::TranslateVisitor(cache->codegenCtx).transform(fnAst);
+      cache->reverseIdentifierLookup[origFnName] + ".vectron";
 
-  LOG("RAW DEBUG -> {}", ast::FormatVisitor(false, cache).transform(fnAst));
+  auto transAst = ast::TypecheckVisitor::apply(cache->typeCtx, fnAst);
+  ast::TranslateVisitor(cache->codegenCtx).transform(transAst);
+  LOG("RAW DEBUG -> {}", ast::FormatVisitor(false, cache).transform(transAst));
 
-  auto vecListType = util::getReturnType(M->getOrRealizeFunc("_get_vec_list", {}, {}, "std.lib"));
+  auto vecListType =
+      util::getReturnType(M->getOrRealizeFunc("_get_vec_list", {}, {}, "std.lib"));
   assert(vecListType && "_get_vec_list method not found in std.lib");
 
   std::vector<ir::types::Type *> newFnArgs;
@@ -260,7 +260,6 @@ void LoopVec::handle(AssignInstr *w) {
   w->setRhs(alpernCall);
 
   LOG("DEBUG FINAL -> {}", *w);
-
 }
 
 } // namespace vectron
