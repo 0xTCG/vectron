@@ -96,17 +96,18 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
 }
 
 // Search expression tree for a identifier
-class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, void> {
+class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stmt*> {
   ast::Cache *cache;
   bool stop;
   int depth;
   std::string wrapFunc, castType;
+  ast::Stmt *modified;
 
 public:
   ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc,
                              std::string castType, int depth = 0)
       : cache(cache), stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
-        castType(std::move(castType)) {}
+        castType(std::move(castType)), modified(nullptr) {}
   void transform(ast::Expr *expr) override {
     if (stop || !expr)
       return;
@@ -115,14 +116,22 @@ public:
       expr->accept(v);
     stop = v.stop;
   }
-  void transform(ast::Stmt *stmt) override {
+  ast::Stmt *transform(ast::Stmt *stmt) override {
     if (stop || !stmt)
-      return;
+      return nullptr;
     ComprehensionSearchVisitor v(cache, wrapFunc, castType,
                                  depth + (!ast::cast<ast::SuiteStmt>(stmt)));
     if (stmt)
       stmt->accept(v);
     stop = v.stop;
+    return v.modified;
+  }
+  void visit(ast::SuiteStmt *stmt) override {
+    for (auto &s : *stmt) {
+      if (auto ns = transform(s)) {
+        s = ns;
+      }
+    }
   }
   void visit(ast::AssignStmt *stmt) override {
     using namespace codon::ast;
@@ -131,10 +140,15 @@ public:
               M<AssignStmt>(M<IdExpr>(), M<IfExpr>(M_, M_, MVar<StmtExpr>(elsExpr))))) {
       SuiteStmt *elsFirst;
       if (!elsExpr->empty() && (elsFirst = cast<SuiteStmt>((*elsExpr)[0]))) {
-        std::string varName;
         if (!elsFirst->empty() &&
             match((*elsFirst)[0], M<AssignStmt>(M<IdExpr>(MStarts("._gen_"))))) {
-          stmt->setRhs(cache->N<CallExpr>(cache->N<IdExpr>(wrapFunc), stmt->getRhs()));
+          auto tmpFnName = cache->getTemporaryVar("vectron");
+          modified = cache->N<SuiteStmt>(
+              cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
+                                     cache->N<ReturnStmt>(stmt->getRhs())),
+              cache->N<AssignStmt>(stmt->getLhs(),
+                                   cache->N<CallExpr>(cache->N<IdExpr>(tmpFnName)),
+                                   stmt->getTypeExpr()));
         }
       }
     }
@@ -143,7 +157,7 @@ public:
     if (depth == 2)
       stop = true;
     else
-      CallbackASTVisitor<void, void>::visit(stmt);
+      CallbackASTVisitor<void, ast::Stmt*>::visit(stmt);
   }
 };
 
