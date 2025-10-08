@@ -157,7 +157,6 @@ def print_ln(x: vec_type):
         print(x[i])
 
 def ternary(cmp, x, y):
-    print("DEBUG inside ternary")
     if isinstance(x, Vec) and isinstance(y, Vec):
         return x.mask(cmp, y)
     if isinstance(x, Vec):
@@ -170,7 +169,7 @@ def ternary(cmp, x, y):
 def maximum(*args):
     if st.len(args) == 0:
         compile_error("invalid args for max")
-    
+
     if st.len(args) == 1:
         return args[0]
 
@@ -190,7 +189,7 @@ def alpern(vec_foo, xs, ys):
     scores = [[size_t(0) for _ in range(len(ys))] for _ in range(len(xs))]
 
     print("DEBUG alpern 1")
-    
+
     if NOVEC == 1:
         print("DEBUG alpern 2")
         for i in range(len(xs)):
@@ -215,7 +214,7 @@ def alpern(vec_foo, xs, ys):
                 for c in r:
                     f.write(f"{c} ")
                 f.write("\n")
-            for k in staticrange(LANE_SIZE):
+            for k in static.range(LANE_SIZE):
                 scores[i][j * LANE_SIZE + k] = r[k]
 
     print("DEBUG alpern 6")
@@ -263,7 +262,8 @@ def dpmat(m, n, init: Static[int] = 0, idx: Static[int] = 0):
     return caches[idx].dpmat(m, n, init=init)
 
 
-def dpmat_temp(l):
+def dpmat_temp(fn):
+    l = fn()
     m, n = len(l), len(l[0])
     dpinit = dpmat(m, n)
 

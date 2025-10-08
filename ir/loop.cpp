@@ -6,6 +6,7 @@
 #include "codon/parser/ast.h"
 #include "codon/parser/match.h"
 #include "codon/parser/visitors/format/format.h"
+#include "codon/parser/visitors/scoping/scoping.h"
 #include "codon/parser/visitors/translate/translate.h"
 #include "codon/parser/visitors/typecheck/ctx.h"
 #include "codon/parser/visitors/typecheck/typecheck.h"
@@ -96,22 +97,21 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
 }
 
 // Search expression tree for a identifier
-class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stmt*> {
+class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stmt *> {
   ast::Cache *cache;
   bool stop;
   int depth;
-  std::string wrapFunc, castType;
+  std::string wrapFunc;
   ast::Stmt *modified;
 
 public:
-  ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc,
-                             std::string castType, int depth = 0)
+  ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc, int depth = 0)
       : cache(cache), stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
-        castType(std::move(castType)), modified(nullptr) {}
+        modified(nullptr) {}
   void transform(ast::Expr *expr) override {
     if (stop || !expr)
       return;
-    ComprehensionSearchVisitor v(cache, wrapFunc, castType, depth + 1);
+    ComprehensionSearchVisitor v(cache, wrapFunc, depth + 1);
     if (expr)
       expr->accept(v);
     stop = v.stop;
@@ -119,7 +119,7 @@ public:
   ast::Stmt *transform(ast::Stmt *stmt) override {
     if (stop || !stmt)
       return nullptr;
-    ComprehensionSearchVisitor v(cache, wrapFunc, castType,
+    ComprehensionSearchVisitor v(cache, wrapFunc,
                                  depth + (!ast::cast<ast::SuiteStmt>(stmt)));
     if (stmt)
       stmt->accept(v);
@@ -135,29 +135,24 @@ public:
   }
   void visit(ast::AssignStmt *stmt) override {
     using namespace codon::ast;
-    StmtExpr *elsExpr;
-    if (match(stmt,
-              M<AssignStmt>(M<IdExpr>(), M<IfExpr>(M_, M_, MVar<StmtExpr>(elsExpr))))) {
-      SuiteStmt *elsFirst;
-      if (!elsExpr->empty() && (elsFirst = cast<SuiteStmt>((*elsExpr)[0]))) {
-        if (!elsFirst->empty() &&
-            match((*elsFirst)[0], M<AssignStmt>(M<IdExpr>(MStarts("._gen_"))))) {
-          auto tmpFnName = cache->getTemporaryVar("vectron");
-          modified = cache->N<SuiteStmt>(
-              cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
-                                     cache->N<ReturnStmt>(stmt->getRhs())),
-              cache->N<AssignStmt>(stmt->getLhs(),
-                                   cache->N<CallExpr>(cache->N<IdExpr>(tmpFnName)),
-                                   stmt->getTypeExpr()));
-        }
-      }
+    if (match(stmt, M<AssignStmt>(M<IdExpr>(),
+                                  M<GeneratorExpr>(GeneratorExpr::ListGenerator, M_),
+                                  M_, M_))) {
+      auto tmpFnName = cache->getTemporaryVar("vectron");
+      modified = cache->N<SuiteStmt>(
+          cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
+                                 cache->N<ReturnStmt>(clone(stmt->getRhs()))),
+          cache->N<AssignStmt>(clone(stmt->getLhs()),
+                               cache->N<CallExpr>(cache->N<IdExpr>(wrapFunc),
+                                                  cache->N<IdExpr>(tmpFnName)),
+                               clone(stmt->getTypeExpr())));
     }
   }
   void visit(ast::ForStmt *stmt) override {
     if (depth == 2)
       stop = true;
     else
-      CallbackASTVisitor<void, ast::Stmt*>::visit(stmt);
+      CallbackASTVisitor<void, ast::Stmt *>::visit(stmt);
   }
 };
 
@@ -198,39 +193,31 @@ void LoopVec::handle(AssignInstr *w) {
       !util::hasAttribute(vectronFunc, "std.vectron.attributes.vectron.0:0"))
     return;
 
-  // LOG("VEC TYPE -> {}", util::getReturnType(M->getOrRealizeFunc("_get_vec_type", {},
-  // {}, "std.lib"))->getName());
-
   // @inumanag: begin change
-
   auto cache = v->getModule()->getCache();
+
+  // 1. Clone the function, change its name (FN -> FN.vectron)
   auto fnAst = cast<ast::FunctionStmt>(
-      vectronFunc->getType()->getAstType()->getFunc()->ast->clone());
+      clean_clone(vectronFunc->getType()->getAstType()->getFunc()->ast));
   auto origFnName = fnAst->getName();
-  auto fnName = origFnName + "_vectron";
+  auto fnName = fmt::format("{}.vectron", cache->rev(origFnName));
   fnAst->setName(fnName);
-  auto cv = ComprehensionSearchVisitor(
-      cache,
-      "std.lib.dpmat_temp", // I use this as wrapper, feel free to change
-      "std.experimental.simd.Vec[Int[16],32]" // init type, get it here; check
-                                              // dpmat_cast as well
-  );
-  cv.transform(fnAst);
 
-  cache->functions[fnName].ast = fnAst;
-  cache->functions[fnName].isToplevel = cache->functions[origFnName].isToplevel;
-  cache->functions[fnName].rootName = fnName;
-  cache->reverseIdentifierLookup[fnName] =
-      cache->reverseIdentifierLookup[origFnName] + ".vectron";
-
+  // 2. Modify the function (wrap the comprehension into:
+  //    def FN(): return COMPREHENSION; M = WRAPPER(FN)
+  ComprehensionSearchVisitor(cache, ast::getMangledFunc("std.lib", "dpmat_temp"))
+      .transform(fnAst);
+  // 3. Check & typecheck new function
+  auto s = cache->N<ast::SuiteStmt>(fnAst);
+  if (auto err = ast::ScopingVisitor::apply(cache, s))
+    throw exc::ParserException(std::move(err));
   auto transAst = ast::TypecheckVisitor::apply(cache->typeCtx, fnAst);
   ast::TranslateVisitor(cache->codegenCtx).transform(transAst);
-  LOG("RAW DEBUG -> {}", ast::FormatVisitor(false, cache).transform(transAst));
 
+  // 4. Realize new function
   auto vecListType =
       util::getReturnType(M->getOrRealizeFunc("_get_vec_list", {}, {}, "std.lib"));
   assert(vecListType && "_get_vec_list method not found in std.lib");
-
   std::vector<ir::types::Type *> newFnArgs;
   for (auto it = vectronFunc->arg_begin(); it != vectronFunc->arg_end(); ++it)
     newFnArgs.push_back(vecListType);
