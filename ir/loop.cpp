@@ -103,11 +103,12 @@ class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stm
   int depth;
   std::string wrapFunc;
   ast::Stmt *modified;
+  int comprehensionCount;
 
 public:
   ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc, int depth = 0)
       : cache(cache), stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
-        modified(nullptr) {}
+        modified(nullptr), comprehensionCount(0) {}
   void transform(ast::Expr *expr) override {
     if (stop || !expr)
       return;
@@ -144,8 +145,10 @@ public:
                                  cache->N<ReturnStmt>(clone(stmt->getRhs()))),
           cache->N<AssignStmt>(clone(stmt->getLhs()),
                                cache->N<CallExpr>(cache->N<IdExpr>(wrapFunc),
-                                                  cache->N<IdExpr>(tmpFnName)),
+                                                  cache->N<IdExpr>(tmpFnName),
+                                                  cache->N<IntExpr>(comprehensionCount)),
                                clone(stmt->getTypeExpr())));
+      comprehensionCount++;
     }
   }
   void visit(ast::ForStmt *stmt) override {
@@ -205,7 +208,7 @@ void LoopVec::handle(AssignInstr *w) {
 
   // 2. Modify the function (wrap the comprehension into:
   //    def FN(): return COMPREHENSION; M = WRAPPER(FN)
-  ComprehensionSearchVisitor(cache, ast::getMangledFunc("std.lib", "dpmat_temp"))
+  ComprehensionSearchVisitor(cache, ast::getMangledFunc("std.lib", "dpmat_wrap"))
       .transform(fnAst);
   // 3. Check & typecheck new function
   auto s = cache->N<ast::SuiteStmt>(fnAst);
@@ -223,19 +226,22 @@ void LoopVec::handle(AssignInstr *w) {
     newFnArgs.push_back(vecListType);
   auto newFn = v->getModule()->getOrRealizeFunc(fnName, newFnArgs);
   LOG("DEBUG -> {}", *newFn);
+  LOG("DEBUG Type -> {}", *newFn->getType());
 
   // @inumanag: end change
 
-  VectronFunctionTransformer vft;
+  // VectronFunctionTransformer vft;
   // For Ibrahim: I would like to get a clean clone of vectronFunc here
-  auto *clone = cast<BodiedFunc>(newFn);
+  // auto *clone = cast<BodiedFunc>(newFn);
   // clone->getBody()->accept(vft);
   // For Ibrahim: I would like to realize clone types here
   // if (vft.updatedVars.empty())
   //   return;
 
-  std::vector<Value *> args = {M->Nr<VarValue>(clone)};
-  std::vector<types::Type *> tps = {clone->getType()};
+  // auto *bodiedNewFn = cast<BodiedFunc>(newFn);
+
+  std::vector<Value *> args;
+  std::vector<types::Type *> tps;
   for (auto it = vectronCall->begin(); it != vectronCall->end(); ++it) {
     auto *getitemCall = cast<CallInstr>(*it);
     assert(getitemCall &&
@@ -252,6 +258,7 @@ void LoopVec::handle(AssignInstr *w) {
     tps.push_back(arg->getType());
   }
 
+  tps.push_back(newFn->getType());
   auto *alpernFunc = M->getOrRealizeFunc("alpern", tps, {}, "std.lib");
   assert(alpernFunc);
 

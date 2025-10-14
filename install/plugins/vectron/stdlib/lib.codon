@@ -1,4 +1,5 @@
 import openmp as omp
+import internal.static as st
 
 from experimental.simd import Vec
 from static import NOVEC
@@ -8,7 +9,6 @@ size_t = Int[INT_SIZE]
 LANE_SIZE: Static[int] = 32
 vec_type = Vec[size_t, LANE_SIZE]
 NUM_THREADS: Static[int] = 1
-cache_type = int if NOVEC == 1 else vec_type
 
 
 # For IR pass hacks. Just leave here and ignore for now.
@@ -112,7 +112,7 @@ class Vec:
     @pure
     @inline
     def scatter(self: Vec[T, N]) -> List[T]:
-        return [self[i] for i in static.range(N)]
+        return [self[i] for i in st.range(N)]
 
 
 @extend
@@ -153,10 +153,11 @@ def canon(seqs):
     return [[to_int_nucl(c) for c in seq] for seq in seqs]
 
 def print_ln(x: vec_type):
-    for i in static.range(LANE_SIZE):
+    for i in st.range(LANE_SIZE):
         print(x[i])
 
 def ternary(cmp, x, y):
+    print("DEBUG inside ternary")
     if isinstance(x, Vec) and isinstance(y, Vec):
         return x.mask(cmp, y)
     if isinstance(x, Vec):
@@ -167,13 +168,13 @@ def ternary(cmp, x, y):
     return vec_type(size_t(x)).mask(cmp, vec_type(size_t(y)))
 
 def maximum(*args):
-    if static.len(args) == 0:
+    if st.len(args) == 0:
         compile_error("invalid args for max")
-
-    if static.len(args) == 1:
+    
+    if st.len(args) == 1:
         return args[0]
 
-    if static.len(args) == 2:
+    if st.len(args) == 2:
         if isinstance(args[0], Vec) and isinstance(args[1], Vec):
             return args[0].llvm_max(args[1])
         elif isinstance(args[0], Vec):
@@ -185,26 +186,45 @@ def maximum(*args):
 
     return maximum(maximum(*args[:2]), *args[2:])
 
-def alpern(xs, ys, vec_foo):
+def alpern(vec_foo, xs, ys):
     scores = [[size_t(0) for _ in range(len(ys))] for _ in range(len(xs))]
 
+    print("DEBUG alpern 1")
+    
     if NOVEC == 1:
+        print("DEBUG alpern 2")
         for i in range(len(xs)):
             for j in range(len(ys)):
                 scores[i][j] = vec_foo(xs[i], ys[j])
         return scores
 
+    print("DEBUG alpern 3", len(xs), len(ys) // LANE_SIZE, len(scores), len(scores[0]))
+
     yst = ys.transpose()
-    @par(num_threads=NUM_THREADS)
+    # @par(num_threads=NUM_THREADS)
     for i in range(len(xs)):
         xvecs = [vec_type(nucl) for nucl in xs[i]]
+        if i == 0: print("DEBUG alpern 4", len(xvecs))
         for j in range(len(ys) // LANE_SIZE):
+            if j == 0: print("DEBUG alpern 40")
             yvecs = [vec_type(row[j * LANE_SIZE:]) for row in yst]
+            if j == 0: print("DEBUG alpern 5", len(yvecs), len(ys) // LANE_SIZE)
             r = vec_foo(xvecs, yvecs).scatter()
-            for k in static.range(LANE_SIZE):
+            print("DEBUG R", r)
+            with open("_log_no_pass.txt" if NOVEC else "_log_pass.txt", "a+") as f:
+                for c in r:
+                    f.write(f"{c} ")
+                f.write("\n")
+            for k in staticrange(LANE_SIZE):
                 scores[i][j * LANE_SIZE + k] = r[k]
 
-    print("DEBUG alpern end", scores[0])
+    print("DEBUG alpern 6")
+    with open("_scores.txt", "a+") as f:
+        for row in scores:
+            for e in row:
+                f.write(f"{e} ")
+            f.write("\n")
+
     return scores
 
 class Cache[T]:
@@ -212,11 +232,14 @@ class Cache[T]:
 
     def __init__(self):
         self.dp_mat = {}
-    
-    def __bool__(self):
-        return self.dp_mat == {}
 
-    def dpmat(self, init):
+    def _dpmat(self, *args, init: Static[int]):
+        if st.len(args) > 0:
+            return [self._dpmat(*args[1:], init=init) for _ in range(args[0])]
+        else:
+            return init if NOVEC == 1 else vec_type(size_t(init))
+
+    def dpmat(self, *args, init: Static[int]):
         if NOVEC == 0 and not isinstance(self.dp_mat, dict[int, list[list[vec_type]]]):
             compile_error("Set type of Cache.dp_mat to dict[int, list[list[vec_type]]] when running without NOVEC")
         if NOVEC == 1 and not isinstance(self.dp_mat, dict[int, list[list[int]]]):
@@ -226,33 +249,33 @@ class Cache[T]:
         if NUM_THREADS == 1:
             assert thr_id == 0, "Internal error: threading"
 
-        if thr_id not in self.dp_mat:
-            self.dp_mat[thr_id] = init if NOVEC == 1 else [
-                [vec_type(size_t(init[i][j])) for j in range(len(init[0]))]
-                for i in range(len(init))]
+        if not thr_id in self.dp_mat:
+            self.dp_mat[thr_id] = self._dpmat(*args, init=init)
 
         return self.dp_mat[thr_id]
 
-
-cache: Optional[dict[int, Cache[cache_type]]] = None
-
-
-def dpmat(init, idx: Static[int]):
-    global cache
-    if cache is None:
-        cache = {}
-    if idx not in cache:
-        cache[idx] = Cache[cache_type]()
-    
-    return cache[idx].dpmat(init)
+# Hardcoding caches size to avoid race issues in multithreading
+cache = Cache[int]() if NOVEC == 1 else Cache[vec_type]()
+caches = (cache, type(cache)(), type(cache)())
 
 
-def dpmat_wrap(fn, idx: Static[int]) -> list[list[vec_type]]:
-    return dpmat(fn(), idx)
+def dpmat(m, n, init: Static[int] = 0, idx: Static[int] = 0):
+    return caches[idx].dpmat(m, n, init=init)
 
 
-def dpmat_cast(x):
+def dpmat_temp(l):
+    m, n = len(l), len(l[0])
+    dpinit = dpmat(m, n)
+
+    for i in range(m):
+        for j in range(n):
+            dpinit[i][j] = vec_type(size_t(l[i][j]))
+
+    return dpinit
+
+
+def dpmat_cast(x, T: type):
     if isinstance(x, List):
         return x
     else:
-        return vec_type(size_t(x))
+        return T(size_t(x))

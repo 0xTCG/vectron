@@ -1,16 +1,12 @@
 import time
 import sys
 from vectron.attributes import vectron
-from lib import maximum, canon, dpmat, alpern, dpmat_temp
+from lib import maximum, canon
 
 
 @vectron
 def hamming(t, q):
-    # M = dpmat_temp([[0 for _ in range(len(q) + 1)] for _ in range(len(t) + 1)])
-    print("DEBUG hamming 1")
-    # M = dpmat(len(q) + 1, len(t) + 1)
     M = [[0 for _ in range(len(q) + 1)] for _ in range(len(t) + 1)]
-    print("DEBUG hamming 2")
     for i in range(1, len(q) + 1):
         for j in range(1, len(t) + 1):
             if j - i <= -1 or j - i >= 1:
@@ -21,7 +17,6 @@ def hamming(t, q):
                     M[i - 1][j - 1] + (0 if q[i - 1] == t[j - 1] else 1), 0
                 )
 
-    print("DEBUG hamming 3")
     return M[-1][-1]
 
 
@@ -33,9 +28,7 @@ with open(sys.argv[-2], 'r') as file:
 
 with time.timing("Hamming"):
     x, y = canon(seqs_x), canon(seqs_y)
-    # scores: list[list[int]] = [[0 for _ in range(len(y))] for _ in range(len(x))]
     scores = [[hamming(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
-    # scores = alpern(hamming, x, y)
 
     print("DEBUG END", scores[0])
 
