@@ -197,7 +197,7 @@ void LoopVec::handle(AssignInstr *w) {
 
   auto *vectronFunc = util::getFunc(vectronCall->getCallee());
   if (!bool(vectronFunc) ||
-      !util::hasAttribute(vectronFunc, "std.vectron.attributes.vectron.0:0"))
+      !util::hasAttribute(vectronFunc, codon::ast::getMangledFunc("std.vectron.attributes", "vectron")))
     return;
 
   // @inumanag: begin change

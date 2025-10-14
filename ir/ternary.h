@@ -60,7 +60,7 @@ class TernaryVec : public transform::OperatorPass {
       return;
     
     auto *pf = getParentFunc();
-    if ( !bool(pf) || !util::hasAttribute(pf, "std.vectron.attributes.vectron.0:0") )
+    if ( !bool(pf) || !util::hasAttribute(pf, codon::ast::getMangledFunc("std.vectron.attributes", "vectron")) )
       return;
 
     std::vector<Value*> args;
