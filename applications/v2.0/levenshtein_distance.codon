@@ -1,16 +1,13 @@
 import time
 import sys
 from vectron.attributes import vectron
-from lib import dpmat, maximum, alpern, canon
+from lib import maximum, canon
 
 
 @vectron
 def levenshtein(Q, T):
-    M = dpmat(len(Q) + 1, len(T) + 1)
-    for i in range(len(T) + 1):
-        M[i][0] = -2 - i * 4
-    for j in range(len(Q) + 1):
-        M[0][j] = -2 - j * 4
+    M = [[((-2 - i * 4) if j == 0 else (-2 - j * 4) if i == 0 else 0)
+          for j in range(len(Q) + 1)] for i in range(len(T) + 1)]
 
     for i in range(1, len(T) + 1):
         for j in range(1, len(Q) + 1):
@@ -31,6 +28,7 @@ with open(sys.argv[-2], 'r') as file:
 
 
 with time.timing("Levenshtein"):
-    scores = alpern(levenshtein, canon(seqs_x), canon(seqs_y))
+    x, y = canon(seqs_x), canon(seqs_y)
+    scores = [[levenshtein(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
 
 print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")
