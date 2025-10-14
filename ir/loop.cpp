@@ -225,20 +225,8 @@ void LoopVec::handle(AssignInstr *w) {
   for (auto it = vectronFunc->arg_begin(); it != vectronFunc->arg_end(); ++it)
     newFnArgs.push_back(vecListType);
   auto newFn = v->getModule()->getOrRealizeFunc(fnName, newFnArgs);
-  LOG("DEBUG -> {}", *newFn);
-  LOG("DEBUG Type -> {}", *newFn->getType());
 
   // @inumanag: end change
-
-  // VectronFunctionTransformer vft;
-  // For Ibrahim: I would like to get a clean clone of vectronFunc here
-  // auto *clone = cast<BodiedFunc>(newFn);
-  // clone->getBody()->accept(vft);
-  // For Ibrahim: I would like to realize clone types here
-  // if (vft.updatedVars.empty())
-  //   return;
-
-  // auto *bodiedNewFn = cast<BodiedFunc>(newFn);
 
   std::vector<Value *> args;
   std::vector<types::Type *> tps;
@@ -266,8 +254,6 @@ void LoopVec::handle(AssignInstr *w) {
   assert(alpernCall);
 
   w->setRhs(alpernCall);
-
-  LOG("DEBUG FINAL -> {}", *w);
 }
 
 } // namespace vectron

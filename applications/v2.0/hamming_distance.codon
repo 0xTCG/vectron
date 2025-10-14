@@ -30,7 +30,5 @@ with time.timing("Hamming"):
     x, y = canon(seqs_x), canon(seqs_y)
     scores = [[hamming(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
 
-    print("DEBUG END", scores[0])
-
 
 print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")

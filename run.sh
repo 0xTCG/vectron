@@ -9,14 +9,6 @@ fi
 echo "Codon path: $VECTRON_CODON_PATH"
 
 VECTRON_PLUGIN_PATH=$VECTRON_CODON_PATH/lib/codon/plugins/vectron/stdlib/
-if [[ $* == *--no-vec* ]]
-then
-    echo "NOVEC: Static[int] = 1" > $VECTRON_PLUGIN_PATH/static.codon
-    VEC_FLAG="non-vectorized"
-else
-    echo "NOVEC: Static[int] = 0" > $VECTRON_PLUGIN_PATH/static.codon
-    VEC_FLAG="vectorized"
-fi
 
 if [[ $* == */v2.0/* ]]
 then
