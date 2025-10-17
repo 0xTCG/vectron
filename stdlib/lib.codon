@@ -28,87 +28,6 @@ class Vec:
     def __int__(self: Vec[T, N]) -> int:
         raise ValueError("IR pass malfunctioned: cannot call int on Vec")
 
-    @llvm
-    @pure
-    @inline
-    def __or__(self: Vec[u1, N], other: Vec[u1, N]) -> Vec[u1, N]:
-        %0 = or <{=N} x i1> %self, %other
-        ret <{=N} x i1> %0
-
-    @llvm
-    @pure
-    @inline
-    def __eq__(self: Vec[T, N], other: Vec[T, N]) -> Vec[u1, N]:
-        %0 = icmp eq <{=N} x {=T}> %self, %other
-        ret <{=N} x i1> %0
-
-    @pure
-    @inline
-    def __eq__(self: Vec[T, N], other: int) -> Vec[u1, N]:
-        return self == Vec[T, N](T(other))
-
-    @llvm
-    @pure
-    @inline
-    def add(self: Vec[T, N], other: Vec[T, N]) -> Vec[T, N]:
-        %0 = add <{=N} x {=T}> %self, %other
-        ret <{=N} x {=T}> %0
-
-    @llvm
-    @pure
-    @inline
-    def add(self: Vec[T, N], other: T) -> Vec[T, N]:
-        %0 = insertelement <{=N} x {=T}> undef, {=T} %other, i32 0
-        %1 = shufflevector <{=N} x {=T}> %0, <{=N} x {=T}> undef, <{=N} x i32> zeroinitializer
-        %2 = add <{=N} x {=T}> %self, %1
-        ret <{=N} x {=T}> %2
-
-    def __add__(self: Vec[T, N], other) -> Vec[T, N]:
-        _other = other if isinstance(other, Vec) else T(other)
-        return self.add(_other)
-
-    @llvm
-    @pure
-    @inline
-    def sub(self: Vec[T, N], other: Vec[T, N]) -> Vec[T, N]:
-        %0 = sub <{=N} x {=T}> %self, %other
-        ret <{=N} x {=T}> %0
-
-    @llvm
-    @pure
-    @inline
-    def sub(self: Vec[T, N], other: T) -> Vec[T, N]:
-        %0 = insertelement <{=N} x {=T}> undef, {=T} %other, i32 0
-        %1 = shufflevector <{=N} x {=T}> %0, <{=N} x {=T}> undef, <{=N} x i32> zeroinitializer
-        %2 = sub <{=N} x {=T}> %self, %1
-        ret <{=N} x {=T}> %2
-
-    @pure
-    @inline
-    def __sub__(self: Vec[T, N], other) -> Vec[T, N]:
-        _other = other if isinstance(other, Vec) else T(other)
-        return self.sub(_other)
-
-    @llvm
-    @pure
-    @inline
-    def mask(self: Vec[T, N], mask: Vec[u1, N], other: Vec[T, N]) -> Vec[T, N]:
-        %0 = select <{=N} x i1> %mask, <{=N} x {=T}> %self, <{=N} x {=T}> %other
-        ret <{=N} x {=T}> %0
-
-    @llvm
-    @pure
-    @inline
-    def llvm_max(self: Vec[i16, N], other: Vec[i16, N]) -> Vec[i16, N]:
-        declare <{=N} x i16> @llvm.smax.v{=N}i16(<{=N} x i16>, <{=N} x i16>)
-        %0 = call <{=N} x i16> @llvm.smax.v{=N}i16(<{=N} x i16> %self, <{=N} x i16> %other)
-        ret <{=N} x i16> %0
-
-    @pure
-    @inline
-    def scatter(self: Vec[T, N]) -> List[T]:
-        return [self[i] for i in static.range(N)]
-
 
 @extend
 class List:
@@ -201,7 +120,7 @@ class Cache:
 
     def __init__(self):
         self.dp_mat = {}
-    
+
     def __bool__(self):
         return self.dp_mat == {}
 
@@ -228,5 +147,5 @@ def dpmat_wrap(fn, idx: Static[int]) -> list[list[vec_type]]:
         cache = {}
     if idx not in cache:
         cache[idx] = Cache()
-    
+
     return cache[idx].dpmat(fn)

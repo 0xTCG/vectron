@@ -199,6 +199,16 @@ void LoopVec::handle(AssignInstr *w) {
   // @inumanag: begin change
   auto cache = v->getModule()->getCache();
 
+  auto attr = vectronFunc->getAttribute<KeyValueAttribute>()->get("std.vectron.attributes.vectron.0:0");
+  auto dtype = cache->typeCtx->forceFind("int")->getType();
+  auto mode = 1;
+  if (!attr.empty()) {
+    auto f = cache->typeCtx->forceFind(attr)->getType();
+    auto tv = ast::TypecheckVisitor(cache->typeCtx);
+    dtype = tv.extractFuncGeneric(f, 0);
+    mode = tv.extractFuncGeneric(f, 1)->getIntStatic()->value;
+  }
+
   // 1. Clone the function, change its name (FN -> FN.vectron)
   auto fnAst = cast<ast::FunctionStmt>(
       clean_clone(vectronFunc->getType()->getAstType()->getFunc()->ast));
