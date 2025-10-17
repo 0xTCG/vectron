@@ -12,7 +12,6 @@ def lcs(t, q):
             M[i][j] = max(M[i - 1][j - 1] + (1 if q[i - 1] == t[j - 1] else 0), 
                         M[i - 1][j], 
                         M[i][j - 1])
-    print(M[-1][-1])
     return M[-1][-1]
 
 @vectron_scheduler

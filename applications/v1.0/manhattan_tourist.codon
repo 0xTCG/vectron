@@ -28,7 +28,6 @@ def manhattan(t, q):
                 0,
                 M[i - 1][j] + S(q[i - 1], 5, 3, 1, t[j - 1])
             )
-    print(M[-1][-1])
     return M[-1][-1]
 
 @vectron_scheduler

@@ -55,11 +55,14 @@ class TernaryVec : public transform::OperatorPass {
   }
 
   void handle(CallInstr *v) override {
+    auto *M = v->getModule();
+    if ( v->getType()->is(M->getNoneType()) )
+      return;
+    
     auto *pf = getParentFunc();
-    if ( !bool(pf) || !util::hasAttribute(pf, "std.vectron.attributes.vectron.0:0") )
+    if ( !bool(pf) || !util::hasAttribute(pf, codon::ast::getMangledFunc("std.vectron.attributes", "vectron")) )
       return;
 
-    auto *M = v->getModule();
     std::vector<Value*> args;
     std::vector<types::Type*> argsTypes;
     bool ternFound = false;

@@ -1,25 +1,20 @@
 import time
 import sys
 from vectron.attributes import vectron
-from lib import dpmat, maximum, alpern, canon
+from lib import maximum, canon, vec_or
 
 
 @vectron
 def min_cost_path(h, m):
-    q = dpmat(len(h) + 1, len(m) + 1)
-    for i in range(len(h) + 1):
-        for j in range(len(m) + 1):
-            if j == 0 and i > 0:
-                q[i][j] = 1 + i * 2
-            elif i == 0 and j > 0:
-                q[i][j] = 1 + j * 3
+    q = [[((1 + i * 2) if j == 0 and i > 0 else (1 + j * 3) if i == 0 and j > 0 else 0)
+          for j in range(len(h) + 1)] for i in range(len(m) + 1)]
     
     for i in range(1, len(m) + 1):
         for j in range(1, len(h) + 1):
             q[i][j] = maximum(
-                q[i - 1][j - 1] + (-1 if ((m[i - 1] == -1).__or__(h[j - 1] == -1)) else 2 if m[i - 1] == h[j - 1] else -3),
-                q[i - 1][j] + (-1 if ((m[i - 1] == -1).__or__(h[j - 1] == -1)) else 1 if m[i - 1] == h[j - 1] else -2),
-                q[i][j - 1] + (-2 if ((m[i - 1] == -1).__or__(h[j - 1] == -1)) else 1 if m[i - 1] == h[j - 1] else -2)
+                q[i - 1][j - 1] + (-1 if vec_or(m[i - 1] == -1, h[j - 1] == -1) else 2 if m[i - 1] == h[j - 1] else -3),
+                q[i - 1][j] + (-1 if vec_or(m[i - 1] == -1, h[j - 1] == -1) else 1 if m[i - 1] == h[j - 1] else -2),
+                q[i][j - 1] + (-2 if vec_or(m[i - 1] == -1, h[j - 1] == -1) else 1 if m[i - 1] == h[j - 1] else -2)
                 )
 
     return q[-1][-1]
@@ -33,6 +28,7 @@ with open(sys.argv[-2], 'r') as file:
 
 
 with time.timing("Min cost path"):
-    scores = alpern(min_cost_path, canon(seqs_x), canon(seqs_y))
+    x, y = canon(seqs_x), canon(seqs_y)
+    scores = [[min_cost_path(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
 
 print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")

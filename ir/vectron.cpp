@@ -11,38 +11,11 @@
 namespace vectron {
 
 void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {  
-  //pm->registerPass(std::make_unique<byPass>());
-  //pm->registerPass(std::make_unique<ListInitializer>());
-  //pm->registerPass(std::make_unique<LoopAnalyzer>());
-  //pm->registerPass(std::make_unique<FuncReplacement>());
-
-
-  //pm->registerPass(std::make_unique<ListInitializer>(), "core-parallel-openmp");
-  //pm->registerPass(std::make_unique<FuncReplacement>(), "core-parallel-openmp");  
-  //pm->registerPass(std::make_unique<LoopAnalyzer>(), "core-parallel-openmp");
-  //pm->registerPass(std::make_unique<byPass>(), "core-parallel-openmp");  
-  //pm->registerPass(std::make_unique<LoopAnalyzer>(),"core-pythonic-dict-arithmetic-opt");  
-  //pm->registerPass(std::make_unique<FuncReplacement>(),"core-pythonic-dict-arithmetic-opt");  
-  //pm->registerPass(std::make_unique<FuncReplacement>(),"core-pythonic-str-addition-opt");  
-  //pm->registerPass(std::make_unique<LoopAnalyzer>(),"core-pythonic-str-addition-opt");  
-  //pm->registerPass(std::make_unique<ListInitializer>(), "core-folding-pass-group");
-  //pm->registerPass(std::make_unique<FuncReplacement>(),"core-pythonic-dict-arithmetic-opt");  
-  //pm->registerPass(std::make_unique<LoopAnalyzer>(),"core-folding-pass-group"); 
-  //pm->registerPass(std::make_unique<FuncReplacement>(), "core-pythonic-dict-arithmetic-opt");  
-  //pm->registerPass(std::make_unique<ListInitializer>(), "core-pythonic-dict-arithmetic-opt");  
-  //pm->registerPass(std::make_unique<LoopAnalyzer>(), "core-pythonic-dict-arithmetic-opt");  
-  //pm->registerPass(std::make_unique<byPass>(), "core-pythonic-dict-arithmetic-opt");      
-
-  //pm->registerPass(std::make_unique<byPass>(), "core-folding-pass-group", {} ,{"core-folding-pass-group"}); 
-  //pm->registerPass(std::make_unique<LoopAnalyzer>(), "core-folding-pass-group", {} ,{"core-folding-pass-group"}); 
-  //pm->registerPass(std::make_unique<ListInitializer>(), "core-folding-pass-group", {} ,{"core-folding-pass-group"}); 
-  //pm->registerPass(std::make_unique<FuncReplacement>(), "core-folding-pass-group", {} ,{"core-folding-pass-group"}); 
-
-  pm->registerPass(std::make_unique<byPass>(), "core-folding-pass-group"); 
-  pm->registerPass(std::make_unique<LoopAnalyzer>(), "core-folding-pass-group");
-  pm->registerPass(std::make_unique<ListInitializer>(), "core-folding-pass-group"); 
-  pm->registerPass(std::make_unique<EvnSelector>(), "core-folding-pass-group");    
-  pm->registerPass(std::make_unique<FuncReplacement>(), "core-folding-pass-group");
+  pm->registerPass(std::make_unique<byPass>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt"); 
+  pm->registerPass(std::make_unique<LoopAnalyzer>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
+  pm->registerPass(std::make_unique<ListInitializer>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt"); 
+  pm->registerPass(std::make_unique<EvnSelector>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");    
+  pm->registerPass(std::make_unique<FuncReplacement>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
 
   pm->registerPass(std::make_unique<LoopVec>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
   pm->registerPass(std::make_unique<TernaryVec>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");

@@ -1,12 +1,12 @@
 import time
 import sys
 from vectron.attributes import vectron
-from lib import dpmat, maximum, alpern, canon
+from lib import maximum, canon
 
 
 @vectron
 def lcs(t, q):
-    M = dpmat(len(t) + 1, len(q) + 1)
+    M = [[0 for _ in range(len(t) + 1)] for _ in range(len(q) + 1)]
     for i in range(1, len(q) + 1):
         for j in range(1, len(t) + 1):       
             M[i][j] = maximum(
@@ -25,6 +25,7 @@ with open(sys.argv[-2], 'r') as file:
 
 
 with time.timing("LCS"):
-    scores = alpern(lcs, canon(seqs_x), canon(seqs_y))
+    x, y = canon(seqs_x), canon(seqs_y)
+    scores = [[lcs(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
 
 print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")

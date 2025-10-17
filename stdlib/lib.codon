@@ -16,6 +16,11 @@ def _get_vec_list():
 
 
 @extend
+class size_t:
+    def __eq__(self, value: int) -> bool:
+        return int(self) == value
+
+@extend
 class int:
     def __getitem__(self, *args):
         return self
@@ -70,6 +75,20 @@ def print_ln(x: vec_type):
     for i in static.range(LANE_SIZE):
         print(x[i])
 
+@llvm
+@pure
+@inline
+def _vec_or(x: Vec[u1, LANE_SIZE], y: Vec[u1, LANE_SIZE]) -> Vec[u1, LANE_SIZE]:
+    %0 = or <{=LANE_SIZE} x i1> %x, %y
+    ret <{=LANE_SIZE} x i1> %0
+
+def vec_or[T](a: T, b: T) -> T:
+    if isinstance(a, Vec) and isinstance(b, Vec):
+        return _vec_or(a, b)
+    if not isinstance(a, Vec) and not isinstance(b, Vec):
+        return a or b
+    compile_error("vec_or: cannot mix vector and scalar")
+
 def ternary(cmp, x, y):
     if isinstance(x, Vec) and isinstance(y, Vec):
         return x.mask(cmp, y)
@@ -100,7 +119,7 @@ def maximum(*args):
     return maximum(maximum(*args[:2]), *args[2:])
 
 def alpern(xs, ys, vec_foo):
-    scores = [[size_t(0) for _ in range(len(ys))] for _ in range(len(xs))]
+    scores = [[0 for _ in range(len(ys))] for _ in range(len(xs))]
 
     yst = ys.transpose()
     @par(num_threads=NUM_THREADS)
@@ -110,7 +129,7 @@ def alpern(xs, ys, vec_foo):
             yvecs = [vec_type(row[j * LANE_SIZE:]) for row in yst]
             r = vec_foo(xvecs, yvecs).scatter()
             for k in static.range(LANE_SIZE):
-                scores[i][j * LANE_SIZE + k] = r[k]
+                scores[i][j * LANE_SIZE + k] = int(r[k])
 
     return scores
 

@@ -103,12 +103,13 @@ class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stm
   int depth;
   std::string wrapFunc;
   ast::Stmt *modified;
-  int comprehensionCount;
+  
+  static int comprehensionCount;
 
 public:
   ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc, int depth = 0)
       : cache(cache), stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
-        modified(nullptr), comprehensionCount(0) {}
+        modified(nullptr) {}
   void transform(ast::Expr *expr) override {
     if (stop || !expr)
       return;
@@ -146,9 +147,9 @@ public:
           cache->N<AssignStmt>(clone(stmt->getLhs()),
                                cache->N<CallExpr>(cache->N<IdExpr>(wrapFunc),
                                                   cache->N<IdExpr>(tmpFnName),
-                                                  cache->N<IntExpr>(comprehensionCount)),
+                                                  cache->N<IntExpr>(ComprehensionSearchVisitor::comprehensionCount)),
                                clone(stmt->getTypeExpr())));
-      comprehensionCount++;
+      ComprehensionSearchVisitor::comprehensionCount++;
     }
   }
   void visit(ast::ForStmt *stmt) override {
@@ -158,6 +159,9 @@ public:
       CallbackASTVisitor<void, ast::Stmt *>::visit(stmt);
   }
 };
+
+// Definition of the static member outside the class
+int ComprehensionSearchVisitor::comprehensionCount = 0;
 
 void LoopVec::handle(AssignInstr *w) {
   auto *v = cast<FlowInstr>(w->getRhs());
@@ -193,7 +197,7 @@ void LoopVec::handle(AssignInstr *w) {
 
   auto *vectronFunc = util::getFunc(vectronCall->getCallee());
   if (!bool(vectronFunc) ||
-      !util::hasAttribute(vectronFunc, "std.vectron.attributes.vectron.0:0"))
+      !util::hasAttribute(vectronFunc, codon::ast::getMangledFunc("std.vectron.attributes", "vectron")))
     return;
 
   // @inumanag: begin change
