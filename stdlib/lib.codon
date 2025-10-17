@@ -1,3 +1,4 @@
+import time
 import openmp as omp
 
 from experimental.simd import Vec
@@ -200,10 +201,11 @@ def maximum(*args):
     return maximum(maximum(*args[:2]), *args[2:])
 
 def alpern(xs, ys, vec_foo):
-    scores = [[0 for _ in range(len(ys))] for _ in range(len(xs))]
+    with time.timing("Alpern scores"):
+        scores = [[0 for _ in range(len(ys))] for _ in range(len(xs))]
 
     yst = ys.transpose()
-    @par(num_threads=NUM_THREADS)
+    # @par(num_threads=NUM_THREADS)
     for i in range(len(xs)):
         xvecs = [vec_type(nucl) for nucl in xs[i]]
         for j in range(len(ys) // LANE_SIZE):
@@ -230,6 +232,7 @@ class Cache:
             assert thr_id == 0, "Internal error: threading"
 
         if thr_id not in self.dp_mat:
+            print("Allocating DP matrix for thread", thr_id, list(self.dp_mat.keys()))
             init = fn()
             self.dp_mat[thr_id] = [
                 [vec_type(size_t(init[i][j])) for j in range(len(init[0]))]
@@ -243,9 +246,12 @@ cache: Optional[dict[int, Cache]] = None
 
 def dpmat_wrap(fn, idx: Static[int]) -> list[list[vec_type]]:
     global cache
-    if cache is None:
-        cache = {}
-    if idx not in cache:
-        cache[idx] = Cache()
+    with time.timing("DP matrix cache"):
+        if cache is None:
+            print("Initializing DP matrix cache")
+            cache = {}
+        if idx not in cache:
+            print("Creating Cache for index", idx)
+            cache[idx] = Cache()
     
     return cache[idx].dpmat(fn)
