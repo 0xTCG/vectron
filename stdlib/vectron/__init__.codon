@@ -10,4 +10,4 @@ def vectron(
 ):
     pass
 
-from .lib import alpern, dpmat_wrap, maximum, canon
+from .lib import alpern, dpmat_wrap, maximum, canon, vec_or, vec_and

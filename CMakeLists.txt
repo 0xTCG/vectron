@@ -38,5 +38,4 @@ endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 install(TARGETS vectron DESTINATION plugins/vectron/build)
 install(FILES plugin.toml DESTINATION plugins/vectron)
-install(FILES stdlib/experimental/simd.codon DESTINATION stdlib/experimental)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/stdlib DESTINATION plugins/vectron)

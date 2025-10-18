@@ -61,9 +61,26 @@ def canon(seqs, T: type = Int[16]):
 @llvm
 @pure
 @inline
+def _vec_and(x: Vec[u1, LANE_SIZE], y: Vec[u1, LANE_SIZE], LANE_SIZE: Literal[int]) -> Vec[u1, LANE_SIZE]:
+    %0 = and <{=LANE_SIZE} x i1> %x, %y
+    ret <{=LANE_SIZE} x i1> %0
+
+
+@llvm
+@pure
+@inline
 def _vec_or(x: Vec[u1, LANE_SIZE], y: Vec[u1, LANE_SIZE], LANE_SIZE: Literal[int]) -> Vec[u1, LANE_SIZE]:
     %0 = or <{=LANE_SIZE} x i1> %x, %y
     ret <{=LANE_SIZE} x i1> %0
+
+
+def vec_and[T](a: T, b: T) -> T:
+    if isinstance(a, Vec) and isinstance(b, Vec):
+        return _vec_and(a, b)
+    if not isinstance(a, Vec) and not isinstance(b, Vec):
+        return a and b
+    compile_error("vec_and: cannot mix vector and scalar")
+
 
 def vec_or[T](a: T, b: T) -> T:
     if isinstance(a, Vec) and isinstance(b, Vec):
@@ -142,7 +159,6 @@ class Cache:
     def dpmat(self, fn):
         thr_id = omp.get_thread_num()
         if thr_id not in self.dp_mat:
-            print("Allocating DP matrix for thread", thr_id, list(self.dp_mat.keys()))
             init = fn()
             self.dp_mat[thr_id] = [
                 [Vec[T, LANE_SIZE](T(init[i][j])) for j in range(len(init[0]))]
@@ -161,10 +177,8 @@ def dpmat_wrap(
 ) -> List[List[Vec[T, LANE_SIZE]]]:
     global cache
     if cache is None:
-        print("Initializing DP matrix cache", cache)
         cache = {}
     if idx not in cache:
-        print("Creating Cache for index", idx)
         c = Cache[LANE_SIZE, T]()
         cache[idx] = c.__raw__()
     # Never inherit Cache or this will fail spectacularly
