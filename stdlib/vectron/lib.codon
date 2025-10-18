@@ -1,4 +1,3 @@
-import time
 import openmp as omp
 from experimental.simd import Vec
 
@@ -118,8 +117,7 @@ def maximum(*args):
 
 
 def alpern(xs, ys, vec_foo, LANE_SIZE: Literal[int], T: type, THREADS: Literal[int]):
-    with time.timing("Alpern scores"):
-        scores = [[0 for _ in range(len(ys))] for _ in range(len(xs))]
+    scores = [[0 for _ in range(len(ys))] for _ in range(len(xs))]
 
     yst = ys.transpose()
     if THREADS == 1:
