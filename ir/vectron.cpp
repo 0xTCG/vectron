@@ -10,12 +10,12 @@
 
 namespace vectron {
 
-void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {  
-  pm->registerPass(std::make_unique<byPass>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt"); 
-  pm->registerPass(std::make_unique<LoopAnalyzer>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
-  pm->registerPass(std::make_unique<ListInitializer>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt"); 
-  pm->registerPass(std::make_unique<EvnSelector>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");    
-  pm->registerPass(std::make_unique<FuncReplacement>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
+void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {
+  // pm->registerPass(std::make_unique<byPass>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
+  // pm->registerPass(std::make_unique<LoopAnalyzer>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
+  // pm->registerPass(std::make_unique<ListInitializer>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
+  // pm->registerPass(std::make_unique<EvnSelector>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
+  // pm->registerPass(std::make_unique<FuncReplacement>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
 
   pm->registerPass(std::make_unique<LoopVec>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");
   pm->registerPass(std::make_unique<TernaryVec>(), debug ? "core-pipeline-lowering" : "core-pythonic-dict-arithmetic-opt");

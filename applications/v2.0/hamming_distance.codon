@@ -1,8 +1,6 @@
 import time
 import sys
-from vectron.attributes import vectron
-from lib import maximum, canon
-
+from vectron import vectron, maximum, canon
 
 @vectron
 def hamming(t, q):

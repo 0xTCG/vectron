@@ -7,30 +7,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-limit-debug-info")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 include_directories(.)
 
-set(CPM_DOWNLOAD_VERSION 0.32.3)
-set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-
-if(NOT(EXISTS ${CPM_DOWNLOAD_LOCATION}))
-    message(STATUS "Downloading CPM.cmake...")
-    file(DOWNLOAD https://github.com/TheLartians/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake ${CPM_DOWNLOAD_LOCATION})
-endif()
-
-include(${CPM_DOWNLOAD_LOCATION})
-
-CPMAddPackage(
-    NAME xz
-    GITHUB_REPOSITORY "xz-mirror/xz"
-    VERSION 5.2.5
-    GIT_TAG e7da44d5151e21f153925781ad29334ae0786101
-    EXCLUDE_FROM_ALL YES
-    OPTIONS "BUILD_SHARED_LIBS OFF"
-    "CMAKE_POSITION_INDEPENDENT_CODE ON")
-
-if(xz_ADDED)
-    set_target_properties(xz PROPERTIES EXCLUDE_FROM_ALL ON)
-    set_target_properties(xzdec PROPERTIES EXCLUDE_FROM_ALL ON)
-endif()
-
 set(VECTRON_FILES
     ir/bypass.cpp
     ir/bypass.h

@@ -85,7 +85,7 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
   auto *dpmatFunc = M->getOrRealizeFunc(
       "dpmat", {M->getIntType(), M->getIntType()},
       {types::Generic(initVal->getVal()), types::Generic(updatedVars.size())},
-      "std.lib");
+      "std.vectron.lib");
   assert(dpmatFunc);
 
   auto *dpmatCall = util::call(dpmatFunc, {outerRange, innerRange});
@@ -98,22 +98,22 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
 
 // Search expression tree for a identifier
 class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stmt *> {
-  ast::Cache *cache;
+  using fn_t = std::function<ast::Stmt *(ast::AssignStmt *, int)>;
+
+  fn_t transformation;
   bool stop;
   int depth;
-  std::string wrapFunc;
   ast::Stmt *modified;
-  
+
   static int comprehensionCount;
 
 public:
-  ComprehensionSearchVisitor(ast::Cache *cache, std::string wrapFunc, int depth = 0)
-      : cache(cache), stop(false), depth(depth), wrapFunc(std::move(wrapFunc)),
-        modified(nullptr) {}
+  ComprehensionSearchVisitor(const fn_t &transformation, int depth = 0)
+      : transformation(transformation), stop(false), depth(depth), modified(nullptr) {}
   void transform(ast::Expr *expr) override {
     if (stop || !expr)
       return;
-    ComprehensionSearchVisitor v(cache, wrapFunc, depth + 1);
+    ComprehensionSearchVisitor v(transformation, depth + 1);
     if (expr)
       expr->accept(v);
     stop = v.stop;
@@ -121,7 +121,7 @@ public:
   ast::Stmt *transform(ast::Stmt *stmt) override {
     if (stop || !stmt)
       return nullptr;
-    ComprehensionSearchVisitor v(cache, wrapFunc,
+    ComprehensionSearchVisitor v(transformation,
                                  depth + (!ast::cast<ast::SuiteStmt>(stmt)));
     if (stmt)
       stmt->accept(v);
@@ -140,16 +140,7 @@ public:
     if (match(stmt, M<AssignStmt>(M<IdExpr>(),
                                   M<GeneratorExpr>(GeneratorExpr::ListGenerator, M_),
                                   M_, M_))) {
-      auto tmpFnName = cache->getTemporaryVar("vectron");
-      modified = cache->N<SuiteStmt>(
-          cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
-                                 cache->N<ReturnStmt>(clone(stmt->getRhs()))),
-          cache->N<AssignStmt>(clone(stmt->getLhs()),
-                               cache->N<CallExpr>(cache->N<IdExpr>(wrapFunc),
-                                                  cache->N<IdExpr>(tmpFnName),
-                                                  cache->N<IntExpr>(ComprehensionSearchVisitor::comprehensionCount)),
-                               clone(stmt->getTypeExpr())));
-      ComprehensionSearchVisitor::comprehensionCount++;
+      modified = transformation(stmt, ComprehensionSearchVisitor::comprehensionCount++);
     }
   }
   void visit(ast::ForStmt *stmt) override {
@@ -164,110 +155,161 @@ public:
 int ComprehensionSearchVisitor::comprehensionCount = 0;
 
 void LoopVec::handle(AssignInstr *w) {
-  auto *v = cast<FlowInstr>(w->getRhs());
-  if (!v)
-    return;
+  try {
+    auto *v = cast<FlowInstr>(w->getRhs());
+    if (!v)
+      return;
 
-  auto *M = v->getModule();
+    auto *M = v->getModule();
 
-  // Skip if inner comprehension.
-  if (bool(findLast<ForFlow>()))
-    return;
+    // Skip if inner comprehension.
+    if (bool(findLast<ForFlow>()))
+      return;
 
-  auto *forFl = cast<ForFlow>(cast<SeriesFlow>(v->getFlow())->back());
-  // If not for flow then it is not comprehension.
-  if (!forFl)
-    return;
+    auto *forFl = cast<ForFlow>(cast<SeriesFlow>(v->getFlow())->back());
+    // If not for flow then it is not comprehension.
+    if (!forFl)
+      return;
 
-  auto *innerFl = cast<FlowInstr>(
-      cast<CallInstr>(cast<SeriesFlow>(forFl->getBody())->back())->back());
-  if (!innerFl || !innerFl->getFlow())
-    return;
+    auto *innerFl = cast<FlowInstr>(
+        cast<CallInstr>(cast<SeriesFlow>(forFl->getBody())->back())->back());
+    if (!innerFl || !innerFl->getFlow())
+      return;
 
-  auto *innerForFl = cast<ForFlow>(cast<SeriesFlow>(innerFl->getFlow())->back());
-  // If not inner for flow then it is not a double comprehension.
-  if (!innerForFl)
-    return;
+    auto *innerForFl = cast<ForFlow>(cast<SeriesFlow>(innerFl->getFlow())->back());
+    // If not inner for flow then it is not a double comprehension.
+    if (!innerForFl)
+      return;
 
-  auto *vectronCall = cast<CallInstr>(
-      cast<CallInstr>(cast<SeriesFlow>(innerForFl->getBody())->back())->back());
-  // If there is no inner call then it cannot be a typical Vectron use-case
-  if (!vectronCall)
-    return;
+    auto *vectronCall = cast<CallInstr>(
+        cast<CallInstr>(cast<SeriesFlow>(innerForFl->getBody())->back())->back());
+    // If there is no inner call then it cannot be a typical Vectron use-case
+    if (!vectronCall)
+      return;
 
-  auto *vectronFunc = util::getFunc(vectronCall->getCallee());
-  if (!bool(vectronFunc) ||
-      !util::hasAttribute(vectronFunc, codon::ast::getMangledFunc("std.vectron.attributes", "vectron")))
-    return;
+    auto *vectronFunc = util::getFunc(vectronCall->getCallee());
+    auto vectronAttr = codon::ast::getMangledFunc("std.vectron.__init__", "vectron");
+    if (!bool(vectronFunc) || !util::hasAttribute(vectronFunc, vectronAttr))
+      return;
 
-  // @inumanag: begin change
-  auto cache = v->getModule()->getCache();
+    // @inumanag: begin change
+    auto cache = v->getModule()->getCache();
 
-  auto attr = vectronFunc->getAttribute<KeyValueAttribute>()->get("std.vectron.attributes.vectron.0:0");
-  auto dtype = cache->typeCtx->forceFind("int")->getType();
-  auto mode = 1;
-  if (!attr.empty()) {
-    auto f = cache->typeCtx->forceFind(attr)->getType();
-    auto tv = ast::TypecheckVisitor(cache->typeCtx);
-    dtype = tv.extractFuncGeneric(f, 0);
-    mode = tv.extractFuncGeneric(f, 1)->getIntStatic()->value;
+    auto attr = vectronFunc->getAttribute<KeyValueAttribute>()->get(vectronAttr);
+    auto dtype = cache->typeCtx->forceFind("int")->getType()->getClass();
+    auto mode = 1;
+    auto lane_size = 8;
+    auto threads = 1;
+    if (!attr.empty()) {
+      auto f = cache->typeCtx->forceFind(attr)->getType();
+      auto tv = ast::TypecheckVisitor(cache->typeCtx);
+      lane_size = tv.extractFuncGeneric(f, 0)->getIntStatic()->value;
+      dtype = tv.extractFuncGeneric(f, 1)->getClass();
+      threads = tv.extractFuncGeneric(f, 2)->getIntStatic()->value;
+      mode = tv.extractFuncGeneric(f, 3)->getIntStatic()->value;
+    }
+    LOG("[vectron] fn: {}, lane: {}, dtype: {}, threads: {}, mode: {}",
+        vectronFunc->getName(), lane_size, dtype->debugString(0), threads, mode);
+
+    seqassertn(dtype && in(cache->getClass(dtype)->realizations,
+                          dtype->getClass()->realizedName()),
+              "{} not realized", dtype ? dtype->debugString(0) : "<null>");
+    auto vectronParams = std::vector<types::Generic>{
+        types::Generic{lane_size},
+        types::Generic{cache->getClass(dtype)
+                           ->realizations[dtype->getClass()->realizedName()]
+                           ->ir},
+        types::Generic{threads},
+    };
+
+    // 1. Clone the function, change its name (FN -> FN.vectron)
+    auto fnAst = cast<ast::FunctionStmt>(
+        clean_clone(vectronFunc->getType()->getAstType()->getFunc()->ast));
+    auto origFnName = fnAst->getName();
+    auto fnName = fmt::format("{}.vectron", cache->rev(origFnName));
+    fnAst->setName(fnName);
+    fnAst->addParam(ast::Param{
+        ".VECTRON_LANE", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
+                                                  cache->N<ast::IdExpr>("int"))});
+    fnAst->addParam(ast::Param{".VECTRON_TYPE", cache->N<ast::IdExpr>("type")});
+    fnAst->addParam(ast::Param{
+        ".VECTRON_THREADS", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
+                                                     cache->N<ast::IdExpr>("int"))});
+
+    // 2. Modify the function (wrap the comprehension into:
+    //    def FN(): return COMPREHENSION; M = WRAPPER(FN)
+    ComprehensionSearchVisitor([&](ast::AssignStmt *stmt,
+                                   int comprehensionCount) -> ast::Stmt * {
+      using namespace codon::ast;
+      auto tmpFnName = cache->getTemporaryVar("vectron");
+      return cache->N<SuiteStmt>(
+          cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
+                                 cache->N<ReturnStmt>(clone(stmt->getRhs()))),
+          cache->N<AssignStmt>(
+              clone(stmt->getLhs()),
+              cache->N<CallExpr>(
+                  cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "dpmat_wrap")),
+                  std::vector<CallArg>{
+                      CallArg{"", cache->N<IdExpr>(tmpFnName)},
+                      CallArg{"", cache->N<IntExpr>(comprehensionCount)},
+                      CallArg{"LANE_SIZE", cache->N<IdExpr>(".VECTRON_LANE")},
+                      CallArg{"T", cache->N<IdExpr>(".VECTRON_TYPE")},
+                      CallArg{"THREADS", cache->N<IdExpr>(".VECTRON_THREADS")},
+                  }),
+              clone(stmt->getTypeExpr())));
+    }).transform(fnAst);
+
+    // 3. Check & typecheck new function
+    auto s = cache->N<ast::SuiteStmt>(fnAst);
+    if (auto err = ast::ScopingVisitor::apply(cache, s))
+      throw exc::ParserException(std::move(err));
+    auto transAst = ast::TypecheckVisitor::apply(cache->typeCtx, fnAst);
+    ast::TranslateVisitor(cache->codegenCtx).translateStmts(transAst);
+
+    // 4. Realize new function
+    auto vecListType = util::getReturnType(
+        M->getOrRealizeFunc("_get_vec_list", {}, vectronParams, "std.vectron.lib"));
+    assert(vecListType && "_get_vec_list method not found in std.lib");
+    std::vector<ir::types::Type *> newFnArgs;
+    for (auto it = vectronFunc->arg_begin(); it != vectronFunc->arg_end(); ++it)
+      newFnArgs.push_back(vecListType);
+    auto newFn = v->getModule()->getOrRealizeFunc(fnName, newFnArgs, vectronParams);
+
+    // @inumanag: end change
+
+    std::vector<Value *> args;
+    std::vector<types::Type *> tps;
+    for (auto it = vectronCall->begin(); it != vectronCall->end(); ++it) {
+      auto *getitemCall = cast<CallInstr>(*it);
+      assert(getitemCall &&
+             "Arguments in Vectron method in comprehension detected but not accessed. "
+             "Did you forget to use __getitem__ (i.e. x[i])?");
+
+      auto *getitem = util::getFunc(getitemCall->getCallee());
+      assert(getitem && getitem->getUnmangledName() == Module::GETITEM_MAGIC_NAME &&
+             "Arguments in Vectron method in comprehension detected but not accessed. "
+             "Did you forget to use __getitem__ (i.e. x[i])?");
+
+      auto *arg = getitemCall->front();
+      args.push_back(arg);
+      tps.push_back(arg->getType());
+    }
+
+    tps.push_back(newFn->getType());
+    auto *alpernFunc =
+        M->getOrRealizeFunc("alpern", tps, vectronParams, "std.vectron.lib");
+    assert(alpernFunc);
+
+    auto *alpernCall = util::call(alpernFunc, args);
+    assert(alpernCall);
+
+    w->setRhs(alpernCall);
+  } catch (const exc::ParserException &e) {
+    for (auto &trace : e.getErrors())
+      for (auto &msg : trace)
+        LOG("parser error at {}: {}", msg.getSrcInfo(), msg.getMessage());
+    throw;
   }
-
-  // 1. Clone the function, change its name (FN -> FN.vectron)
-  auto fnAst = cast<ast::FunctionStmt>(
-      clean_clone(vectronFunc->getType()->getAstType()->getFunc()->ast));
-  auto origFnName = fnAst->getName();
-  auto fnName = fmt::format("{}.vectron", cache->rev(origFnName));
-  fnAst->setName(fnName);
-
-  // 2. Modify the function (wrap the comprehension into:
-  //    def FN(): return COMPREHENSION; M = WRAPPER(FN)
-  ComprehensionSearchVisitor(cache, ast::getMangledFunc("std.lib", "dpmat_wrap"))
-      .transform(fnAst);
-  // 3. Check & typecheck new function
-  auto s = cache->N<ast::SuiteStmt>(fnAst);
-  if (auto err = ast::ScopingVisitor::apply(cache, s))
-    throw exc::ParserException(std::move(err));
-  auto transAst = ast::TypecheckVisitor::apply(cache->typeCtx, fnAst);
-  ast::TranslateVisitor(cache->codegenCtx).transform(transAst);
-
-  // 4. Realize new function
-  auto vecListType =
-      util::getReturnType(M->getOrRealizeFunc("_get_vec_list", {}, {}, "std.lib"));
-  assert(vecListType && "_get_vec_list method not found in std.lib");
-  std::vector<ir::types::Type *> newFnArgs;
-  for (auto it = vectronFunc->arg_begin(); it != vectronFunc->arg_end(); ++it)
-    newFnArgs.push_back(vecListType);
-  auto newFn = v->getModule()->getOrRealizeFunc(fnName, newFnArgs);
-
-  // @inumanag: end change
-
-  std::vector<Value *> args;
-  std::vector<types::Type *> tps;
-  for (auto it = vectronCall->begin(); it != vectronCall->end(); ++it) {
-    auto *getitemCall = cast<CallInstr>(*it);
-    assert(getitemCall &&
-           "Arguments in Vectron method in comprehension detected but not accessed. "
-           "Did you forget to use __getitem__ (i.e. x[i])?");
-
-    auto *getitem = util::getFunc(getitemCall->getCallee());
-    assert(getitem && getitem->getUnmangledName() == Module::GETITEM_MAGIC_NAME &&
-           "Arguments in Vectron method in comprehension detected but not accessed. "
-           "Did you forget to use __getitem__ (i.e. x[i])?");
-
-    auto *arg = getitemCall->front();
-    args.push_back(arg);
-    tps.push_back(arg->getType());
-  }
-
-  tps.push_back(newFn->getType());
-  auto *alpernFunc = M->getOrRealizeFunc("alpern", tps, {}, "std.lib");
-  assert(alpernFunc);
-
-  auto *alpernCall = util::call(alpernFunc, args);
-  assert(alpernCall);
-
-  w->setRhs(alpernCall);
 }
 
 } // namespace vectron
