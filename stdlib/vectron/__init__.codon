@@ -1,2 +1,13 @@
-from .simd import *
-#from .dispatcher import kernel, scheduler, list, bypass, max, cmp
+CPU: Literal[int] = 1
+GPU: Literal[int] = 2
+
+@__attribute__
+def vectron(
+    lane_size: Literal[int] = 8,
+    dtype: type = Int[16],
+    threads: Literal[int] = 1,
+    mode: Literal[int] = CPU
+):
+    pass
+
+from .lib import alpern, dpmat_wrap, maximum, canon, vec_or, vec_and

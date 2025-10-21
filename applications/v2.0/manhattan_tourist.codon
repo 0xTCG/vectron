@@ -1,0 +1,31 @@
+import time
+import sys
+from vectron import vectron, maximum, canon, vec_or
+
+
+@vectron(lane_size=32, threads=4)
+def manhattan(t, q):
+    M = [[0 for _ in range(len(t) + 1)] for _ in range(len(q) + 1)]
+    for i in range(1, len(q) + 1):
+        for j in range(1, len(t) + 1):
+            M[i][j] = maximum(
+                M[i][j - 1] + (0 if vec_or(q[i - 1] == -1, t[j - 1] == -1) else 4 if q[i - 1] == t[j - 1] else 1),
+                0,
+                M[i - 1][j] + (1 if vec_or(q[i - 1] == -1, t[j - 1] == -1) else 5 if q[i - 1] == t[j - 1] else 3)
+            )
+
+    return M[-1][-1]
+
+
+with open(sys.argv[-1], 'r') as file:
+    seqs_x = [line.strip() for line in file]
+
+with open(sys.argv[-2], 'r') as file:
+    seqs_y = [line.strip() for line in file]
+
+
+with time.timing("Manhattan"):
+    x, y = canon(seqs_x), canon(seqs_y)
+    scores = [[manhattan(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
+
+print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")
