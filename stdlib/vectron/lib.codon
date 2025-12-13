@@ -1,5 +1,5 @@
 import openmp as omp
-from experimental.simd import Vec
+from simd import Vec
 
 
 # For IR pass hacks. Just leave here and ignore for now.
@@ -16,6 +16,12 @@ class int:
 
 
 @extend
+class Int:
+    def __eq__(self, i: int):
+        return self == Int[N](i)
+
+
+@extend
 class Vec:
     def __bool__(self: Vec[T, N]) -> bool:
         raise ValueError("IR pass malfunctioned: cannot call bool on Vec")
@@ -23,13 +29,22 @@ class Vec:
     def __int__(self: Vec[T, N]) -> int:
         raise ValueError("IR pass malfunctioned: cannot call int on Vec")
 
+    def __add__(self, other: int) -> Vec[T, N]:
+        return self + Vec[T, N](T(other))
+
+    def __sub__(self, other: int) -> Vec[T, N]:
+        return self - Vec[T, N](T(other))
+
+    def __mul__(self, other: int) -> Vec[T, N]:
+        return self * Vec[T, N](T(other))
+
+    def __eq__(self, other: int) -> Vec[u1, N]:
+        return self == Vec[T, N](T(other))
+
+
 
 @extend
 class List:
-    # def __setitem__(self: List[Vec[VT, VN]], idx: int, val: VT, VT: type, VN: Literal[int]):
-        # superf(self, idx, Vec[VT, VN](val))
-        # BUG: should be self[idx] = Vec[VT, VN](val)
-
     def __setitem__(self: List[Vec[VT, VN]], idx: int, val: int, VT: type, VN: Literal[int]):
         self[idx] = Vec[VT, VN](VT(val))
 
@@ -91,12 +106,12 @@ def vec_or[T](a: T, b: T) -> T:
 
 def ternary(cmp, x, y, LANE_SIZE: Literal[int], T: type):
     if isinstance(x, Vec) and isinstance(y, Vec):
-        return x.mask(cmp, y)
+        return x.mask(y, cmp)
     if isinstance(x, Vec):
-        return x.mask(cmp, Vec[T, LANE_SIZE](T(y)))
+        return x.mask(Vec[T, LANE_SIZE](T(y)), cmp)
     if isinstance(y, Vec):
-        return Vec[T, LANE_SIZE](T(x)).mask(cmp, y)
-    return Vec[T, LANE_SIZE](T(x)).mask(cmp, Vec[T, LANE_SIZE](T(y)))
+        return Vec[T, LANE_SIZE](T(x)).mask(y, cmp)
+    return Vec[T, LANE_SIZE](T(x)).mask(Vec[T, LANE_SIZE](T(y)), cmp)
 
 
 def maximum(*args):
@@ -106,11 +121,11 @@ def maximum(*args):
         return args[0]
     if static.len(args) == 2:
         if isinstance(args[0], Vec) and isinstance(args[1], Vec):
-            return args[0].llvm_max(args[1])
+            return args[0].max(args[1])
         elif isinstance(args[0], Vec):
-            return args[0].llvm_max(type(args[0])(type(args[0]).T(args[1])))
+            return args[0].max(type(args[0])(type(args[0]).T(args[1])))
         elif isinstance(args[1], Vec):
-            return args[1].llvm_max(type(args[1])(type(args[1]).T(args[0])))
+            return args[1].max(type(args[1])(type(args[1]).T(args[0])))
         else:
             return max(*args[:2])
     return maximum(maximum(*args[:2]), *args[2:])
@@ -165,7 +180,7 @@ class Cache:
 
         return self.dp_mat[thr_id]
 
-cache: Optional[Dict[int, cobj]] = None
+cache: Optional[Dict[int, Any]] = None
 def dpmat_wrap(
     fn,
     idx: int,
@@ -177,7 +192,6 @@ def dpmat_wrap(
     if cache is None:
         cache = {}
     if idx not in cache:
-        c = Cache[LANE_SIZE, T]()
-        cache[idx] = c.__raw__()
+        cache[idx] = Cache[LANE_SIZE, T]()
     # Never inherit Cache or this will fail spectacularly
-    return __internal__.to_class_ptr(cache[idx], Cache[LANE_SIZE, T]).dpmat(fn)
+    return cache[idx].unwrap(Cache[LANE_SIZE, T]).dpmat(fn)

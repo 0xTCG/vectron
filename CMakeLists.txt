@@ -7,21 +7,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-limit-debug-info")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 include_directories(.)
 
-set(VECTRON_FILES
-    ir/bypass.cpp
-    ir/bypass.h
-    ir/func_repl.cpp
-    ir/func_repl.h
-    ir/loop_anlz.cpp
-    ir/loop_anlz.h
-    ir/list_init.cpp
-    ir/list_init.h
-    ir/env_select.cpp
-    ir/env_select.h
-    ir/vectron.cpp
-    ir/loop.cpp
-    ir/loop.h
-    ir/vectron.h)
+set(VECTRON_FILES ir/vectron.cpp ir/vectron.h)
 add_library(vectron SHARED ${VECTRON_FILES})
 
 # Include directories for your custom LLVM

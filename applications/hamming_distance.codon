@@ -1,6 +1,6 @@
 import time
 import sys
-from vectron import vectron, maximum, canon
+from vectron import vectron, canon
 
 @vectron(lane_size=32, threads=4)
 def hamming(t, q):
@@ -11,7 +11,7 @@ def hamming(t, q):
                 if j - i == -1 or j - i == 1:
                     M[i][j] = -10000
             else:
-                M[i][j] = maximum(
+                M[i][j] = max(
                     M[i - 1][j - 1] + (0 if q[i - 1] == t[j - 1] else 1), 0
                 )
 
