@@ -131,7 +131,7 @@ def maximum(*args):
     return maximum(maximum(*args[:2]), *args[2:])
 
 
-def alpern(xs, ys, vec_foo, LANE_SIZE: Literal[int], T: type, THREADS: Literal[int]):
+def kernel(xs, ys, fn, LANE_SIZE: Literal[int], T: type, THREADS: Literal[int]):
     scores = [[0 for _ in range(len(ys))] for _ in range(len(xs))]
 
     yst = ys.transpose()
@@ -140,7 +140,7 @@ def alpern(xs, ys, vec_foo, LANE_SIZE: Literal[int], T: type, THREADS: Literal[i
             xvecs = [Vec[T, LANE_SIZE](nucl) for nucl in xs[i]]
             for j in range(len(ys) // LANE_SIZE):
                 yvecs = [Vec[T, LANE_SIZE](row[j * LANE_SIZE:]) for row in yst]
-                r = vec_foo(xvecs, yvecs).scatter()
+                r = fn(xvecs, yvecs).scatter()
                 for k in static.range(LANE_SIZE):
                     scores[i][j * LANE_SIZE + k] = int(r[k])
     else:
@@ -149,7 +149,7 @@ def alpern(xs, ys, vec_foo, LANE_SIZE: Literal[int], T: type, THREADS: Literal[i
             xvecs = [Vec[T, LANE_SIZE](nucl) for nucl in xs[i]]
             for j in range(len(ys) // LANE_SIZE):
                 yvecs = [Vec[T, LANE_SIZE](row[j * LANE_SIZE:]) for row in yst]
-                r = vec_foo(xvecs, yvecs).scatter()
+                r = fn(xvecs, yvecs).scatter()
                 for k in static.range(LANE_SIZE):
                     scores[i][j * LANE_SIZE + k] = int(r[k])
 

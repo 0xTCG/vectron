@@ -10,4 +10,5 @@ def vectron(
 ):
     pass
 
-from .lib import alpern, dpmat_wrap, canon
+from .lib import kernel, canon
+from .libgpu import kernel as gpu_kernel

@@ -18,6 +18,8 @@ using namespace codon;
 using namespace codon::ir;
 using namespace codon::matcher;
 
+enum VectronMode { SIMD, GPU };
+
 std::string getVectronModuleName(const std::string &what) {
   return "std.vectron.stdlib.vectron." + what;
 }
@@ -117,8 +119,6 @@ class ComprehensionSearchVisitor : public ast::ReplacingCallbackASTVisitor {
   using Base = ReplacingCallbackASTVisitor;
 
   ast::Cache *cache;
-  int depth;
-  bool replaceComprehension, replaceOr;
   ast::ASTNode *modified;
 
   static int comprehensionCount;
@@ -126,75 +126,33 @@ class ComprehensionSearchVisitor : public ast::ReplacingCallbackASTVisitor {
 public:
   ComprehensionSearchVisitor(ast::Cache *cache, int depth = 0,
                              bool replaceComprehension = true)
-      : cache(cache), depth(depth), replaceComprehension(replaceComprehension),
-        replaceOr(false), modified(nullptr) {}
+      : cache(cache), modified(nullptr) {}
 
   ast::Expr *transform(ast::Expr *expr) override {
     if (expr) {
-      ComprehensionSearchVisitor v(cache, depth + 1, replaceComprehension);
-      v.replaceOr = replaceOr;
+      ComprehensionSearchVisitor v(cache);
       if (expr)
         expr->accept(v);
-      replaceOr = false; // HACK: only handle first expression in IfStmt to avoid doing
-                         // this for if/else nodes
-      replaceComprehension = v.replaceComprehension;
-      return v.modified ? cast<ast::Expr>(v.modified) : expr;
+      if (v.modified)
+        expr = cast<ast::Expr>(v.modified);
     }
     return expr;
   }
 
   ast::Stmt *transform(ast::Stmt *stmt) override {
     if (stmt) {
-      ComprehensionSearchVisitor v(cache, depth + (!ast::cast<ast::SuiteStmt>(stmt)),
-                                   replaceComprehension);
+      ComprehensionSearchVisitor v(cache);
       if (stmt)
         stmt->accept(v);
-      replaceComprehension = v.replaceComprehension;
-      return v.modified ? cast<ast::Stmt>(v.modified) : stmt;
+      if (v.modified)
+        stmt = cast<ast::Stmt>(v.modified);
     }
     return stmt;
   }
 
-  void visit(ast::IfExpr *expr) override {
-    if (!replaceComprehension)
-      replaceOr = true;
-    Base::visit(expr);
-  }
-
-  void visit(ast::IfStmt *stmt) override {
-    if (!replaceComprehension)
-      replaceOr = true;
-    Base::visit(stmt);
-  }
-
-  void visit(ast::BinaryExpr *expr) override {
-    using namespace codon::ast;
-
-    if (replaceOr && expr->getOp() == "||") {
-      modified = cache->N<CallExpr>(
-          cache->N<IdExpr>(getMangledFunc(getVectronModuleName("lib"), "vec_or")),
-          expr->getLhs(), expr->getRhs());
-    } else if (replaceOr && expr->getOp() == "&&") {
-      modified = cache->N<CallExpr>(
-          cache->N<IdExpr>(getMangledFunc(getVectronModuleName("lib"), "vec_and")),
-          expr->getLhs(), expr->getRhs());
-    } else {
-      Base::visit(expr);
-    }
-  }
-
-  void visit(ast::SuiteStmt *stmt) override {
-    for (auto &s : *stmt) {
-      if (auto ns = transform(s)) {
-        s = ns;
-      }
-    }
-  }
-
   void visit(ast::AssignStmt *stmt) override {
     using namespace codon::ast;
-    if (replaceComprehension &&
-        match(stmt, M<AssignStmt>(M<IdExpr>(),
+    if (match(stmt, M<AssignStmt>(M<IdExpr>(),
                                   M<GeneratorExpr>(GeneratorExpr::ListGenerator, M_),
                                   M_, M_))) {
       auto tmpFnName = cache->getTemporaryVar("vectron");
@@ -218,13 +176,70 @@ public:
       Base::visit(stmt);
     }
   }
+};
 
-  void visit(ast::ForStmt *stmt) override {
-    if (depth == 2) {
-      // First for loop in the function
-      replaceComprehension = false;
+class OrSearchVisitor : public ast::ReplacingCallbackASTVisitor {
+  using Base = ReplacingCallbackASTVisitor;
+
+  ast::Cache *cache;
+  ast::ASTNode *modified;
+  bool replace;
+
+  static int comprehensionCount;
+
+public:
+  OrSearchVisitor(ast::Cache *cache)
+      : cache(cache), modified(nullptr), replace(false) {}
+
+  ast::Expr *transform(ast::Expr *expr) override {
+    if (expr) {
+      OrSearchVisitor v(cache);
+      v.replace = replace;
+      if (expr)
+        expr->accept(v);
+      replace = false; // HACK: only handle first expression in IfStmt to avoid doing
+                       // this for if/else nodes
+      if (v.modified)
+        expr = cast<ast::Expr>(v.modified);
     }
+    return expr;
+  }
+
+  ast::Stmt *transform(ast::Stmt *stmt) override {
+    if (stmt) {
+      OrSearchVisitor v(cache);
+      if (stmt)
+        stmt->accept(v);
+      if (v.modified)
+        stmt = cast<ast::Stmt>(v.modified);
+    }
+    return stmt;
+  }
+
+  void visit(ast::IfExpr *expr) override {
+    replace = true;
+    Base::visit(expr);
+  }
+
+  void visit(ast::IfStmt *stmt) override {
+    replace = true;
     Base::visit(stmt);
+  }
+
+  void visit(ast::BinaryExpr *expr) override {
+    using namespace codon::ast;
+
+    if (replace && expr->getOp() == "||") {
+      modified = cache->N<CallExpr>(
+          cache->N<IdExpr>(getMangledFunc(getVectronModuleName("lib"), "vec_or")),
+          expr->getLhs(), expr->getRhs());
+    } else if (replace && expr->getOp() == "&&") {
+      modified = cache->N<CallExpr>(
+          cache->N<IdExpr>(getMangledFunc(getVectronModuleName("lib"), "vec_and")),
+          expr->getLhs(), expr->getRhs());
+    } else {
+      Base::visit(expr);
+    }
   }
 };
 
@@ -270,12 +285,11 @@ void LoopVec::handle(AssignInstr *w) {
     if (!bool(vectronFunc) || !util::hasAttribute(vectronFunc, vectronAttr))
       return;
 
-    // @inumanag: begin change
     auto cache = v->getModule()->getCache();
 
     auto attr = vectronFunc->getAttribute<KeyValueAttribute>()->get(vectronAttr);
     auto dtype = cache->typeCtx->forceFind("int")->getType()->getClass();
-    auto mode = 1;
+    VectronMode mode = SIMD;
     auto lane_size = 8;
     auto threads = 1;
     if (!attr.empty()) {
@@ -284,45 +298,91 @@ void LoopVec::handle(AssignInstr *w) {
       lane_size = tv.extractFuncGeneric(f, 0)->getIntStatic()->value;
       dtype = tv.extractFuncGeneric(f, 1)->getClass();
       threads = tv.extractFuncGeneric(f, 2)->getIntStatic()->value;
-      mode = tv.extractFuncGeneric(f, 3)->getIntStatic()->value;
+      mode = tv.extractFuncGeneric(f, 3)->getIntStatic()->value == 2 ? GPU : SIMD;
     }
     LOG("[vectron] fn: {}, lane: {}, dtype: {}, threads: {}, mode: {}",
-        vectronFunc->getName(), lane_size, dtype->debugString(0), threads, mode);
+        vectronFunc->getName(), lane_size, dtype->debugString(0), threads, (int)mode);
 
     seqassertn(dtype && in(cache->getClass(dtype)->realizations,
                            dtype->getClass()->realizedName()),
                "{} not realized", dtype ? dtype->debugString(0) : "<null>");
-    auto vectronParams = std::vector<types::Generic>{
-        types::Generic{lane_size},
-        types::Generic{cache->getClass(dtype)
-                           ->realizations[dtype->getClass()->realizedName()]
-                           ->ir},
-        types::Generic{threads},
-    };
+    std::vector<types::Generic> vectronParams;
 
     // 1. Clone the function, change its name (FN -> FN.vectron)
     auto fnAst = cast<ast::FunctionStmt>(
         clean_clone(vectronFunc->getType()->getAstType()->getFunc()->ast));
-    auto origFnName = fnAst->getName();
-    auto fnName = fmt::format("{}.vectron", cache->rev(origFnName));
-    fnAst->setName(fnName);
-    fnAst->addParam(ast::Param{
-        ".VECTRON_LANE", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
-                                                  cache->N<ast::IdExpr>("int"))});
-    fnAst->addParam(ast::Param{".VECTRON_TYPE", cache->N<ast::IdExpr>("type")});
-    fnAst->addParam(ast::Param{
-        ".VECTRON_THREADS", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
-                                                     cache->N<ast::IdExpr>("int"))});
-    fnAst->setSuite(cache->N<ast::SuiteStmt>(
-        cache->N<ast::AssignStmt>(cache->N<ast::IdExpr>("max"),
-                                  cache->N<ast::IdExpr>(ast::getMangledFunc(
-                                      getVectronModuleName("lib"), "maximum"))),
-        fnAst->getSuite()));
+
+    auto initialization = cache->N<ast::SuiteStmt>();
+    auto loops = cache->N<ast::SuiteStmt>();
+    for (auto s : *(fnAst->getSuite())) {
+      if (ast::cast<ast::ForStmt>(s)) {
+        loops->addStmt(s);
+      } else if (loops->empty()) {
+        initialization->addStmt(s);
+      } else {
+        loops->addStmt(s);
+      }
+    }
+    std::string argName = "";
+    if (mode == GPU) {
+      if (initialization->size() == 1) {
+        ast::IdExpr *i = nullptr;
+        if (match(initialization->front(),
+                  matcher::M<ast::AssignStmt>(MVar<ast::IdExpr>(i), M_, M_, M_))) {
+          argName = i->getValue();
+        }
+      }
+      if (argName.empty())
+        seqassertn(false, "Cannot extract GPU initialization block from function");
+    }
 
     // 2. Modify the function (wrap the comprehension into:
     //    def FN(): return COMPREHENSION; M = WRAPPER(FN)
-    auto csv = ComprehensionSearchVisitor(cache, 0, true);
-    csv.transform(fnAst);
+    if (mode == SIMD) {
+      initialization = cast<ast::SuiteStmt>(
+          ComprehensionSearchVisitor(cache).transform(initialization));
+      loops = cast<ast::SuiteStmt>(OrSearchVisitor(cache).transform(loops));
+    }
+
+    auto origFnName = fnAst->getName();
+    auto fnName = fmt::format("{}.vectron", cache->rev(origFnName));
+    fnAst->setName(fnName);
+    if (mode == GPU) {
+      fnAst->addParam(ast::Param{argName, nullptr});
+      fnAst->addParam(ast::Param{
+          ".VECTRON_INIT", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
+                                                    cache->N<ast::IdExpr>("int"))});
+      vectronParams.push_back(types::Generic{int64_t(0)});
+    }
+    if (mode == SIMD) {
+      fnAst->addParam(ast::Param{
+          ".VECTRON_LANE", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
+                                                    cache->N<ast::IdExpr>("int"))});
+      vectronParams.push_back(types::Generic{lane_size});
+    }
+    fnAst->addParam(ast::Param{".VECTRON_TYPE", cache->N<ast::IdExpr>("type")});
+    vectronParams.push_back(types::Generic{
+        cache->getClass(dtype)->realizations[dtype->getClass()->realizedName()]->ir});
+    if (mode == SIMD) {
+      fnAst->addParam(ast::Param{
+          ".VECTRON_THREADS", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
+                                                       cache->N<ast::IdExpr>("int"))});
+      vectronParams.push_back(types::Generic{threads});
+    }
+    fnAst->setSuite(cache->N<ast::SuiteStmt>(cache->N<ast::AssignStmt>(
+        cache->N<ast::IdExpr>("max"), cache->N<ast::IdExpr>(ast::getMangledFunc(
+                                          getVectronModuleName("lib"), "maximum")))));
+    if (mode == SIMD) {
+      fnAst->getSuite()->addStmt(initialization);
+      fnAst->getSuite()->addStmt(loops);
+    } else {
+      fnAst->getSuite()->addStmt(cache->N<ast::IfStmt>(
+          cache->N<ast::BinaryExpr>(cache->N<ast::IdExpr>(".VECTRON_INIT"),
+                                    "==", cache->N<ast::IntExpr>(1)),
+          cache->N<ast::SuiteStmt>(cache->N<ast::ReturnStmt>(
+              ast::cast<ast::AssignStmt>(initialization->front())->getRhs())),
+          loops));
+    }
 
     // 3. Check & typecheck new function
     auto s = cache->N<ast::SuiteStmt>(fnAst);
@@ -332,27 +392,34 @@ void LoopVec::handle(AssignInstr *w) {
     ast::TranslateVisitor(cache->codegenCtx).translateStmts(transAst);
 
     // 4. Realize new function
-    auto vecListType = util::getReturnType(M->getOrRealizeFunc(
-        "_get_vec_list", {}, vectronParams, getVectronModuleName("lib")));
-    assert(vecListType && "_get_vec_list method not found in std.lib");
     std::vector<ir::types::Type *> newFnArgs;
+    auto vecListType = util::getReturnType(
+        M->getOrRealizeFunc("_get_vec_list", {}, vectronParams,
+                            getVectronModuleName(mode == SIMD ? "lib" : "libgpu")));
+    assert(vecListType && "_get_vec_list method not found");
     for (auto it = vectronFunc->arg_begin(); it != vectronFunc->arg_end(); ++it)
       newFnArgs.push_back(vecListType);
+    if (mode == GPU) {
+      auto arrListType = util::getReturnType(M->getOrRealizeFunc(
+          "_get_array_list", {}, vectronParams, getVectronModuleName("libgpu")));
+      assert(arrListType && "_get_array_list method not found in std.lib");
+      newFnArgs.push_back(arrListType);
+    }
     auto newFn = v->getModule()->getOrRealizeFunc(fnName, newFnArgs, vectronParams);
-
-    // @inumanag: end change
+    seqassertn(newFn, "cannot realize vectron function");
 
     std::vector<Value *> args;
     std::vector<types::Type *> tps;
     for (auto it = vectronCall->begin(); it != vectronCall->end(); ++it) {
       auto *getitemCall = cast<CallInstr>(*it);
-      assert(getitemCall &&
-             "Arguments in Vectron method in comprehension detected but not accessed. "
-             "Did you forget to use __getitem__ (i.e. x[i])?");
+      assert(getitemCall && "Arguments in Vectron method in comprehension "
+                            "detected but not accessed. "
+                            "Did you forget to use __getitem__ (i.e. x[i])?");
 
       auto *getitem = util::getFunc(getitemCall->getCallee());
       assert(getitem && getitem->getUnmangledName() == Module::GETITEM_MAGIC_NAME &&
-             "Arguments in Vectron method in comprehension detected but not accessed. "
+             "Arguments in Vectron method in comprehension "
+             "detected but not accessed. "
              "Did you forget to use __getitem__ (i.e. x[i])?");
 
       auto *arg = getitemCall->front();
@@ -360,10 +427,27 @@ void LoopVec::handle(AssignInstr *w) {
       tps.push_back(arg->getType());
     }
 
+    if (mode == GPU) {
+      // Call fn(VECTRON_INIT=1). GpuAlloc argument is not needed and is replaced with
+      // args[0].
+      auto initParams = vectronParams;
+      initParams[0] = types::Generic{int64_t(1)};
+      newFnArgs[newFnArgs.size() - 1] = newFnArgs[0];
+      auto initFn = v->getModule()->getOrRealizeFunc(fnName, newFnArgs, initParams);
+      seqassertn(initFn, "cannot realize vectron initialization");
+
+      args.push_back(args[0]);
+      auto arg = util::call(initFn, args);
+      args.pop_back();
+      args.push_back(arg);
+      tps.push_back(arg->getType());
+    }
+
     tps.push_back(newFn->getType());
-    auto *alpernFunc =
-        M->getOrRealizeFunc("alpern", tps, vectronParams, getVectronModuleName("lib"));
-    assert(alpernFunc);
+    auto *alpernFunc = M->getOrRealizeFunc("kernel", tps, vectronParams,
+                                           mode == GPU ? getVectronModuleName("libgpu")
+                                                       : getVectronModuleName("lib"));
+    seqassertn(alpernFunc, "cannot realize vectron kernel");
 
     auto *alpernCall = util::call(alpernFunc, args);
     assert(alpernCall);

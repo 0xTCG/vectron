@@ -1,9 +1,9 @@
 import time
 import sys
-from vectron import vectron, canon
+import vectron
 
 
-@vectron(lane_size=32, threads=4)
+@vectron.vectron(lane_size=32, threads=4, mode=vectron.GPU)
 def lcs(t, q):
     M = [[0 for _ in range(len(t) + 1)] for _ in range(len(q) + 1)]
     for i in range(1, len(q) + 1):
@@ -23,9 +23,8 @@ with open(sys.argv[-1], 'r') as file:
 with open(sys.argv[-2], 'r') as file:
     seqs_y = [line.strip() for line in file]
 
-
 with time.timing("LCS"):
-    x, y = canon(seqs_x), canon(seqs_y)
+    x, y = vectron.canon(seqs_x), vectron.canon(seqs_y)
     scores = [[lcs(x[i], y[j]) for j in range(len(y))] for i in range(len(x))]
 
 print(f"Checksum: {sum([sum([int(e) for e in row]) for row in scores])}")
