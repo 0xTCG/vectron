@@ -1,0 +1,83 @@
+import internal.gpu as gpu
+import numpy as np
+
+
+@extend
+class Int:
+    def __add__(self, i: int):
+        return self + Int[N](i)
+
+
+@tuple
+class GpuArray[T, N: Static[int], U]:
+    n: np.ndarray[T, N + 1]
+    slice: U
+
+    def __getitem__(self, x: int):
+        idx = (*self.slice, x)
+        if static.len(self.slice) == N:
+            return self.n[idx]
+        else:
+            return GpuArray[T, N, type(idx)](self.n, idx)
+
+    def __setitem__(self, x: int, v: T):
+        idx = (*self.slice, x)
+        self.n[idx] = v
+
+
+# For IR pass hacks. Just leave here and ignore for now.
+def _get_vec_list(_: Literal[int], T: type):
+    return [T()]
+def _get_array_list(_: Literal[int], T: type):
+    return GpuArray[T, 2, Tuple[int]](np.empty((1, 1, 1), dtype=T), (1, ))
+
+
+def kernel(xs, ys, init, fn, _: Literal[int], T: type):
+    def gpu_kernel(scores, buffer, x, y, buffer_size):
+        idx = (gpu.block.x * gpu.block.dim.x) + gpu.thread.x
+        m, n = len(x), len(y)
+
+        abs_idx = idx
+        while abs_idx < m * n:
+            t_idx, q_idx = divmod(abs_idx, n)
+            t = x[t_idx]
+            q = y[q_idx]
+
+            scores[t_idx, q_idx] = fn(q, t, buffer[idx])
+            abs_idx += buffer_size
+
+
+    N = 512
+    assert max(max(len(seq) for seq in xs), max(len(seq) for seq in ys)) == N, \
+           "All sequences must have length equal to N"
+
+    throughput = min(128 * 128, len(xs) * len(ys))
+
+    scores = np.array(init, dtype=T)
+    init_index = ()
+    buffer = GpuArray[T, 2, type(init_index)](np.empty((throughput, N + 1, N + 1), dtype=T), init_index)
+
+    block = min(1024, throughput)
+    grid = (throughput + block - 1) // block
+
+    # Manually unroll GPU wrapper here
+    grid = gpu.canonical_dim(grid)
+    block = gpu.canonical_dim(block)
+    cache = gpu.AllocCache([])
+    shared_mem = 0
+    args = (scores, buffer, xs, ys, throughput)
+    gpu_args = tuple(arg.__to_gpu__(cache) for arg in args)
+    kernel_ptr = gpu.nvptx_function(
+        static.function.realized(gpu_kernel, *gpu_args).__llvm_name__
+    )
+    p = __ptr__(gpu_args).as_byte()
+    arg_ptrs = tuple((p + offset) for offset in gpu.offsets(gpu_args))
+    gpu.cuda_check(gpu.cuLaunchKernel(kernel_ptr,
+                                        u32(grid[0]), u32(grid[1]), u32(grid[2]),
+                                        u32(block[0]), u32(block[1]), u32(block[2]),
+                                        u32(shared_mem), cobj(),
+                                        __ptr__(arg_ptrs).as_byte(), cobj()))
+    gpu._tuple_from_gpu(args, gpu_args)
+    cache.free()
+
+    return scores
