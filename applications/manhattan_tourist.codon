@@ -1,6 +1,6 @@
 import time
 import sys
-from vectron import vectron, maximum, canon, vec_or
+from vectron import vectron, canon
 
 
 @vectron(lane_size=32, threads=4)
@@ -9,9 +9,9 @@ def manhattan(t, q):
     for i in range(1, len(q) + 1):
         for j in range(1, len(t) + 1):
             M[i][j] = max(
-                M[i][j - 1] + (0 if vec_or(q[i - 1] == -1, t[j - 1] == -1) else 4 if q[i - 1] == t[j - 1] else 1),
+                M[i][j - 1] + (0 if (q[i - 1] == -1) or (t[j - 1] == -1) else 4 if q[i - 1] == t[j - 1] else 1),
                 0,
-                M[i - 1][j] + (1 if vec_or(q[i - 1] == -1, t[j - 1] == -1) else 5 if q[i - 1] == t[j - 1] else 3)
+                M[i - 1][j] + (1 if (q[i - 1] == -1) or (t[j - 1] == -1) else 5 if q[i - 1] == t[j - 1] else 3)
             )
 
     return M[-1][-1]

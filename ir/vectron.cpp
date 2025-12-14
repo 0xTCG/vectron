@@ -109,37 +109,76 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
 }
 
 // Search expression tree for a identifier
-class ComprehensionSearchVisitor : public ast::CallbackASTVisitor<void, ast::Stmt *> {
-  using fn_t = std::function<ast::Stmt *(ast::AssignStmt *, int)>;
+class ComprehensionSearchVisitor : public ast::ReplacingCallbackASTVisitor {
+  using Base = ReplacingCallbackASTVisitor;
 
-  fn_t transformation;
-  bool stop;
+  ast::Cache *cache;
   int depth;
-  ast::Stmt *modified;
+  bool replaceComprehension, replaceOr;
+  ast::ASTNode *modified;
 
   static int comprehensionCount;
 
 public:
-  ComprehensionSearchVisitor(const fn_t &transformation, int depth = 0)
-      : transformation(transformation), stop(false), depth(depth), modified(nullptr) {}
-  void transform(ast::Expr *expr) override {
-    if (stop || !expr)
-      return;
-    ComprehensionSearchVisitor v(transformation, depth + 1);
-    if (expr)
-      expr->accept(v);
-    stop = v.stop;
+  ComprehensionSearchVisitor(ast::Cache *cache, int depth = 0,
+                             bool replaceComprehension = true)
+      : cache(cache), depth(depth), replaceComprehension(replaceComprehension),
+        replaceOr(false), modified(nullptr) {}
+
+  ast::Expr *transform(ast::Expr *expr) override {
+    if (expr) {
+      ComprehensionSearchVisitor v(cache, depth + 1, replaceComprehension);
+      v.replaceOr = replaceOr;
+      if (expr)
+        expr->accept(v);
+      replaceOr = false; // HACK: only handle first expression in IfStmt to avoid doing
+                         // this for if/else nodes
+      replaceComprehension = v.replaceComprehension;
+      return v.modified ? cast<ast::Expr>(v.modified) : expr;
+    }
+    return expr;
   }
+
   ast::Stmt *transform(ast::Stmt *stmt) override {
-    if (stop || !stmt)
-      return nullptr;
-    ComprehensionSearchVisitor v(transformation,
-                                 depth + (!ast::cast<ast::SuiteStmt>(stmt)));
-    if (stmt)
-      stmt->accept(v);
-    stop = v.stop;
-    return v.modified;
+    if (stmt) {
+      ComprehensionSearchVisitor v(cache, depth + (!ast::cast<ast::SuiteStmt>(stmt)),
+                                   replaceComprehension);
+      if (stmt)
+        stmt->accept(v);
+      replaceComprehension = v.replaceComprehension;
+      return v.modified ? cast<ast::Stmt>(v.modified) : stmt;
+    }
+    return stmt;
   }
+
+  void visit(ast::IfExpr *expr) override {
+    if (!replaceComprehension)
+      replaceOr = true;
+    Base::visit(expr);
+  }
+
+  void visit(ast::IfStmt *stmt) override {
+    if (!replaceComprehension)
+      replaceOr = true;
+    Base::visit(stmt);
+  }
+
+  void visit(ast::BinaryExpr *expr) override {
+    using namespace codon::ast;
+
+    if (replaceOr && expr->getOp() == "||") {
+      modified = cache->N<CallExpr>(
+          cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "vec_or")), expr->getLhs(),
+          expr->getRhs());
+    } else if (replaceOr && expr->getOp() == "&&") {
+      modified = cache->N<CallExpr>(
+          cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "vec_and")),
+          expr->getLhs(), expr->getRhs());
+    } else {
+      Base::visit(expr);
+    }
+  }
+
   void visit(ast::SuiteStmt *stmt) override {
     for (auto &s : *stmt) {
       if (auto ns = transform(s)) {
@@ -147,19 +186,40 @@ public:
       }
     }
   }
+
   void visit(ast::AssignStmt *stmt) override {
     using namespace codon::ast;
-    if (match(stmt, M<AssignStmt>(M<IdExpr>(),
+    if (replaceComprehension &&
+        match(stmt, M<AssignStmt>(M<IdExpr>(),
                                   M<GeneratorExpr>(GeneratorExpr::ListGenerator, M_),
                                   M_, M_))) {
-      modified = transformation(stmt, ComprehensionSearchVisitor::comprehensionCount++);
+      auto tmpFnName = cache->getTemporaryVar("vectron");
+      modified = cache->N<SuiteStmt>(
+          cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
+                                 cache->N<ReturnStmt>(clone(stmt->getRhs()))),
+          cache->N<AssignStmt>(
+              clone(stmt->getLhs()),
+              cache->N<CallExpr>(
+                  cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "dpmat_wrap")),
+                  std::vector<CallArg>{
+                      CallArg{"", cache->N<IdExpr>(tmpFnName)},
+                      CallArg{"", cache->N<IntExpr>(comprehensionCount++)},
+                      CallArg{"LANE_SIZE", cache->N<IdExpr>(".VECTRON_LANE")},
+                      CallArg{"T", cache->N<IdExpr>(".VECTRON_TYPE")},
+                      CallArg{"THREADS", cache->N<IdExpr>(".VECTRON_THREADS")},
+                  }),
+              clone(stmt->getTypeExpr())));
+    } else {
+      Base::visit(stmt);
     }
   }
+
   void visit(ast::ForStmt *stmt) override {
-    if (depth == 2)
-      stop = true;
-    else
-      CallbackASTVisitor<void, ast::Stmt *>::visit(stmt);
+    if (depth == 2) {
+      // First for loop in the function
+      replaceComprehension = false;
+    }
+    Base::visit(stmt);
   }
 };
 
@@ -255,26 +315,8 @@ void LoopVec::handle(AssignInstr *w) {
 
     // 2. Modify the function (wrap the comprehension into:
     //    def FN(): return COMPREHENSION; M = WRAPPER(FN)
-    ComprehensionSearchVisitor([&](ast::AssignStmt *stmt,
-                                   int comprehensionCount) -> ast::Stmt * {
-      using namespace codon::ast;
-      auto tmpFnName = cache->getTemporaryVar("vectron");
-      return cache->N<SuiteStmt>(
-          cache->N<FunctionStmt>(tmpFnName, nullptr, std::vector<Param>{},
-                                 cache->N<ReturnStmt>(clone(stmt->getRhs()))),
-          cache->N<AssignStmt>(
-              clone(stmt->getLhs()),
-              cache->N<CallExpr>(
-                  cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "dpmat_wrap")),
-                  std::vector<CallArg>{
-                      CallArg{"", cache->N<IdExpr>(tmpFnName)},
-                      CallArg{"", cache->N<IntExpr>(comprehensionCount)},
-                      CallArg{"LANE_SIZE", cache->N<IdExpr>(".VECTRON_LANE")},
-                      CallArg{"T", cache->N<IdExpr>(".VECTRON_TYPE")},
-                      CallArg{"THREADS", cache->N<IdExpr>(".VECTRON_THREADS")},
-                  }),
-              clone(stmt->getTypeExpr())));
-    }).transform(fnAst);
+    auto csv = ComprehensionSearchVisitor(cache, 0, true);
+    csv.transform(fnAst);
 
     // 3. Check & typecheck new function
     auto s = cache->N<ast::SuiteStmt>(fnAst);
