@@ -3,7 +3,7 @@ import sys
 import vectron
 
 
-@vectron.vectron(lane_size=32, threads=4, mode=vectron.GPU)
+@vectron.vectron(lane_size=32, threads=4, mode=vectron.CPU)
 def lcs(t, q):
     M = [[0 for _ in range(len(t) + 1)] for _ in range(len(q) + 1)]
     for i in range(1, len(q) + 1):
