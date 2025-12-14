@@ -18,6 +18,10 @@ using namespace codon;
 using namespace codon::ir;
 using namespace codon::matcher;
 
+std::string getVectronModuleName(const std::string &what) {
+  return "std.vectron.stdlib.vectron." + what;
+}
+
 void Vectron::addIRPasses(codon::ir::transform::PassManager *pm, bool debug) {
   pm->registerPass(std::make_unique<LoopVec>(),
                    debug ? "core-pipeline-lowering"
@@ -97,7 +101,7 @@ void VectronFunctionTransformer::handle(AssignInstr *x) {
   auto *dpmatFunc = M->getOrRealizeFunc(
       "dpmat", {M->getIntType(), M->getIntType()},
       {types::Generic(initVal->getVal()), types::Generic(updatedVars.size())},
-      "std.vectron.lib");
+      getVectronModuleName("lib"));
   assert(dpmatFunc);
 
   auto *dpmatCall = util::call(dpmatFunc, {outerRange, innerRange});
@@ -168,11 +172,11 @@ public:
 
     if (replaceOr && expr->getOp() == "||") {
       modified = cache->N<CallExpr>(
-          cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "vec_or")), expr->getLhs(),
-          expr->getRhs());
+          cache->N<IdExpr>(getMangledFunc(getVectronModuleName("lib"), "vec_or")),
+          expr->getLhs(), expr->getRhs());
     } else if (replaceOr && expr->getOp() == "&&") {
       modified = cache->N<CallExpr>(
-          cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "vec_and")),
+          cache->N<IdExpr>(getMangledFunc(getVectronModuleName("lib"), "vec_and")),
           expr->getLhs(), expr->getRhs());
     } else {
       Base::visit(expr);
@@ -200,7 +204,8 @@ public:
           cache->N<AssignStmt>(
               clone(stmt->getLhs()),
               cache->N<CallExpr>(
-                  cache->N<IdExpr>(getMangledFunc("std.vectron.lib", "dpmat_wrap")),
+                  cache->N<IdExpr>(
+                      getMangledFunc(getVectronModuleName("lib"), "dpmat_wrap")),
                   std::vector<CallArg>{
                       CallArg{"", cache->N<IdExpr>(tmpFnName)},
                       CallArg{"", cache->N<IntExpr>(comprehensionCount++)},
@@ -260,7 +265,8 @@ void LoopVec::handle(AssignInstr *w) {
       return;
 
     auto *vectronFunc = util::getFunc(vectronCall->getCallee());
-    auto vectronAttr = codon::ast::getMangledFunc("std.vectron.__init__", "vectron");
+    auto vectronAttr =
+        codon::ast::getMangledFunc(getVectronModuleName("__init__"), "vectron");
     if (!bool(vectronFunc) || !util::hasAttribute(vectronFunc, vectronAttr))
       return;
 
@@ -308,9 +314,9 @@ void LoopVec::handle(AssignInstr *w) {
         ".VECTRON_THREADS", cache->N<ast::IndexExpr>(cache->N<ast::IdExpr>("Literal"),
                                                      cache->N<ast::IdExpr>("int"))});
     fnAst->setSuite(cache->N<ast::SuiteStmt>(
-        cache->N<ast::AssignStmt>(
-            cache->N<ast::IdExpr>("max"),
-            cache->N<ast::IdExpr>(ast::getMangledFunc("std.vectron.lib", "maximum"))),
+        cache->N<ast::AssignStmt>(cache->N<ast::IdExpr>("max"),
+                                  cache->N<ast::IdExpr>(ast::getMangledFunc(
+                                      getVectronModuleName("lib"), "maximum"))),
         fnAst->getSuite()));
 
     // 2. Modify the function (wrap the comprehension into:
@@ -326,8 +332,8 @@ void LoopVec::handle(AssignInstr *w) {
     ast::TranslateVisitor(cache->codegenCtx).translateStmts(transAst);
 
     // 4. Realize new function
-    auto vecListType = util::getReturnType(
-        M->getOrRealizeFunc("_get_vec_list", {}, vectronParams, "std.vectron.lib"));
+    auto vecListType = util::getReturnType(M->getOrRealizeFunc(
+        "_get_vec_list", {}, vectronParams, getVectronModuleName("lib")));
     assert(vecListType && "_get_vec_list method not found in std.lib");
     std::vector<ir::types::Type *> newFnArgs;
     for (auto it = vectronFunc->arg_begin(); it != vectronFunc->arg_end(); ++it)
@@ -356,7 +362,7 @@ void LoopVec::handle(AssignInstr *w) {
 
     tps.push_back(newFn->getType());
     auto *alpernFunc =
-        M->getOrRealizeFunc("alpern", tps, vectronParams, "std.vectron.lib");
+        M->getOrRealizeFunc("alpern", tps, vectronParams, getVectronModuleName("lib"));
     assert(alpernFunc);
 
     auto *alpernCall = util::call(alpernFunc, args);
@@ -405,7 +411,7 @@ TernaryVec::ternToCall(codon::ir::Value *v,
 
   auto *ternaryHelper = M->getOrRealizeFunc(
       "ternary", {cond->getType(), trueVal->getType(), falseVal->getType()},
-      ternaryGenerics, "std.vectron.lib");
+      ternaryGenerics, getVectronModuleName("lib"));
   assert(ternaryHelper);
 
   auto *ternaryCall = util::call(ternaryHelper, {cond, trueVal, falseVal});
@@ -420,7 +426,8 @@ void TernaryVec::handle(CallInstr *v) {
     return;
 
   auto *pf = getParentFunc();
-  auto vectronAttr = codon::ast::getMangledFunc("std.vectron.__init__", "vectron");
+  auto vectronAttr =
+      codon::ast::getMangledFunc(getVectronModuleName("__init__"), "vectron");
   if (!bool(pf) || !util::hasAttribute(pf, vectronAttr))
     return;
   auto attr = pf->getAttribute<KeyValueAttribute>()->get(vectronAttr);

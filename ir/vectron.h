@@ -23,14 +23,14 @@ struct VectronFunctionTransformer : public codon::ir::util::Operator {
 };
 
 class LoopVec : public codon::ir::transform::OperatorPass {
-  const std::string KEY = "loop-vec";
+  const std::string KEY = "vectron-vectorize-fn";
   std::string getKey() const override { return KEY; }
 
   void handle(codon::ir::AssignInstr *) override;
 };
 
 class TernaryVec : public codon::ir::transform::OperatorPass {
-  const std::string KEY = "ternary-vec";
+  const std::string KEY = "vectron-vectorize-ternary";
   std::string getKey() const override { return KEY; }
 
   void handle(codon::ir::CallInstr *) override;
